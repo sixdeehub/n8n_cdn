@@ -25,6 +25,8 @@
         font-family: inherit;
         resize: none;
         transition: none;
+        max-width: calc(100vw - 20px);
+        max-height: calc(100vh - 20px);
     }
 
     .n8n-chat-widget .chat-container.position-left {
@@ -614,6 +616,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        inset-inline-end: max(10px, min(53px, calc(100vw - 70px))); /* Prevent from going off-screen */
+        inset-block-end: max(10px, min(33px, calc(100vh - 70px)));
     }
     @keyframes BackgroundGradient {
         0% {background-position: 0% 50%;}
@@ -2297,6 +2301,10 @@
 		});
 
 
+
+
+
+
 		const toggleButton = document.createElement('button');
 		toggleButton.className = `chat-toggle${config.style.position === 'left' ? ' position-left' : ''}`;
 		toggleButton.innerHTML = `
@@ -2322,6 +2330,37 @@
 		const filePreviewContainer = chatContainer.querySelector('#file-preview-container');
 		const refreshButton = chatContainer.querySelector('.refresh-button');
 
+
+
+
+
+        function clampChatPosition() {
+            const chat = document.querySelector('.chat-container');
+            const rect = chat.getBoundingClientRect();
+            const buffer = 10; // Margin from screen edge
+
+            let newTop = Math.max(buffer, Math.min(window.innerHeight - rect.height - buffer, rect.top));
+            let newLeft = Math.max(buffer, Math.min(window.innerWidth - rect.width - buffer, rect.left));
+
+
+            // console.log(newTop)
+            // console.log(newLeft)
+
+            // Update the inline style safely
+            chat.style.inset = 'auto auto auto auto';
+            chat.style.top = `${newTop}px`;
+            chat.style.left = `${newLeft}px`;
+            chat.style.right = 'auto';
+            chat.style.bottom = 'auto';
+            }
+
+            document.querySelector('.chat-container').addEventListener('mouseup', clampChatPosition);
+        window.addEventListener('resize', clampChatPosition); // Optional: fix if screen resizes
+
+
+
+
+        
 		function generateUUID() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                 const r = Math.random() * 16 | 0;
@@ -2497,6 +2536,8 @@
 			});
 
 
+
+
 			const botMessageDiv1 = document.createElement('div');
 			botMessageDiv1.className = 'chat-message bot';
 			botMessageDiv1.style.position = 'relative';
@@ -2514,9 +2555,11 @@
 						I am AARYA (Automated AI Responder at Your Assistance).<br>
 						How can I assist you today?
 					</div>
-					<div style="position: absolute; bottom: -30px; right: 10px; font-size: 10px; color: #666;">
+                    
+					<div style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666;">
 						${timeWithDate}
 					</div>
+                    
 				</div>
 			`;
 
@@ -2525,19 +2568,19 @@
             
             if (config.wss && config.wss.url) {
                 socket = new WebSocket(config.wss.url);
-                console.log('WebSocket defined URL:', socket);
+                // console.log('WebSocket defined URL:', socket);
 
                 // Optional: Handle WebSocket events here
                 socket.onopen = () => {
-                    console.log('WebSocket connection established');
+                    // console.log('WebSocket connection established');
                 };
 
                 socket.onerror = (error) => {
-                    console.error('WebSocket error:', error);
+                    // console.error('WebSocket error:', error);
                 };
 
                 socket.onclose = () => {
-                    console.log('WebSocket connection closed');
+                    // console.log('WebSocket connection closed');
                 };
             } else {
                 console.error('WebSocket URL not defined in config');
@@ -2607,7 +2650,7 @@
         let abortController = new AbortController();
 
 		async function sendMessage(message, files = []) {
-			console.log('sendMessage called with message:', message, 'and files:', files);
+			// console.log('sendMessage called with message:', message, 'and files:', files);
 
 			const formData = new FormData();
 			const messageSessionId = currentSessionId; // Capture the session ID at the time of sending
@@ -2735,7 +2778,7 @@
 					}
 				});
 			} else {
-				console.log('No files to process');
+				// console.log('No files to process');
 			}
 
 			// Handle plain text message
@@ -2747,7 +2790,7 @@
 
 			// If there's no content (no files and no message), return early
 			if (!messageBubble.hasChildNodes()) {
-				console.log('No message content to display');
+				// console.log('No message content to display');
 				return;
 			}
 
@@ -2768,12 +2811,14 @@
 
             // Create a wrapper div for aligning the timestamp
             const timestampWrapper = document.createElement('div');
-            timestampWrapper.style.bottom = '-30px'; // Position below the bubble
+            // timestampWrapper.style.position='absolute';
             timestampWrapper.style.textAlign = 'right';
             timestampWrapper.style.marginTop = '-15px'; // Slight spacing below the bubble
 
             // Create the timestamp div itself
             const timestampDiv = document.createElement('div');
+            timestampDiv.style.marginBottom = '-35px';
+            timestampDiv.style.marginTop = '30px';
             timestampDiv.style.fontSize = '10px';
             timestampDiv.style.color = '#666';
             timestampDiv.textContent = timeWithDate;
@@ -2786,8 +2831,8 @@
              // Now timestamp is under the bubble, right aligned
 
             // Append the user message div to the main messages container
-            messagesContainer.appendChild(userMessageDiv);
             messagesContainer.appendChild(timestampWrapper);
+            messagesContainer.appendChild(userMessageDiv);
 			messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
 			// Clear input + preview
@@ -2806,7 +2851,9 @@
 
 			messagesContainer.appendChild(loadingDiv);
 			messagesContainer.scrollTop = messagesContainer.scrollHeight;
-			console.log('Sending message data:', JSON.stringify(messageData));
+			// console.log('Sending message data:', JSON.stringify(messageData));
+            
+
 
 
         try {
@@ -2814,12 +2861,12 @@
             // Check if WebSocket URL is present
             async function connectWebSocket(messageData, retries = Infinity, delay = 5000) {
                 if (config.wss && config.wss.url) {
-                    console.log('WebSocket inside URL:', socket);
+                    // console.log('WebSocket inside URL:', socket);
 
                     // Create socket if not defined or closed
                     if (!socket || socket.readyState > 1) {
                         socket = new WebSocket(config.wss.url);
-                        console.log('New WebSocket created. State:', socket.readyState);
+                        // console.log('New WebSocket created. State:', socket.readyState);
                     }
 
 
@@ -2837,25 +2884,25 @@
 
                     // ✅ Send message immediately if already open
                     if (socket.readyState === WebSocket.OPEN) {
-                        console.log('WebSocket already open, sending message');
+                        // console.log('WebSocket already open, sending message');
                         socket.send(JSON.stringify(messageData));
                     } else {
                         // ✅ Otherwise, wait for it to open
                         socket.onopen = () => {
-                            console.log('Connected to WebSocket server');
+                            // console.log('Connected to WebSocket server');
                             socket.send(JSON.stringify(messageData));
                         };
                     }
                     let receivedData = null;
 
                     socket.onmessage = (event) => {
-                        console.log('Received:', event.data);
+                        // console.log('Received:', event.data);
                         try {
                             receivedData = JSON.parse(event.data);
-                            console.log('Parsed JSON:', receivedData);
+                            // console.log('Parsed JSON:', receivedData);
                             handleResponse(receivedData);
                         } catch (e) {
-                            console.log('Non-JSON response:', event.data);
+                            // console.log('Non-JSON response:', event.data);
                         }
                     };
 
@@ -2870,7 +2917,7 @@
                         signal: abortController.signal
                     });                    
                     // Fallback to HTTP if WebSocket URL is not present
-                    console.log('WebSocket URL not present, using HTTP fallback');
+                    // console.log('WebSocket URL not present, using HTTP fallback');
                     const data = await response.json();
                     loadingDiv.remove();
                     handleResponse(data); // Use the data from the initial HTTP POST
@@ -2882,19 +2929,19 @@
             // Function to handle response (shared for WebSocket and HTTP)
             function handleResponse(data) {
                 if (messageSessionId !== currentSessionId) {
-                    console.log('Discarding response from outdated session:', messageSessionId);
+                    // console.log('Discarding response from outdated session:', messageSessionId);
                     loadingDiv.remove();
                     return;
                 }
                 if (data != null) {
-                    console.log('Received data:', data);
+                    // console.log('Received data:', data);
                     loadingDiv.remove();
                     const botMessageDiv = document.createElement('div');
                     botMessageDiv.className = 'chat-message bot';
 
-                    console.log('Received data-----------------------------------:', data);
+                    // console.log('Received data-----------------------------------:', data);
                     const rawMessage = Array.isArray(data) ? data[0].output : data.output;
-                    console.log('Raw message:', rawMessage);
+                    // console.log('Raw message:', rawMessage);
 
                     const customEvent = Array.isArray(data) ? data[0].event : data.event;
                     if (customEvent && customEvent.type) {
@@ -2927,7 +2974,7 @@
                     let messageBodyHTML = '';
                     let fulltableHTML = '';
                     if (table_content && Array.isArray(table_content.columns) && Array.isArray(table_content.rows)) {
-                        console.log('Table data is valid, setting up table and download buttons');
+                        // console.log('Table data is valid, setting up table and download buttons');
                         messageBodyHTML = `
 
                             <div class="message-bubble-table" id="message-body">
@@ -2953,7 +3000,7 @@
                     }
 
                     if (dropdown_content && Array.isArray(dropdown_content.options) && dropdown_content.options.length > 0) {
-                        console.log('Dropdown data is valid, setting up dropdown');
+                        // console.log('Dropdown data is valid, setting up dropdown');
                         messageBodyHTML += `
                             <div class="message-bubble-dropdown" id="dropdown-body">
                                 <!-- Dropdown will be appended here -->
@@ -2962,7 +3009,7 @@
                     }
 
                     let footerHTML = `
-                        <div class="message-footer" style="position: absolute; bottom: -50px; order: 2;">
+                        <div class="message-footer" style="position: absolute; order: 2;">
                                 <button class="action-btn copy-btn" title="Copy">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z" fill="currentColor"/>
@@ -2993,7 +3040,7 @@
                             <div class="message-bubble">
                                 <div class="avatar bot-avatar"></div>                     
                                 <div class="message-content">${formatBotMessage(rawMessage)}</div>
-                                <div class="message-content1" style="position: absolute; bottom: -30px; right: 10px; font-size: 10px; color: #666; order: 1;"                             >
+                                <div class="message-content1" style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666; order: 1;"                             >
                                     ${timeWithDate}
                                 </div>
                             </div>
@@ -3004,18 +3051,18 @@
 
                     // Add event listeners for table and download buttons
                     if (table_content && Array.isArray(table_content.columns) && Array.isArray(table_content.rows)) {
-                        console.log('Appending table to message-body');
+                        // console.log('Appending table to message-body');
                         const messageBody = botMessageDiv.querySelector("#message-body");
                         if (messageBody) {
                             const table = createTableFromJSON(table_content);
                             messageBody.appendChild(table);
-                            console.log('Table appended to message-body:', table);
+                            // console.log('Table appended to message-body:', table);
 
                             // Attach listener to view button
                             const viewTableBtn = botMessageDiv.querySelector('#view-table-btn');
                             if (viewTableBtn) {
                                 viewTableBtn.addEventListener('click', () => {
-                                    console.log('View table button clicked, showing popup');
+                                    // console.log('View table button clicked, showing popup');
                                     showTablePopup(table_content);
                                 });
                             } else {
@@ -3024,14 +3071,14 @@
 
                             // ✅ Attach listener to message-body div
                             messageBody.addEventListener('click', () => {
-                                console.log('Message body clicked, showing popup');
+                                // console.log('Message body clicked, showing popup');
                                 showTablePopup(table_content);
                             });
 
                             const downloadCsvBtn = botMessageDiv.querySelector('#download-csv-btn');
                             if (downloadCsvBtn) {
                                 downloadCsvBtn.addEventListener('click', () => {
-                                    console.log('Download CSV button clicked');
+                                    // console.log('Download CSV button clicked');
                                     downloadTableAsCSV(table_content);
                                 });
                             } else {
@@ -3049,13 +3096,13 @@
                     // Handle dropdown content
                     // Handle dropdown content
                     if (dropdown_content && Array.isArray(dropdown_content.options) && dropdown_content.options.length > 0) {
-                        console.log('Dropdown options:', dropdown_content.options);
-                        console.log('Appending dropdown to dropdown-body');
+                        // console.log('Dropdown options:', dropdown_content.options);
+                        // console.log('Appending dropdown to dropdown-body');
                         const dropdownBody = botMessageDiv.querySelector("#dropdown-body");
                         if (dropdownBody) {
                             const dropdown = createDropdownFromJSON(dropdown_content);
                             dropdownBody.appendChild(dropdown);
-                            console.log('Dropdown appended to dropdown-body:', dropdown);
+                            // console.log('Dropdown appended to dropdown-body:', dropdown);
 
                             // Add event listener to send selected option as a user message, only if a <select> element exists
                             const select = dropdown.querySelector('select');
@@ -3063,12 +3110,12 @@
                                 select.addEventListener('change', (e) => {
                                     const selectedValue = e.target.value;
                                     if (selectedValue) {
-                                        console.log('Dropdown selection:', selectedValue);
+                                        // console.log('Dropdown selection:', selectedValue);
                                         sendMessage(selectedValue, [], 'dropdown');
                                     }
                                 });
                             } else {
-                                console.log('No <select> element found; likely using buttons instead of a dropdown');
+                                // console.log('No <select> element found; likely using buttons instead of a dropdown');
                             }
                         } else {
                             console.error('dropdown-body element not found');
@@ -3167,7 +3214,7 @@
 
             // Function to create and show the table popup
             function showTablePopup(tableData) {
-                console.log('Showing table popup with data:', tableData);
+                // console.log('Showing table popup with data:', tableData);
                 const backdrop = document.createElement('div');
                 backdrop.className = 'dialog-backdrop';
                 chatContainer.appendChild(backdrop);
@@ -3184,7 +3231,7 @@
                 const tableContainer = dialog.querySelector('.table-container');
                 const table = createTableFromJSON(tableData, true); // Pass isPopup: true
                 tableContainer.appendChild(table);
-                console.log('Table appended to popup:', table);
+                // console.log('Table appended to popup:', table);/
 
                 const closeDialog = () => {
                     dialog.remove();
@@ -3197,7 +3244,7 @@
 
             // Function to create table from JSON data
             function createTableFromJSON(data, isPopup = false) {
-                console.log('Creating table from data:', data, 'isPopup:', isPopup);
+                // console.log('Creating table from data:', data, 'isPopup:', isPopup);
                 
                 // Create a container for the table with horizontal scrolling
                 const tableContainer = document.createElement("div");
@@ -3262,13 +3309,13 @@
             }
 
             function createDropdownFromJSON(data) {
-                console.log('Creating dropdown or buttons from data:', data);
+                // console.log('Creating dropdown or buttons from data:', data);
 
                 const container = document.createElement('div');
                 container.className = 'options-container';
                 container.style.marginTop = '0px';
                 
-                console.log('Option length:', data.options.length);
+                // console.log('Option length:', data.options.length);
 
                 // Add a label for both buttons and dropdown
                 const label = document.createElement('label');
@@ -3321,7 +3368,7 @@
 
                         // Add click event to send the selected option as a message
                         button.addEventListener('click', () => {
-                            console.log('Button clicked:', option);
+                            // console.log('Button clicked:', option);
                             sendMessage(option, [], 'button');
                         });
 
@@ -3365,7 +3412,7 @@
             
             // Function to download table as CSV
             function downloadTableAsCSV(tableData) {
-                console.log('Generating CSV for table data:', tableData);
+                // console.log('Generating CSV for table data:', tableData);
                 
                 // Escape CSV values to handle commas and quotes
                 const escapeCsvValue = (value) => {
@@ -3398,7 +3445,7 @@
                 link.click();
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
-                console.log('CSV download initiated');
+                // console.log('CSV download initiated');
             }
         } catch (error) {
             console.error('Error sending message:', error);
@@ -3466,14 +3513,14 @@
                     mediaRecorder.ondataavailable = (e) => {
                         if (e.data.size > 0) {
                             audioChunks.push(e.data);
-                            console.log('Audio chunk received, size:', e.data.size);
+                            // console.log('Audio chunk received, size:', e.data.size);
                         } else {
-                            console.log('Empty audio chunk received');
+                            // console.log('Empty audio chunk received');
                         }
                     };
 
                     mediaRecorder.onstop = () => {
-                        console.log('MediaRecorder stopped');
+                        // console.log('MediaRecorder stopped');
                         isRecording = false;
                         micButton.innerHTML = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 225 225">
                         <path d="M0 0 C74.25 0 148.5 0 225 0 C225 74.25 225 148.5 225 225 C150.75 225 76.5 225 0 225 C0 150.75 0 76.5 0 0 Z " fill="#1A8CF5"/>
@@ -3597,7 +3644,7 @@
                         micButton.classList.remove('recording');
 
                         if (audioChunks.length === 0) {
-                            console.log('No audio recorded');
+                            // console.log('No audio recorded');
                             return;
                         }
 
@@ -3606,7 +3653,7 @@
                             type: 'audio/webm'
                         });
 
-                        console.log('Audio file created:', audioFile);
+                        // console.log('Audio file created:', audioFile);
 
                         // Add to current files and show preview (but do not send yet)
                         currentFiles = [audioFile];
@@ -3620,13 +3667,13 @@
 
                     // Start audio recording
                     mediaRecorder.start();
-                    console.log('MediaRecorder started');
+                    // console.log('MediaRecorder started');
 
                     // Start speech recognition immediately after
                     try {
                         finalTranscript = ''; // Reset transcript only when starting a new session
                         recognition.start();
-                        console.log('Speech recognition started');
+                        // console.log('Speech recognition started');
                     } catch (error) {
                         console.error('Speech recognition start error:', error);
                         textarea.value += `\n[Error starting speech recognition: ${error.message}]`;
@@ -3829,9 +3876,9 @@
 
         // Restart recognition on end to extend pause duration
         recognition.onend = () => {
-            console.log('Speech recognition ended');
+            // console.log('Speech recognition ended');
             if (isRecording) {
-                console.log('Restarting speech recognition to continue listening...');
+                // console.log('Restarting speech recognition to continue listening...');
                 try {
                     recognition.start();
                 } catch (error) {
@@ -3848,11 +3895,11 @@
 
         // Log when speech starts and ends for debugging
         recognition.onspeechstart = () => {
-            console.log('Speech detected.');
+            // console.log('Speech detected.');
         };
 
         recognition.onspeechend = () => {
-            console.log('Speech paused (short pause detected).');
+            // console.log('Speech paused (short pause detected).');
         };
     } else {
         // Fallback for unsupported browsers
@@ -3946,7 +3993,7 @@
 
     fileInput.addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
-        console.log('Files selected via file input:', files);
+        // console.log('Files selected via file input:', files);
         currentFiles = [...currentFiles, ...files];
         renderFilePreviews();
         updateButtonVisibility();
