@@ -35,9 +35,32 @@
     }
 
     .n8n-chat-widget .chat-container.open {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
         display: flex;
         flex-direction: column;
     }
+
+    .n8n-chat-widget .chat-container.position-left.open {
+        left: 20px;
+        right: auto;
+    }
+
+    .n8n-chat-widget .chat-container.open:not(.position-left) {
+        right: 20px;
+        left: auto;
+    }
+
+
+
+    .n8n-chat-widget .chat-container,
+    .n8n-chat-widget .chat-container.open {
+        bottom: 20px;
+        right: 20px;
+        left: auto;
+    }
+
 
     .n8n-chat-widget .brand-header {
         padding: 7px;
@@ -344,14 +367,14 @@
 
     .n8n-chat-widget .chat-message.bot .message-bubble-dropdown {
         margin-top: -20px;
-        padding: 8px 12px;
+        padding: 10px 12px;
         border-radius: 0 0 12px 12px;
         maxWidth = "80%";
         width = "100%";
         display: flex;
         align-items: flex-start;
         gap: 10px;
-        padding: 10px;
+        padding: 10px,20px,20px,20px;
         background: #f1f1f1;
     }
 
@@ -1179,6 +1202,18 @@
             allowFileUploads: true
         }
     };
+
+
+    window.addEventListener('resize', () => {
+    const chatContainer = document.querySelector('.n8n-chat-widget .chat-container');
+    if (chatContainer && chatContainer.classList.contains('open')) {
+        chatContainer.style.bottom = '20px';
+        chatContainer.style.right = '20px';
+        chatContainer.style.left = ''; // Reset left in case it was in position-left mode
+    }
+    });
+
+
 
     // Merge user config with defaults
     const config = window.ChatWidgetConfig ? 
@@ -2945,7 +2980,7 @@
                                     console.log("📤 Sending ping 1:", pingMessage);
                                     socket.send(JSON.stringify(pingMessage));
                                 }
-                            }, 5000);
+                            }, 10000);
                             }
                             
                     } else {        
@@ -2969,7 +3004,7 @@
                                     console.log("📤 Sending ping 1:", pingMessage);
                                     socket.send(JSON.stringify(pingMessage));
                                 }
-                            }, 5000);
+                            }, 10000);
                             }
                         };
                     }
@@ -3354,7 +3389,7 @@
             }
 
             // Function to create table from JSON data
-            function createTableFromJSON(data, isPopup = false) {
+            function createPopUpTableFromJSON(data, isPopup = false) {
                 // console.log('Creating table from data:', data, 'isPopup:', isPopup);
                 
                 // Create a container for the table with horizontal scrolling
@@ -3419,6 +3454,105 @@
                 return table
             }
 
+
+
+           function createTableFromJSON(data, isPopup = false) {
+    const tableContainer = document.createElement("div");
+    tableContainer.className = "table-container";
+    if (!isPopup) tableContainer.style.cursor = "pointer";
+
+    const table = document.createElement("table");
+    table.border = "1";
+    table.style.width = "100%";
+    table.style.boxSizing = "border-box";
+    table.style.borderCollapse = "collapse";
+    table.style.marginLeft = isPopup ? "0px" : "40px";
+
+    // === Column truncation ===
+    let columnsToRender;
+    if (isPopup || data.columns.length <= 6) {
+        columnsToRender = data.columns;
+    } else {
+        const firstCols = data.columns.slice(0, 2);
+        const lastCols = data.columns.slice(-2);
+        columnsToRender = [...firstCols, '...', ...lastCols];
+    }
+
+    // === Header ===
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    columnsToRender.forEach(col => {
+        const th = document.createElement("th");
+        th.innerText = col;
+        th.style.padding = "8px";
+        th.style.backgroundColor = "#f0f0f0";
+        th.style.fontSize = isPopup ? "16px" : "14px";
+        th.style.whiteSpace = "normal";
+        th.style.wordBreak = "break-word";
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    // === Row truncation ===
+    let rowsToRender;
+    if (isPopup || data.rows.length <= 3) {
+        rowsToRender = data.rows;
+    } else {
+        const firstRows = data.rows.slice(0, 2);
+        const lastRow = data.rows[data.rows.length - 1];
+        rowsToRender = [...firstRows, '...', lastRow];
+    }
+
+    // === Body ===
+    const tbody = document.createElement("tbody");
+
+    rowsToRender.forEach(row => {
+        const tr = document.createElement("tr");
+
+        if (row === '...') {
+            // Create placeholder row with individual boxed cells
+            columnsToRender.forEach(col => {
+                const td = document.createElement("td");
+                td.innerText = '...';
+                td.style.textAlign = 'center';
+                td.style.color = '#888';
+                td.style.fontStyle = 'italic';
+                td.style.padding = "8px";
+                td.style.fontSize = isPopup ? "16px" : "14px";
+                tr.appendChild(td);
+            });
+        } else {
+            columnsToRender.forEach(col => {
+                const td = document.createElement("td");
+
+                if (col === '...') {
+                    td.innerText = '...';
+                    td.style.textAlign = 'center';
+                    td.style.color = '#888';
+                    td.style.fontStyle = 'italic';
+                } else {
+                    td.innerText = row[col] || '';
+                }
+
+                td.style.padding = "8px";
+                td.style.fontSize = isPopup ? "16px" : "14px";
+                td.style.whiteSpace = "normal";
+                td.style.wordBreak = "break-word";
+                tr.appendChild(td);
+            });
+        }
+
+        tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    return table;
+}
+
+
+
+
             function createDropdownFromJSON(data) {
                 // console.log('Creating dropdown or buttons from data:', data);
 
@@ -3443,12 +3577,26 @@
                 if (data.options.length < 6) {
                     // Display as buttons
                     // container.style.marginTop = '-px';
+                    if (data.label){
+                        const labelElement = document.createElement('div');
+                        labelElement.textContent  = data.label// Create a header label element
+                        labelElement.style.fontWeight = 'bold';
+                        labelElement.style.margin = '5px 5px 5px 20px';
+                        labelElement.style.fontSize = '14px';
+
+                        // Insert the label before the container
+                        container.prepend(labelElement);
+
+                        // Reset any inline style if needed
+                        container.style = '';
+                    }
+
                     container.style.marginBottom = '-11px';
                     container.style.display = 'flex';
-                    container.style.gap = '20px'; // Space between buttons
+                    container.style.gap = '15px'; // Space between buttons
                     container.style.flexWrap = 'wrap'; // Allow buttons to wrap if needed
                     container.style.background = 'rgb(241, 241, 241)'; // Light background like in the image
-                    container.style.padding = '20px'; // Add padding for better appearance
+                    container.style.padding = '5px 20px 8px 20px'; // Add padding for better appearance
                     container.style.borderRadius = '0px 0px 12px 12px';
                     
                     
@@ -3465,7 +3613,7 @@
                         button.style.fontSize = '14px';
                         button.style.fontWeight = '500';
                         button.style.transition = 'background-color 0.3s, transform 0.2s';
-                        button.style.boxShadow = '0 5px 10px rgba(0, 0, 0, 0.52)';
+                        button.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.52)';
 
                         // Add hover effect
                         button.onmouseover = () => {
