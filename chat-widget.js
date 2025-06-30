@@ -1977,16 +1977,16 @@
     }
 
     let video = 'off';
-    // Set up the chat interface and toggle event listener
-    document.addEventListener('DOMContentLoaded', () => {
-        const toggleInput = document.getElementById('videoToggle');
+    // // Set up the chat interface and toggle event listener
+    // document.addEventListener('DOMContentLoaded', () => {
+    //     const toggleInput = document.getElementById('videoToggle');
         
-        toggleInput.addEventListener('change', () => {
-            video = toggleInput.checked ? 'on' : 'off';
-            console.log('Video state:', video);
-            updateBrandingMessage(video); // Update branding message when toggle changes
-        });
-    });
+    //     toggleInput.addEventListener('change', () => {
+    //         video = toggleInput.checked ? 'on' : 'off';
+    //         console.log('Video state:', video);
+    //         updateBrandingMessage(video); // Update branding message when toggle changes
+    //     });
+    // });
 
 
 
