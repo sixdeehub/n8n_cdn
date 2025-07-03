@@ -1,7 +1,8 @@
-// Updated CSS part
-// floating fabicon changed 
-// updated cvg icons 
-
+// Version: 0.0.6
+// Author: Prathamesh Patil
+// Date: 2025-07-03
+// Description: 1. Added ping/pong functionality to maintain WebSocket connection and prevent disconnection due to inactivity.
+//              2. Optimized table popup css for better view.
 
 (function() {
     // Create and inject styles (updated with audio player and recording feedback)
@@ -431,6 +432,7 @@
     }
 
     .n8n-chat-widget .chat-input textarea {
+
         flex: 1;
         height: 100%;
         padding: 12px 40px 12px 40px;
@@ -445,6 +447,8 @@
         box-sizing: border-box;
         max-height: 120px;
         overflow-y: auto;
+        min-height: 40px;
+        height = 40px !important;
     }
 
     .n8n-chat-widget .chat-input textarea:focus {
@@ -1044,62 +1048,189 @@
         overflow-x: auto; /* Allow horizontal scrolling in widget */
     }
 
+
+
+    /* Fullscreen Table Popup Styles */
     .n8n-chat-widget .dialog-backdrop {
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1999;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .n8n-chat-widget .table-dialog {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        position: relative;
+        width: 95vw;
+        height: 90vh;
         background: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        z-index: 2000;
-        padding: 20px;
-        max-width: 90vw; /* Constrain to 90% of viewport width */
-        max-height: 90vh; /* Constrain to 90% of viewport height */
-        overflow: auto; /* Enable scrolling for overflow */
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         display: flex;
         flex-direction: column;
+        max-width: none;
+        max-height: none;
+        overflow: hidden;
+        z-index: 10000;
+    }
+
+    .n8n-chat-widget .table-dialog .dialog-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+        border-bottom: 1px solid #e0e0e0;
+        background: #f8f9fa;
+        flex-shrink: 0;
     }
 
     .n8n-chat-widget .table-dialog h3 {
-        margin: 0 0 10px 0;
-        font-size: 18px;
-        flex-shrink: 0; /* Prevent the title from shrinking */
+        margin: 0;
+        font-size: 24px;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .n8n-chat-widget .dialog-close-button {
+        background: none;
+        border: none;
+        font-size: 32px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .n8n-chat-widget .dialog-close-button:hover {
+        background-color: #f0f0f0;
+        color: #333;
     }
 
     .n8n-chat-widget .table-dialog .table-container {
-        max-width: none; /* Remove width constraint in popup */
-        overflow: visible; /* Let the table take its natural size */
-        flex-grow: 1; /* Allow the table container to grow within the dialog */
+        flex: 1;
+        overflow: auto;
+        padding: 20px;
+        max-width: none;
     }
 
     .n8n-chat-widget .table-dialog table {
-        width: auto; /* Let table width adjust to its content */
+        width: 100%;
+        box-sizing: border-box;
         border-collapse: collapse;
+        margin-left: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: white;
+        font-size: 14px;
     }
 
-    .n8n-chat-widget .table-dialog th,
-    .n8n-chat-widget .table-dialog td {
-        padding: 10px;
-        border: 1px solid #ddd;
-        text-align: left;
-        white-space: nowrap; /* Prevent unnecessary wrapping in popup */
-        word-break: normal; /* Prevent breaking words in popup */
+    .n8n-chat-widget .table-dialog thead {
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
 
     .n8n-chat-widget .table-dialog th {
-        background-color: #f0f0f0;
-        font-weight: bold;
+        padding: 12px 16px;
+        background-color: #f8f9fa;
+        font-size: 16px;
+        font-weight: 600;
+        color: #495057;
+        text-align: left;
+        border: 1px solid #dee2e6;
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .n8n-chat-widget .table-dialog td {
+        padding: 12px 16px;
+        font-size: 16px;
+        border: 1px solid #dee2e6;
+        white-space: normal;
+        word-break: break-word;
+        color: #495057;
+        vertical-align: top;
+    }
+
+    .n8n-chat-widget .table-dialog tbody tr {
+        transition: background-color 0.15s ease;
+    }
+
+    .n8n-chat-widget .table-dialog tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    .n8n-chat-widget .table-dialog tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    .n8n-chat-widget .table-dialog tbody tr:hover {
+        background-color: #e3f2fd !important;
+    }
+
+    /* Ellipsis cells styling */
+    .n8n-chat-widget .table-dialog td.ellipsis {
+        text-align: center;
+        color: #888;
+        font-style: italic;
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+        .n8n-chat-widget .table-dialog {
+            width: 98vw;
+            height: 95vh;
+            border-radius: 8px;
+        }
+        
+        .n8n-chat-widget .table-dialog .dialog-header {
+            padding: 15px 20px;
+        }
+        
+        .n8n-chat-widget .table-dialog h3 {
+            font-size: 20px;
+        }
+        
+        .n8n-chat-widget .dialog-close-button {
+            font-size: 28px;
+            width: 35px;
+            height: 35px;
+        }
+        
+        .n8n-chat-widget .table-dialog .table-container {
+            padding: 15px;
+        }
+        
+        .n8n-chat-widget .table-dialog th,
+        .n8n-chat-widget .table-dialog td {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+    }
+
+    /* Extra small screens */
+    @media (max-width: 480px) {
+        .n8n-chat-widget .table-dialog {
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+        }
+        
+        .n8n-chat-widget .table-dialog th,
+        .n8n-chat-widget .table-dialog td {
+            padding: 6px 8px;
+            font-size: 12px;
+        }
     }
 
     .n8n-chat-widget .dialog-close-button {
@@ -1122,6 +1253,7 @@
         animation: blink 0.7s infinite;
         display: inline-block;
         color: var(--chat--color-font);
+        font-family: var(-fira-font);
     }
     @keyframes blink {
         0% { opacity: 1; }
@@ -1460,7 +1592,7 @@
                     <div id="file-preview-container"></div>
                     <div class="input-row">
                         <div class="textarea-wrapper">
-                            <textarea id="chat-textarea" placeholder="" rows="1" style="height: 40px;"></textarea>
+                            <textarea id="chat-textarea" placeholder="" rows="1" style="height: 40px !important;"></textarea>
                             <button class="file-upload-button" title="Upload file">
                             <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                                 width="20" height="20" viewBox="0 0 512.000000 512.000000"
@@ -1768,7 +1900,6 @@
         });
 
  
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2232,10 +2363,32 @@
         try {
 
             // ✅ Connect WebSocket and send messageData + optional files
+            // Global variable to track last activity
+            let lastActivityTime = Date.now();
+            let smartPingInterval = null;
+
+            // Function to update last activity time
+            function updateLastActivity() {
+                lastActivityTime = Date.now();
+            }
+
+            // Function to send smart ping (only if no activity for 1 minute)
+            function sendSmartPing() {
+                const now = Date.now();
+                const timeSinceLastActivity = now - lastActivityTime;
+                const oneMinute = 60 * 1000; // 1 minute in milliseconds
+                
+                if (timeSinceLastActivity >= oneMinute && socket.readyState === WebSocket.OPEN) {
+                    const pingMessage = { type: "ping" };
+                    // console.log("📤 Sending smart ping after", Math.round(timeSinceLastActivity / 1000), "seconds of inactivity");
+                    socket.send(JSON.stringify(pingMessage));
+                    updateLastActivity(); // Update activity time after sending ping
+                }
+            }
+
             // Check if WebSocket URL is present
             async function connectWebSocket(messageData, retries = Infinity, delay = 5000) {
                 // console.log("message ", messageData);
-                let pingInterval = null;
 
                 if (config.wss && config.wss.url) {
                     // console.log('WebSocket inside URL:', socket);
@@ -2253,18 +2406,24 @@
 
                     socket.onclose = (event) => {
                         console.warn('WebSocket closed:', event.code, event.reason);
+                        
+                        // Clear the smart ping interval when socket closes
+                        if (smartPingInterval) {
+                            clearInterval(smartPingInterval);
+                            smartPingInterval = null;
+                        }
+                        
                         if (retries > 0) {
                             console.warn(`Retrying in ${delay / 1000}s...`);
                             setTimeout(() => connectWebSocket(messageData, retries - 1, delay), delay);
                         }
                     };
 
-
-                    
                     const sendFilesOverWebSocket = async () => {
                         if (files.length === 0) {
                             const serialized = JSON.stringify(messageData);
                             socket.send(serialized);
+                            updateLastActivity(); // Update activity after sending
                             return;
                         }
 
@@ -2289,10 +2448,10 @@
                                 };
 
                                 if (socket.readyState === WebSocket.OPEN) {
-
                                     // console.log("JSON.stringify(combinedMessage)",JSON.stringify(combinedMessage));
                                     // Send as a single JSON message that includes both metadata and binary data
                                     socket.send(JSON.stringify(combinedMessage));
+                                    updateLastActivity(); // Update activity after sending
                                     // console.log(`Sent combined message for file: ${file.name}`);
                                 }
 
@@ -2302,70 +2461,40 @@
                         }
                     };
 
-                    // // Rest of your WebSocket setup remains the same
-                    // if (socket.readyState === WebSocket.OPEN) {
-                    //     console.log('WebSocket already open, sending message');
-                    //     await sendFilesOverWebSocket();
-                    // } else {
-                    //     socket.onopen = async () => {
-                    //         console.log('Connected to WebSocket server');
-                    //         await sendFilesOverWebSocket();
-                    //     };
-                    // }
-
-
-
                     if (socket.readyState === WebSocket.OPEN) {
                         // console.log('WebSocket already open, sending message');
                         await sendFilesOverWebSocket();
 
                         messageData = {}; // Reset after sending
 
-                        if (!pingInterval) {
-                            pingInterval = setInterval(() => {
-                                if (
-                                    socket.readyState === WebSocket.OPEN &&
-                                    (!messageData.chatInput || Object.keys(messageData.chatInput).length === 0)
-                                ) {
-                                    const pingMessage = { type: "ping" };
-                                    // console.log("📤 Sending ping 1:", pingMessage);
-                                    socket.send(JSON.stringify(pingMessage));
-                                }
-                            }, 10000);
-                            }
-                            
-                    } else {        
-                    socket.onopen = async () => {
-                        // console.log('✅ WebSocket connection established');
-
-                        if (messageData && Object.keys(messageData).length > 0 && messageData.chatInput) {
-                            await sendFilesOverWebSocket();
-                            // console.log("📤 Sent messageData:", serialized);
+                        // Start smart ping interval if not already running
+                        if (!smartPingInterval) {
+                            smartPingInterval = setInterval(sendSmartPing, 30000); // Check every 30 seconds
                         }
+                                    
+                    } else {        
+                        socket.onopen = async () => {
+                            // console.log('✅ WebSocket connection established');
+                            updateLastActivity(); // Update activity when connection opens
 
-                        messageData = {}; // Reset after sending
+                            if (messageData && Object.keys(messageData).length > 0 && messageData.chatInput) {
+                                await sendFilesOverWebSocket();
+                                // console.log("📤 Sent messageData:", serialized);
+                            }
 
-                        if (!pingInterval) {
-                            pingInterval = setInterval(() => {
-                                if (
-                                    socket.readyState === WebSocket.OPEN &&
-                                    (!messageData.chatInput || Object.keys(messageData.chatInput).length === 0)
-                                ) {
-                                    const pingMessage = { type: "ping" };
-                                    // console.log("📤 Sending ping 1:", pingMessage);
-                                    socket.send(JSON.stringify(pingMessage));
-                                }
-                            }, 10000);
+                            messageData = {}; // Reset after sending
+
+                            // Start smart ping interval
+                            if (!smartPingInterval) {
+                                smartPingInterval = setInterval(sendSmartPing, 30000); // Check every 30 seconds
                             }
                         };
                     }
 
-
-
-                    // let receivedData = null;
-
                     socket.onmessage = (event) => {
                         try {
+                            updateLastActivity(); // Update activity when receiving any message
+                            
                             const receivedData = JSON.parse(event.data);
                             // console.log("recvied------",receivedData);
                             if (receivedData.error) {
@@ -2380,27 +2509,29 @@
                                             const pongMessage = { type: 'pong' };
                                             // console.log('📤 got ping so Sending pong:', pongMessage);
                                             socket.send(JSON.stringify(pongMessage));
+                                            updateLastActivity(); // Update activity after sending pong
                                         }
                                     } catch (e) {
                                         // console.warn('⚠️ Failed to parse inner message:', receivedData.receivedMessage);
                                     }
                                 }
-                            } else if (receivedData.message && receivedData.message.includes('Send "PING"')) {
+                            } else if (receivedData.type && receivedData.type.includes('Send "PING"')) {
                                 const pongMessage = { type: 'ping' };
                                 // console.log('📤 got connection so Sending ping:', pongMessage);
                                 socket.send(JSON.stringify(pongMessage));
-                            } else if (receivedData.message && receivedData.message.includes('pong')) {
+                                updateLastActivity(); // Update activity after sending ping
+                            } else if (receivedData.type && receivedData.type.includes('pong')) {
                                 // console.log('📥 Pong received:', receivedData);
                             } else {
                                 // console.log('📥 Received message:', receivedData);
+                                updateLastActivity();
                                 handleResponse(receivedData);
                             }
                         } catch (e) {
                             // console.warn('⚠️ Failed to parse JSON, raw message:', event.data);
                         }
                     }; 
-
-                    } else {
+                }else {
                         // Fallback to HTTP if WebSocket URL is not present
                         const response = await fetch(config.webhook.url, {
                             method: 'POST',
@@ -2745,16 +2876,19 @@
                 const dialog = document.createElement('div');
                 dialog.className = 'table-dialog';
                 dialog.innerHTML = `
-                    <button class="dialog-close-button">×</button>
-                    <h3>${tableData.title || 'Table Data'}</h3>
+                    <div class="dialog-header">
+                        <h3>${tableData.title || 'Table Data'}</h3>
+                        <button class="dialog-close-button">×</button>
+                    </div>
                     <div class="table-container"></div>
                 `;
-                chatContainer.appendChild(dialog);
+                
+                backdrop.appendChild(dialog);
 
                 const tableContainer = dialog.querySelector('.table-container');
                 const table = createTableFromJSON(tableData, true); // Pass isPopup: true
                 tableContainer.appendChild(table);
-                // console.log('Table appended to popup:', table);/
+                // console.log('Table appended to popup:', table);
 
                 const closeDialog = () => {
                     dialog.remove();
@@ -2762,24 +2896,35 @@
                 };
 
                 dialog.querySelector('.dialog-close-button').addEventListener('click', closeDialog);
-                backdrop.addEventListener('click', closeDialog);
+                backdrop.addEventListener('click', (e) => {
+                    if (e.target === backdrop) {
+                        closeDialog();
+                    }
+                });
+
+                // Add escape key handler
+                const handleEscape = (e) => {
+                    if (e.key === 'Escape') {
+                        closeDialog();
+                        document.removeEventListener('keydown', handleEscape);
+                    }
+                };
+                document.addEventListener('keydown', handleEscape);
             }
 
-
-
-
-
-           function createTableFromJSON(data, isPopup = false) {
+            function createTableFromJSON(data, isPopup = false) {
                 const tableContainer = document.createElement("div");
                 tableContainer.className = "table-container";
                 if (!isPopup) tableContainer.style.cursor = "pointer";
 
                 const table = document.createElement("table");
                 table.border = "1";
-                table.style.width = "100%";
-                table.style.boxSizing = "border-box";
-                table.style.borderCollapse = "collapse";
-                table.style.marginLeft = isPopup ? "0px" : "40px";
+                if (!isPopup) {
+                    table.style.width = "100%";
+                    table.style.boxSizing = "border-box";
+                    table.style.borderCollapse = "collapse";
+                    table.style.marginLeft = "40px";
+                }
 
                 // === Column truncation ===
                 let columnsToRender;
@@ -2797,11 +2942,13 @@
                 columnsToRender.forEach(col => {
                     const th = document.createElement("th");
                     th.innerText = col;
-                    th.style.padding = "8px";
-                    th.style.backgroundColor = "#f0f0f0";
-                    th.style.fontSize = isPopup ? "16px" : "14px";
-                    th.style.whiteSpace = "normal";
-                    th.style.wordBreak = "break-word";
+                    if (!isPopup) {
+                        th.style.padding = "8px";
+                        th.style.backgroundColor = "#f0f0f0";
+                        th.style.fontSize = "14px";
+                        th.style.whiteSpace = "normal";
+                        th.style.wordBreak = "break-word";
+                    }
                     headerRow.appendChild(th);
                 });
                 thead.appendChild(headerRow);
@@ -2828,11 +2975,14 @@
                         columnsToRender.forEach(col => {
                             const td = document.createElement("td");
                             td.innerText = '...';
-                            td.style.textAlign = 'center';
-                            td.style.color = '#888';
-                            td.style.fontStyle = 'italic';
-                            td.style.padding = "8px";
-                            td.style.fontSize = isPopup ? "16px" : "14px";
+                            td.className = 'ellipsis';
+                            if (!isPopup) {
+                                td.style.textAlign = 'center';
+                                td.style.color = '#888';
+                                td.style.fontStyle = 'italic';
+                                td.style.padding = "8px";
+                                td.style.fontSize = "14px";
+                            }
                             tr.appendChild(td);
                         });
                     } else {
@@ -2841,17 +2991,26 @@
 
                             if (col === '...') {
                                 td.innerText = '...';
-                                td.style.textAlign = 'center';
-                                td.style.color = '#888';
-                                td.style.fontStyle = 'italic';
+                                td.className = 'ellipsis';
+                                if (!isPopup) {
+                                    td.style.textAlign = 'center';
+                                    td.style.color = '#888';
+                                    td.style.fontStyle = 'italic';
+                                    td.style.padding = "8px";
+                                    td.style.fontSize = "14px";
+                                    td.style.whiteSpace = "normal";
+                                    td.style.wordBreak = "break-word";
+                                }
                             } else {
                                 td.innerText = row[col] || '';
+                                if (!isPopup) {
+                                    td.style.padding = "8px";
+                                    td.style.fontSize = "14px";
+                                    td.style.whiteSpace = "normal";
+                                    td.style.wordBreak = "break-word";
+                                }
                             }
 
-                            td.style.padding = "8px";
-                            td.style.fontSize = isPopup ? "16px" : "14px";
-                            td.style.whiteSpace = "normal";
-                            td.style.wordBreak = "break-word";
                             tr.appendChild(td);
                         });
                     }
@@ -2862,7 +3021,6 @@
                 table.appendChild(tbody);
                 return table;
             }
-
 
 
 
@@ -3637,8 +3795,7 @@
     refreshButton.addEventListener('click', () => {
             speechSynthesis.cancel(); // Stop any ongoing text-to-speech
             showConfirmationDialog();
-        });
-    
+    });
 
     let isResizing = false;
     let startX, startY, startWidth, startHeight, startLeft, startTop;
@@ -3684,4 +3841,6 @@
             document.body.style.userSelect = '';
         }
     });
+
+    
     })();
