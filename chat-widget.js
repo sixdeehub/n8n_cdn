@@ -1,8 +1,10 @@
-// Version: 0.0.6
-// Author: Prathamesh Patil
-// Date: 2025-07-03
-// Description: 1. Added ping/pong functionality to maintain WebSocket connection and prevent disconnection due to inactivity.
-//              2. Optimized table popup css for better view.
+// Version: 0.0.7
+// Author:  Prathamesh Patil / Pavankumar K 
+// Date: 2025-07-01
+// modified Date: 2025-07-08
+// Description: 1. Changes did according to ui designs.
+//              2. Prevented CSS overrides from the main app.
+
 
 (function() {
     // Create and inject styles (updated with audio player and recording feedback)
@@ -11,7 +13,7 @@
         --chat--color-primary: var(--n8n-chat-primary-color, #854fff);
         --chat--color-secondary: var(--n8n-chat-secondary-color, #6b3fd4);
         --chat--color-background: var(--n8n-chat-background-color, #ffffff);
-        --chat--color-font: var(--n8n-chat-font-color, #333333);
+        --chat--color-font: var(--n8n-chat-font-color, #122646);
         font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 
@@ -29,7 +31,7 @@
         box-shadow: 0 8px 32px rgba(133, 79, 255, 0.15);
         border: 1px solid rgba(133, 79, 255, 0.2);
         overflow: hidden;
-        font-family: inherit;
+        font-family: "Poppins", sans-serif;;
         resize: none;
         transition: none;
         max-width: calc(100vw - 20px);
@@ -84,8 +86,8 @@
 
     .n8n-chat-widget .fullscreen-button {
         position: absolute;
-        right: 76px; /* Adjusted to place it to the left of the refresh button (48px + 28px) */
-        top: 50%;
+        right: 42%; /* Adjusted to place it to the left of the refresh button (48px + 28px) */
+        top: 42%;
         transform: translateY(-50%);
         background: none;
         border: none;
@@ -97,20 +99,21 @@
         justify-content: center;
         transition: opacity 0.2s;
         border-radius: 50%;
-        width: 29px;
-        height: 29px;
+        width: auto;
+        height: auto;
     }
 
-    .n8n-chat-widget .fullscreen-button:hover {
-        opacity: 1;
-        background-color: #333333;
-    }
+    // .n8n-chat-widget .fullscreen-button:hover {
+    //     opacity: 1;
+    //     background-color: #333333;
+    // }
 
-    .n8n-chat-widget .fullscreen-button svg {
-        fill: currentColor;
-        width: 16px;
-        height: 16px;
-    }
+    // .n8n-chat-widget .fullscreen-button svg {
+    //     fill: currentColor;
+    //     width: 16px;
+    //     height: 16px;
+    // }
+
     .n8n-chat-widget   {
         fill: currentColor;
         width: 20px;
@@ -133,8 +136,7 @@
         justify-content: center;
         transition: opacity 0.2s;
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        width: 40px; 
     }
 
     .n8n-chat-widget .refresh-button:hover {
@@ -143,7 +145,7 @@
     }
 
     .n8n-chat-widget .refresh-button svg {
-        fill: currentColor;
+        fill: rgb(156 140 140);
         width: 20px;
         height: 20px;
     }
@@ -168,16 +170,16 @@
         height: 28px;
     }
 
-    .n8n-chat-widget .close-button:hover {
-        background-color: #333333;
-        opacity: 1;
-    }
+    // .n8n-chat-widget .close-button:hover {
+    //     background-color: #333333;
+    //     opacity: 1;
+    // }
 
-    .n8n-chat-widget .brand-header img {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-    }
+    // .n8n-chat-widget .brand-header img {
+    //     width: 32px;
+    //     height: 32px;
+    //     border-radius: 50%;
+    // }
     
     .n8n-chat-widget .bot-avatar {
         background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='54' height='56'%3E%3Cpath d='M0 0 C0 1.32 0 2.64 0 4 C-0.66 4 -1.32 4 -2 4 C-2 4.99 -2 5.98 -2 7 C-1.26394531 7.09796875 -0.52789063 7.1959375 0.23046875 7.296875 C10.33390242 8.84508941 10.33390242 8.84508941 14 13 C14.8125 15.25 14.8125 15.25 15 17 C16.32 17.33 17.64 17.66 19 18 C19 21.63 19 25.26 19 29 C18.01 29.33 17.02 29.66 16 30 C14.79117904 32.00016466 14.79117904 32.00016466 14 34 C13.34 34 12.68 34 12 34 C12 34.66 12 35.32 12 36 C9.73192796 37.0067004 7.46092246 38.00551766 5.1875 39 C4.54490234 39.28617188 3.90230469 39.57234375 3.24023438 39.8671875 C0.32243531 41.13711041 -1.78265714 42 -5 42 C-5 40.68 -5 39.36 -5 38 C-5.75925781 37.95101562 -6.51851562 37.90203125 -7.30078125 37.8515625 C-8.29464844 37.77679688 -9.28851562 37.70203125 -10.3125 37.625 C-11.29863281 37.55539063 -12.28476562 37.48578125 -13.30078125 37.4140625 C-16 37 -16 37 -19 35 C-19 34.34 -19 33.68 -19 33 C-19.66 33 -20.32 33 -21 33 C-21 32.01 -21 31.02 -21 30 C-21.639375 29.87625 -22.27875 29.7525 -22.9375 29.625 C-23.9584375 29.315625 -23.9584375 29.315625 -25 29 C-26.20272819 26.59454362 -26.10071472 25.05003047 -26.0625 22.375 C-26.05347656 21.55773437 -26.04445313 20.74046875 -26.03515625 19.8984375 C-26.02355469 19.27195312 -26.01195312 18.64546875 -26 18 C-25.03900391 17.82597656 -25.03900391 17.82597656 -24.05859375 17.6484375 C-23.37925781 17.43445313 -22.69992188 17.22046875 -22 17 C-21.690625 16.21625 -21.38125 15.4325 -21.0625 14.625 C-19.62590758 11.07577167 -18.52451269 10.51050544 -15 9 C-11.35427854 8.17842897 -7.69568037 7.55014506 -4 7 C-4 6.01 -4 5.02 -4 4 C-4.66 4 -5.32 4 -6 4 C-6 2.68 -6 1.36 -6 0 C-3.50907189 -1.24546405 -2.58919267 -0.7767578 0 0 Z ' fill='%23CACDD0' transform='translate(31,7)'/%3E%3Cpath d='M0 0 C1.58748047 -0.0299707 1.58748047 -0.0299707 3.20703125 -0.06054688 C4.72876953 -0.05958008 4.72876953 -0.05958008 6.28125 -0.05859375 C7.6744043 -0.06137329 7.6744043 -0.06137329 9.09570312 -0.06420898 C11.5 0.4375 11.5 0.4375 13.3034668 2.30029297 C14.82430072 5.01675494 14.86729985 6.90170081 14.8125 10 C14.80863281 10.95003906 14.80476563 11.90007813 14.80078125 12.87890625 C14.5 15.4375 14.5 15.4375 12.5 18.4375 C8.4951979 19.880311 4.26936741 19.62140746 0.0625 19.625 C-0.68837891 19.63724609 -1.43925781 19.64949219 -2.21289062 19.66210938 C-6.39120456 19.67313395 -9.74381715 19.50014376 -13.5 17.4375 C-14.85281371 14.73187257 -14.70609362 12.51856345 -14.75 9.5 C-14.77578125 8.43910156 -14.8015625 7.37820312 -14.828125 6.28515625 C-14.5 3.4375 -14.5 3.4375 -13.30566406 1.78662109 C-9.60321762 -0.97970111 -4.44163789 -0.02975519 0 0 Z ' fill='%23071942' transform='translate(27.5,20.5625)'/%3E%3Cpath d='M0 0 C1.60294922 0.04060547 1.60294922 0.04060547 3.23828125 0.08203125 C4.04652344 0.11683594 4.85476562 0.15164063 5.6875 0.1875 C5.6875 1.5075 5.6875 2.8275 5.6875 4.1875 C4.84445313 4.30867188 4.00140625 4.42984375 3.1328125 4.5546875 C2.03710938 4.72226562 0.94140625 4.88984375 -0.1875 5.0625 C-1.82332031 5.30613281 -1.82332031 5.30613281 -3.4921875 5.5546875 C-6.43182714 5.95006513 -6.43182714 5.95006513 -8.3125 8.1875 C-8.55627883 11.54494112 -8.55627883 11.54494112 -8.4375 15.3125 C-8.39625 17.58125 -8.355 19.85 -8.3125 22.1875 C-3.6925 22.8475 0.9275 23.5075 5.6875 24.1875 C5.6875 25.5075 5.6875 26.8275 5.6875 28.1875 C0.02975575 29.36619672 -3.81360636 29.08367022 -9.3125 27.1875 C-9.6425 26.1975 -9.9725 25.2075 -10.3125 24.1875 C-10.9725 24.1875 -11.6325 24.1875 -12.3125 24.1875 C-12.3125 23.1975 -12.3125 22.2075 -12.3125 21.1875 C-12.951875 21.06375 -13.59125 20.94 -14.25 20.8125 C-15.2709375 20.503125 -15.2709375 20.503125 -16.3125 20.1875 C-17.51522819 17.78204362 -17.41321472 16.23753047 -17.375 13.5625 C-17.36597656 12.74523438 -17.35695313 11.92796875 -17.34765625 11.0859375 C-17.33605469 10.45945312 -17.32445312 9.83296875 -17.3125 9.1875 C-16.67183594 9.07148438 -16.03117187 8.95546875 -15.37109375 8.8359375 C-14.69175781 8.62195312 -14.01242188 8.40796875 -13.3125 8.1875 C-13.003125 7.40375 -12.69375 6.62 -12.375 5.8125 C-10.12962936 0.26511373 -5.4692016 -0.18030335 0 0 Z ' fill='%23E1E3E5' transform='translate(22.3125,15.8125)'/%3E%3Cpath d='M0 0 C0 2.31 0 4.62 0 7 C0.66 7 1.32 7 2 7 C2 4.69 2 2.38 2 0 C2.99 0.33 3.98 0.66 5 1 C5.3125 3.6875 5.3125 3.6875 5 7 C2.6875 9.875 2.6875 9.875 0 12 C-0.99 12 -1.98 12 -3 12 C-4.52491998 8.95016004 -4.23562548 6.3576631 -4 3 C-1.77419355 0 -1.77419355 0 0 0 Z ' fill='%23122B5D' transform='translate(17,26)'/%3E%3Cpath d='M0 0 C0 1.32 0 2.64 0 4 C-0.66 4 -1.32 4 -2 4 C-2 4.99 -2 5.98 -2 7 C-1.01 7.33 -0.02 7.66 1 8 C1 8.33 1 8.66 1 9 C-1.97 9 -4.94 9 -8 9 C-6.68 8.34 -5.36 7.68 -4 7 C-4 6.01 -4 5.02 -4 4 C-4.66 4 -5.32 4 -6 4 C-6 2.68 -6 1.36 -6 0 C-3.50907189 -1.24546405 -2.58919267 -0.7767578 0 0 Z ' fill='%232881C5' transform='translate(31,7)'/%3E%3Cpath d='M0 0 C0.99 0 1.98 0 3 0 C3 4.29 3 8.58 3 13 C2.01 12.67 1.02 12.34 0 12 C-1.1898306 9.6203388 -1.13349966 8.08514265 -1.125 5.4375 C-1.12886719 4.22900391 -1.12886719 4.22900391 -1.1328125 2.99609375 C-1 1 -1 1 0 0 Z ' fill='%2332B6EF' transform='translate(6,24)'/%3E%3Cpath d='M0 0 C3.53571429 0.53571429 3.53571429 0.53571429 5 2 C5.04092937 4.33297433 5.04241723 6.66705225 5 9 C4.34 9 3.68 9 3 9 C2.67 7.02 2.34 5.04 2 3 C1.67 3 1.34 3 1 3 C0.67 4.98 0.34 6.96 0 9 C-0.66 9 -1.32 9 -2 9 C-2.125 5.625 -2.125 5.625 -2 2 C-1.34 1.34 -0.68 0.68 0 0 Z ' fill='%2335BAF7' transform='translate(34,24)'/%3E%3Cpath d='M0 0 C2.475 0.99 2.475 0.99 5 2 C5 4.31 5 6.62 5 9 C4.34 9 3.68 9 3 9 C2.87625 8.030625 2.7525 7.06125 2.625 6.0625 C2.315625 4.5465625 2.315625 4.5465625 2 3 C1.34 2.67 0.68 2.34 0 2 C0 4.31 0 6.62 0 9 C-0.66 9 -1.32 9 -2 9 C-2.125 5.625 -2.125 5.625 -2 2 C-1.34 1.34 -0.68 0.68 0 0 Z ' fill='%2335BBF8' transform='translate(19,24)'/%3E%3Cpath d='M0 0 C1.32 0.33 2.64 0.66 4 1 C4 4.63 4 8.26 4 12 C3.01 12 2.02 12 1 12 C0.67 8.04 0.34 4.08 0 0 Z ' fill='%232F7ADD' transform='translate(46,24)'/%3E%3Cpath d='M0 0 C-2.07143201 4.03384128 -3.96615872 5.92856799 -8 8 C-8.36075949 3.55063291 -8.36075949 3.55063291 -6.8125 1.1875 C-4.44017475 -0.36678206 -2.77958655 -0.22537188 0 0 Z ' fill='%23152E62' transform='translate(21,21)'/%3E%3Cpath d='M0 0 C0 2.64 0 5.28 0 8 C-1.98 8.99 -1.98 8.99 -4 10 C-4.36814024 3.49618902 -4.36814024 3.49618902 -2.5625 1.0625 C-1 0 -1 0 0 0 Z ' fill='%2306163E' transform='translate(17,26)'/%3E%3Cpath d='M0 0 C1.9453125 -0.29296875 1.9453125 -0.29296875 4.125 -0.1875 C5.40375 -0.125625 6.6825 -0.06375 8 0 C6.68 1.65 5.36 3.3 4 5 C2.02 4.34 0.04 3.68 -2 3 C-1.34 2.01 -0.68 1.02 0 0 Z ' fill='%23071B44' transform='translate(21,21)'/%3E%3Cpath d='M0 0 C1.32 0.33 2.64 0.66 4 1 C1.36 3.64 -1.28 6.28 -4 9 C-4.33 7.68 -4.66 6.36 -5 5 C-2.8125 2.1875 -2.8125 2.1875 0 0 Z ' fill='%23152E63' transform='translate(29,21)'/%3E%3Cpath d='M0 0 C1.98 0 3.96 0 6 0 C5.6875 1.9375 5.6875 1.9375 5 4 C4.01 4.33 3.02 4.66 2 5 C1.01 4.01 0.02 3.02 -1 2 C-0.67 1.34 -0.34 0.68 0 0 Z ' fill='%2330A9E4' transform='translate(25,32)'/%3E%3Cpath d='M0 0 C-6.625 3 -6.625 3 -10 3 C-10 2.01 -10 1.02 -10 0 C-3.375 -1.125 -3.375 -1.125 0 0 Z ' fill='%23D4D6D7' transform='translate(36,46)'/%3E%3C/svg%3E");
@@ -197,7 +199,7 @@
         margin-left: 40px;
         margin-top: 4px;
         display: flex;
-        gap: 12px;
+        gap: 2px;
         justify-content: flex-start;
         opacity: 0;
         transition: opacity 0.2s;
@@ -213,19 +215,19 @@
         background: none;
         border: none;
         cursor: pointer;
-        padding: 5px;
+        // padding: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border-radius: 50%;
+        // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        // border-radius: 50%;
         transition: transform 0.1s ease, box-shadow 0.1s ease;
         color: #666;
     }
 
     .n8n-chat-widget .message-footer button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
     .n8n-chat-widget .message-footer button svg {
@@ -238,6 +240,7 @@
         font-size: 18px;
         font-weight: 500;
         color: #ffffff;
+        display: flex;
     }
 
     .n8n-chat-widget .chat-interface {
@@ -249,23 +252,24 @@
     .n8n-chat-widget .chat-messages {
         flex: 1;
         overflow-y: auto;
-        padding: 1px 20px 20px 20px;
+        padding: 20px 10px;
         background: var(--chat--color-background);
         display: flex;
         flex-direction: column;
         gap: 15px;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+        // padding-top: 20px;
     }
 
-    ::-webkit-scrollbar {
+    .chat-container ::-webkit-scrollbar {
         width: 5px;
     }
 
-    ::-webkit-scrollbar-track {
+    .chat-container ::-webkit-scrollbar-track {
         background: transparent;
     }
 
-    ::-webkit-scrollbar-thumb {
+    .chat-container ::-webkit-scrollbar-thumb {
         -webkit-border-radius: 10px;
         border-radius: 10px;
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
@@ -296,6 +300,7 @@
         background-size: cover;
         background-position: center;
         flex-shrink: 0;
+        display: none;
     }
 
     .n8n-chat-widget .message-bubble {        
@@ -314,13 +319,13 @@
     .n8n-chat-widget .chat-message.user .message-bubble-user {
         white-space: pre-wrap;
         padding: 8px 12px;
-        background: linear-gradient(to right,rgb(9, 90, 160),rgb(63, 11, 137));
-        color: rgb(255, 255, 255);
-        border-radius: 12px 0px 12px 12px; 
+        background: transparent linear-gradient(153deg, #DDF1FF 0%, #FFD8A3 100%) 0% 0% no-repeat padding-box;
+        color: #122646;
+        border-radius: 20px 0px 20px 20px;
         max-height: 100%;
         word-wrap: break-word;
-        font-size: 14px;
-        line-height: 1.4;
+        font-size: 13px;
+        // line-height: 1.4;
         margin: 20px 0;
         min-width: 40px;
         // display: inline-block;
@@ -334,15 +339,15 @@
 
     .n8n-chat-widget .message-bubble li {
         margin-bottom: 5px;
-        font-size: 14px;
-        line-height: 1.5;
+        font-size: 13px;
+        // line-height: 1.5;
         color: var(--chat--color-font);
     }
 
     .n8n-chat-widget .message-bubble div {
         margin-bottom: 5px;
-        font-size: 14px;
-        line-height: 1.5;
+        font-size: 13px;
+        // line-height: 1.5;
         color: var(--chat--color-font);
     }
 
@@ -354,9 +359,13 @@
 
     .n8n-chat-widget .chat-message.bot .message-bubble {
         padding: 8px 12px;
-        border-radius: 0px 12px 12px 12px;
+        border-radius: 0px 20px 20px 20px;
         maxWidth = "80%";
         width = "100%";
+        background: #ffffff;
+        color: #122646; 
+        font-size: 13px;
+        border: 1px solid #E5E5E5;
     }
 
     .n8n-chat-widget .chat-message.bot .message-bubble-table {
@@ -391,7 +400,7 @@
         border-radius: 4px;
         border: 1px solid #ddd;
         background:  #fff;
-        font-size: 14px;
+        font-size: 13px;
     }
 
 
@@ -402,11 +411,13 @@
 
 
     .n8n-chat-widget .chat-input {
-        margin-bottom: -10px;
+        // margin-bottom: -10px;
         padding: 5px 12px;
         border-top: 1px solid rgba(133, 79, 255, 0.2);
         position: relative;
-        flex-shrink: 0; /* Prevent it from shrinking in full-screen */
+        flex-shrink: 0; /* Prevent it from shrinking in full-screen */ 
+        background: #ffffff;
+        border: none
     }
     .n8n-chat-widget .messages {
         flex: 1;
@@ -432,27 +443,30 @@
     }
 
     .n8n-chat-widget .chat-input textarea {
-
+        height : 50px !important;
         flex: 1;
         height: 100%;
         padding: 12px 40px 12px 40px;
-        border: 1px solid #000000;
+        border: 1px solid #E5E5E599;
         border-radius: 10px;
-        background: var(--chat--color-background);
+        background: #E3F4FF;
         color: var(--chat--color-font);
         resize: none;
         font-family: inherit;
-        font-size: 14px;
+        font-size: 12px;
         width: 100%;
         box-sizing: border-box;
         max-height: 120px;
         overflow-y: auto;
-        min-height: 40px;
-        height = 40px !important;
+        min-height: 40px;        
     }
 
-    .n8n-chat-widget .chat-input textarea:focus {
-        border: 1px solid #000000;
+    // .n8n-chat-widget .chat-input textarea:focus {
+    //     border: 1px solid #000000;
+    //     outline: none;
+    // }
+
+    .n8n-chat-widget .chat-input textarea:focus-visible{
         outline: none;
     }
 
@@ -462,15 +476,15 @@
     }
 
     .n8n-chat-widget .chat-input .send-button {
-        background-color: #F3F4F6;
+        background-color: transparent;
         border: none;
         padding: 0;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
+        // width: 32px;
+        // height: 32px;
         border-radius: 50%;
         position: absolute;
         right: 10px;
@@ -530,15 +544,15 @@
     }
 
     .n8n-chat-widget .file-upload-button {
-        background: #F3F4F6;
+        background: transparent;
         border: none;
         padding: 0;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         font-size: 20px;
         color: white;
@@ -549,8 +563,7 @@
         transition: background-color 0.2s ease, transform 0.2s ease;
     }
 
-    .n8n-chat-widget .file-upload-button:hover {
-        background-color: #D3D3D3;
+    .n8n-chat-widget .file-upload-button:hover { 
         transform: translateY(-50%) scale(1.1);
     }
 
@@ -615,6 +628,7 @@
         padding: 4px;
         text-align: center;
         background: var(--chat--color-background);
+        display: none;
     }
 
     .n8n-chat-widget .chat-footer a {
@@ -636,7 +650,7 @@
         right: 53px;
         width: auto;
         height: 50px;
-        border-radius: 25px 25px 0px 25px;
+        border-radius: 999px;
         background: transparent linear-gradient(109deg, #103278 0%, #5C006B 100%) 0% 0% no-repeat padding-box;
         color: white;
         border: none;
@@ -647,20 +661,30 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0 20px;
-        font-size: 14px;
+        padding: 0 15px 0 5px;
+        font-size: 13px;
         font-weight: 500;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         gap: 10px;
         min-width: 120px;
     }
 
+.chatbot-tail {
+    position: absolute;
+    bottom: -8px;
+    right: 30px;
+    width: 0;
+    height: 0;
+    border-left: 0 solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 8px solid #6a1b9a;
+}
 
 
-
-.n8n-chat-widget .chat-toggle::before {
+.n8n-chat-widget .chat-toggle::after {
     content: "Ask AARYA";
     white-space: nowrap;
+    font-weight: normal;
 }
 
 
@@ -674,10 +698,11 @@
 }
 
 .n8n-chat-widget .chat-toggle svg {
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
     fill: currentColor;
     flex-shrink: 0;
+    border-radius: 50%;
 }
 
     .n8n-chat-widget .confirmation-dialog {
@@ -704,7 +729,7 @@
 
     .n8n-chat-widget .confirmation-dialog p {
         margin: 0 0 16px;
-        font-size: 14px;
+        font-size: 13px;
         color: var(--chat--color-font);
     }
 
@@ -719,7 +744,7 @@
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 13px;
         font-family: inherit;
     }
 
@@ -1035,7 +1060,7 @@
         font-size: 28px;
         color: #5f6368; /* Google Sheets close button color */
         cursor: pointer;
-        line-height: 1;
+        // line-height: 1;
         transition: color 0.2s;
     }
 
@@ -1131,7 +1156,7 @@
         margin-left: 0;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         background: white;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .n8n-chat-widget .table-dialog thead {
@@ -1214,7 +1239,7 @@
         .n8n-chat-widget .table-dialog th,
         .n8n-chat-widget .table-dialog td {
             padding: 8px 12px;
-            font-size: 14px;
+            font-size: 13px;
         }
     }
 
@@ -1371,7 +1396,7 @@
         position: absolute;
         right: 152px;
         color: #ffffff;
-        font-size: 14px;
+        font-size: 13px;
         letter-spacing: 0.5px;
     }
 
@@ -1416,16 +1441,16 @@
     .n8n-chat-widget .brand-header button {
         background: none;
         border: none;
-        color: #ffffff;
-        font-size: 30px;
+        // color: #ffffff;
+        // font-size: 30px;
         cursor: pointer;
-        padding: 0 6px;
-        transition: color 0.3s;
+        // padding: 0 6px;
+        // transition: color 0.3s;
     }
 
-    .n8n-chat-widget .brand-header button:hover {
-        color: #ddd;
-    }
+    // .n8n-chat-widget .brand-header button:hover {
+    //     color: #ddd;
+    // }
 
 
 
@@ -1436,6 +1461,7 @@
         justify-content: center;
         margin: 20px 0 40px 0;
         text-align: center;
+        display: none;
     }
 
     .n8n-chat-widget .chat-branding-message-video-off img {
@@ -1450,6 +1476,17 @@
         font-size: 18px;
         font-weight: 500;
         color: var(--chat--color-font);
+    }
+
+    .n8n-chat-widget .message-bubble div.message-bot-who, div.message-bot-who {
+        padding-right: 5px;
+        font-size: 10px;
+        margin-bottom: 0;
+        font-weight: 600; 
+    }
+
+    div.message-bot-who {
+        padding-left: 3px;
     }
 
     `;
@@ -1575,8 +1612,21 @@
                             </svg></span>
 
                     <button class="fullscreen-button" title="Toggle Fullscreen">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path d="M344 0L488 0c13.3 0 24 10.7 24 24l0 144c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-39-39-87 87c-9.4 9.4-24.6 9.4-33.9 0l-32-32c-9.4-9.4-9.4-24.6 0-33.9l87-87L327 41c-6.9-6.9-8.9-17.2-5.2-26.2S334.3 0 344 0zM168 512L24 512c-13.3 0-24-10.7-24-24L0 344c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2l39 39 87-87c9.4-9.4 24.6-9.4 33.9 0l32 32c9.4 9.4 9.4 24.6 0 33.9l-87 87 39 39c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8z"/>
+                       <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
+                        <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22">
+                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6)" fill="#fff"/>
+                            <circle id="Ellipse_2895" data-name="Ellipse 2895" cx="1.5" cy="1.5" r="1.5" transform="translate(6 21)" fill="#fff"/>
+                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" fill="#fff"/>
+                            <circle id="Ellipse_2892" data-name="Ellipse 2892" cx="1.5" cy="1.5" r="1.5" transform="translate(0 21)" fill="#fff"/>
+                            <circle id="Ellipse_2877" data-name="Ellipse 2877" cx="1.5" cy="1.5" r="1.5" transform="translate(6 7)" fill="#fff"/>
+                            <circle id="Ellipse_2896" data-name="Ellipse 2896" cx="1.5" cy="1.5" r="1.5" transform="translate(6 28)" fill="#fff"/>
+                            <circle id="Ellipse_2880" data-name="Ellipse 2880" cx="1.5" cy="1.5" r="1.5" transform="translate(0 7)" fill="#fff"/>
+                            <circle id="Ellipse_2893" data-name="Ellipse 2893" cx="1.5" cy="1.5" r="1.5" transform="translate(0 28)" fill="#fff"/>
+                            <circle id="Ellipse_2878" data-name="Ellipse 2878" cx="1.5" cy="1.5" r="1.5" transform="translate(6 14)" fill="#fff"/>
+                            <circle id="Ellipse_2897" data-name="Ellipse 2897" cx="1.5" cy="1.5" r="1.5" transform="translate(6 35)" fill="#fff"/>
+                            <circle id="Ellipse_2879" data-name="Ellipse 2879" cx="1.5" cy="1.5" r="1.5" transform="translate(0 14)" fill="#fff"/>
+                            <circle id="Ellipse_2894" data-name="Ellipse 2894" cx="1.5" cy="1.5" r="1.5" transform="translate(0 35)" fill="#fff"/>
+                        </g>
                         </svg>
                     </button>
                     <button class="refresh-button" title="Refresh chat">
@@ -1584,7 +1634,17 @@
                             <path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                         </svg>
                     </button>
-                    <button class="close-button">×</button>
+                    <button class="close-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="6" viewBox="0 0 15 6">
+                        <g id="Group_83625" data-name="Group 83625" opacity="0.437">
+                        <rect id="Rectangle_31702" data-name="Rectangle 31702" width="15" height="2" fill="#fff"/>
+                        <g id="Rectangle_31703" data-name="Rectangle 31703" transform="translate(0 1)" fill="none" stroke="#fff" stroke-width="1">
+                        <rect width="15" height="5" stroke="none"/>
+                        <rect x="0.5" y="0.5" width="14" height="4" fill="none"/>
+                        </g>
+                    </g>
+                    </svg>
+                    </button>
 
                 </div>
                 <div class="chat-messages"></div>
@@ -1592,7 +1652,7 @@
                     <div id="file-preview-container"></div>
                     <div class="input-row">
                         <div class="textarea-wrapper">
-                            <textarea id="chat-textarea" placeholder="" rows="1" style="height: 40px !important;"></textarea>
+                            <textarea id="chat-textarea" placeholder="Type your message.." rows="1" style="height: 40px !important;"></textarea>
                             <button class="file-upload-button" title="Upload file">
                             <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                                 width="20" height="20" viewBox="0 0 512.000000 512.000000"
@@ -1601,7 +1661,7 @@
                                 Created by potrace 1.16, written by Peter Selinger 2001-2019
                                 </metadata>
                                 <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                                fill="#000000" stroke="none">
+                                fill="#0099ff" stroke="none">
                                 <path d="M3880 4679 c-103 -14 -254 -67 -353 -125 -75 -44 -169 -136 -1103 -1069 -880 -879 -1025 -1028 -1051 -1080 -56 -110 -68 -160 -68 -285 0 -144    23 -226 96 -334 111 -167 281 -256 489 -256 110 0 190 19 285 68 63 32 129 95 703 666 349 347 643 644 654 659 90 124 -18 290 -169 262 -34 -6 -113 -81
                                 -678 -645 -489 -488 -651 -644 -685 -659 -59 -27 -160 -28 -215 -2 -95 44
                                 -160 151 -153 250 2 31 14 76 26 101 16 33 281 304 1009 1031 915 913 993 988
@@ -1618,28 +1678,18 @@
                             </svg>
                             </button>
                             <button class="mic-button" title="Record voice">
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 512.000000 512.000000">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 512.000000 512.000000" fill="#0099ff">
                                     <path d="M0 0 C1.51671886 1.26424817 3.0593383 2.49722026 4.60253906 3.72900391 C19.28864031 15.68237492 33.1902857 29.28168978 44.33349609 44.62451172 C45.62066708 46.38127784 46.9453607 48.10442915 48.27832031 49.82666016 C72.45591287 81.38831197 88.32687017 120.12752123 94.56347656 159.30322266 C94.72428711 160.30675781 94.88509766 161.31029297 95.05078125 162.34423828 C99.15307909 189.19102865 98.85784384 216.50430539 94.56347656 243.30322266 C94.40782227 244.28097656 94.25216797 245.25873047 94.09179688 246.26611328 C83.83070262 307.66882901 48.55341729 366.91574741 -1.70214844 404.01318359 C-3.45613547 405.31781021 -5.18141301 406.65442649 -6.90527344 407.99853516 C-58.49573872 447.71022316 -126.64664264 463.36497081 -190.72607422 455.71557617 C-232.1290536 450.25493496 -271.20213463 435.19680584 -305.43652344 411.30322266 C-306.15565918 410.80177734 -306.87479492 410.30033203 -307.61572266 409.78369141 C-318.02591578 402.43816999 -327.32460976 394.18751632 -336.43652344 385.30322266 C-337.07509277 384.69043457 -337.71366211 384.07764648 -338.37158203 383.44628906 C-346.67181637 375.47831329 -354.27219981 367.3099454 -361.12597656 358.0625 C-362.45449434 356.27909852 -363.81012381 354.5191275 -365.17089844 352.76025391 C-404.6647793 301.10368044 -421.02435224 232.73318877 -412.84033203 168.60058594 C-412.40469949 165.49544331 -411.93264328 162.39924907 -411.43652344 159.30322266 C-411.28086914 158.32546875 -411.12521484 157.34771484 -410.96484375 156.34033203 C-402.66879853 106.69653249 -378.42754956 60.28925426 -343.43652344 24.30322266 C-342.82550781 23.66642578 -342.21449219 23.02962891 -341.58496094 22.37353516 C-333.27930111 13.73697254 -324.82481479 5.71874882 -315.1796875 -1.40234375 C-313.40167473 -2.7226552 -311.64898673 -4.07204745 -309.89746094 -5.42724609 C-231.90738178 -65.10203185 -121.53510399 -69.85830349 0 0 Z " fill="#2F6FDD" transform="translate(414.4365234375,54.69677734375)"/>
                                     <path d="M0 0 C12.42224174 10.39773082 19.76584284 22.52302065 23.8125 38.1875 C23.98958874 38.80172569 24.16667747 39.41595139 24.34913254 40.04878998 C24.87862699 42.49271446 24.94449123 44.71825806 24.95294189 47.21936035 C24.95865204 48.23404388 24.96436218 49.24872742 24.97024536 50.29415894 C24.97192215 51.95549362 24.97192215 51.95549362 24.97363281 53.65039062 C24.97859772 54.82163483 24.98356262 55.99287903 24.98867798 57.19961548 C25.00077656 60.41083164 25.0082431 63.62201141 25.01268864 66.83324623 C25.01562559 68.84415082 25.01973173 70.85504979 25.02419281 72.86595154 C25.03786635 79.17067833 25.04753158 85.47539218 25.0513947 91.78013277 C25.05586392 99.03259997 25.07335924 106.28487762 25.1023953 113.53728724 C25.12410805 119.15789494 25.1341042 124.77844973 25.13543582 130.39909887 C25.13647778 133.74854452 25.1437283 137.09767117 25.16025543 140.44709778 C25.1774211 144.1946929 25.17540931 147.94183402 25.16894531 151.68945312 C25.1781601 152.78081573 25.18737488 153.87217834 25.1968689 154.99661255 C25.14152213 165.30482332 23.00793096 174.98339502 18.3125 184.1875 C17.97210693 184.859021 17.63171387 185.53054199 17.28100586 186.22241211 C8.18571212 203.25357726 -8.13754902 214.27458502 -26.1875 220.1875 C-40.96035048 223.42695866 -57.47272057 222.52258239 -71.1875 216.1875 C-72.15429688 215.7646875 -73.12109375 215.341875 -74.1171875 214.90625 C-89.98826543 207.17303356 -102.02001346 192.36911802 -108.50275135 176.19633675 C-111.19925232 168.28565266 -111.48105258 160.32587591 -111.4621582 152.04345703 C-111.46726913 150.87133667 -111.47238007 149.69921631 -111.47764587 148.49157715 C-111.49146955 144.64276935 -111.49059054 140.79414207 -111.48828125 136.9453125 C-111.49059497 134.9344191 -111.49409906 132.92353004 -111.497688 130.91263855 C-111.50874341 124.59782809 -111.50924309 118.28307714 -111.50317383 111.96826172 C-111.49713751 105.48463012 -111.50944538 99.00121572 -111.5307439 92.51762116 C-111.54843871 86.9223599 -111.55434891 81.32716728 -111.55110615 75.73187912 C-111.54930558 72.40266223 -111.55314744 69.07372314 -111.56582069 65.74451065 C-111.57823904 62.02628374 -111.57136063 58.30855178 -111.55981445 54.59033203 C-111.56745819 53.50839569 -111.57510193 52.42645935 -111.58297729 51.31173706 C-111.45647745 32.76193832 -103.84802264 17.3438609 -91.171875 4.078125 C-65.69586911 -20.26561396 -27.45332059 -20.96435391 0 0 Z " fill="#FEFEFE" transform="translate(299.1875,103.8125)"/>
                                     <path d="M0 0 C2.87029869 1.79393668 4.49131638 2.98263276 6 6 C6.19375772 8.12291066 6.38273173 10.24640357 6.54345703 12.37207031 C8.67955691 39.55053259 18.92903508 63.9102293 40 82 C60.17214379 97.7804004 84.37234267 105.60533967 110 103 C136.11046367 99.09316278 159.09631304 86.76179985 175.1953125 65.5859375 C184.9892939 51.55213731 190.84389608 36.36245029 192.484375 19.2890625 C192.56212158 18.48428467 192.63986816 17.67950684 192.7199707 16.8503418 C192.86174081 15.2778233 192.98614651 13.7036127 193.09057617 12.12817383 C193.50778592 7.22582299 194.4871831 4.47282278 198 1 C201.47263273 -0.73631636 205.21193013 -0.60190402 209 0 C211.75569447 2.18159145 213.43588747 3.87177494 215 7 C217.33691368 35.85816665 204.52083635 63.88912672 186.75390625 85.765625 C167.41565338 108.24074242 140.16137552 121.08386245 111 124 C111 134.23 111 144.46 111 155 C114.26261719 154.96519531 117.52523437 154.93039062 120.88671875 154.89453125 C124.05069097 154.87112719 127.2146535 154.8529154 130.37866211 154.83520508 C132.57564621 154.82012948 134.77260026 154.79966574 136.96948242 154.77368164 C140.12947 154.73724498 143.28905924 154.72026116 146.44921875 154.70703125 C147.91979988 154.68380547 147.91979988 154.68380547 149.42008972 154.66011047 C155.66306293 154.65857381 159.0765136 155.46631179 163.875 159.625 C165.67939414 163.43427651 165.09501562 167.00209061 164 171 C161.75410675 173.99452434 160.55130633 174.81623122 157 176 C155.44024881 176.09947413 153.87665187 176.14350139 152.31376648 176.15390015 C150.86914536 176.16680084 150.86914536 176.16680084 149.39533997 176.17996216 C148.34021713 176.18422211 147.2850943 176.18848206 146.19799805 176.19287109 C145.08553711 176.20104858 143.97307617 176.20922607 142.8269043 176.21765137 C139.13851461 176.2425029 135.45016337 176.2590196 131.76171875 176.2734375 C130.50321421 176.27876118 129.24470966 176.28408485 127.94806862 176.28956985 C122.65940906 176.31079697 117.37075527 176.32992729 112.08206463 176.34119225 C104.5099254 176.35742891 96.93829944 176.3906072 89.36635369 176.44759309 C83.39537731 176.49099426 77.42451524 176.50694035 71.45337868 176.51332474 C68.91562048 176.52004887 66.3778701 176.53530082 63.84021568 176.55921555 C60.28980701 176.59076918 56.74069714 176.59091792 53.19018555 176.58349609 C52.14113541 176.59990143 51.09208527 176.61630676 50.01124573 176.63320923 C45.40157823 176.59374052 42.05074243 176.56127426 38.3618927 173.60391235 C35.37556546 170.31158058 34.91720764 168.52249614 34.6875 164.22265625 C35.23528501 160.32653534 37.16101017 158.64092077 40 156 C42.39582346 154.80208827 43.86777538 154.8793256 46.54150391 154.88647461 C47.48232819 154.88655014 48.42315247 154.88662567 49.39248657 154.88670349 C50.41023163 154.89186478 51.42797668 154.89702606 52.4765625 154.90234375 C54.03713882 154.90446617 54.03713882 154.90446617 55.62924194 154.90663147 C58.96119021 154.91224134 62.29307195 154.92479553 65.625 154.9375 C67.88020736 154.94251373 70.13541578 154.94707686 72.390625 154.95117188 C77.92712975 154.96136426 83.46349017 154.9809378 89 155 C89 144.77 89 134.54 89 124 C83.555 123.505 83.555 123.505 78 123 C50.2450228 118.50606785 24.57550623 101.40169471 8 79 C-6.17032116 59.1639511 -18.46131918 31.97360396 -15 7 C-11.61041298 0.09160417 -7.24944534 -1.06833931 0 0 Z " fill="#FCFDFE" transform="translate(156,247)"/>
                                 </svg>
                             </button>
                             <button class="send-button" style="display: none;">
-                                <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                                    width="24" height="24" viewBox="0 0 512.000000 512.000000"
-                                    preserveAspectRatio="xMidYMid meet">
-                                    <metadata>
-                                    Created by potrace 1.16, written by Peter Selinger 2001-2019
-                                    </metadata>
-                                    <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                                    fill="#007BFF" stroke="none">
-                                    <path d="M130 5098 c-46 -30 -70 -81 -70 -143 0 -50 424 -1964 438 -1976 5 -4
-                                    1574 -278 2270 -396 56 -10 102 -20 102 -23 0 -3 -46 -13 -102 -23 -731 -124
-                                    -2265 -392 -2270 -396 -14 -12 -438 -1926 -438 -1976 0 -61 25 -112 71 -143
-                                    30 -21 43 -23 104 -20 l70 4 2315 1188 c1273 653 2334 1199 2357 1212 110 63
-                                    110 245 0 308 -23 13 -1084 559 -2357 1212 l-2315 1188 -70 4 c-61 3 -75 1
-                                    -105 -20z"/>
-                                    </g>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20.001" height="20" viewBox="0 0 20.001 20">
+                                <g id="Path_127105" data-name="Path 127105" transform="translate(0 20) rotate(-90)" fill="none" fill-rule="evenodd">
+                                    <path d="M17.776,13.6,5.752,19.573a4,4,0,0,1-5.3-5.431L2.57,10,.457,5.859A4,4,0,0,1,5.752.428L17.776,6.4A4.021,4.021,0,0,1,17.776,13.6ZM11.592,9.412a.588.588,0,0,1,0,1.176h-8L1.506,14.674A2.819,2.819,0,0,0,5.233,18.52l12.026-5.975a2.849,2.849,0,0,0,0-5.09L5.232,1.481A2.819,2.819,0,0,0,1.5,5.326L3.589,9.412h8Z" stroke="none"/>
+                                    <path d="M 3.981279611587524 20.00092697143555 C 1.232009768486023 20.00092697143555 -0.9926430583000183 16.98419761657715 0.4566248953342438 14.14200210571289 L 2.570134878158569 10.00046253204346 L 0.4574649035930634 5.858922481536865 C -1.296665191650391 2.420552492141724 2.327553033828735 -1.273617386817932 5.751864910125732 0.4278825223445892 L 17.77585411071777 6.403352737426758 C 20.74137496948242 7.876242637634277 20.74137496948242 12.12471294403076 17.77585411071777 13.59758281707764 L 5.751864910125732 19.57304191589355 C 5.158058643341064 19.86808395385742 4.558011054992676 20.00092697143555 3.981279611587524 20.00092697143555 Z M 3.589724779129028 10.58847236633301 L 1.505814909934998 14.67401218414307 C 0.2615449130535126 17.10984420776367 2.810936450958252 19.72336006164551 5.232824802398682 18.51955223083496 L 17.25849533081055 12.54408264160156 C 19.34981536865234 11.50459289550781 19.34981536865234 8.493912696838379 17.25849533081055 7.454312324523926 L 5.231985092163086 1.48053252696991 C 2.81089448928833 0.2773919999599457 0.2607449889183044 2.890092849731445 1.504974842071533 5.326072692871094 L 3.588884830474854 9.411612510681152 L 11.59238529205322 9.412452697753906 C 11.91559505462646 9.412452697753906 12.17957496643066 9.675612449645996 12.17957496643066 10.00046253204346 C 12.17957496643066 10.32531261444092 11.91559505462646 10.58847236633301 11.59238529205322 10.58847236633301 L 3.589724779129028 10.58847236633301 Z" stroke="none" fill="#09f"/>
+                                </g>
                                 </svg>
 
                             </button>
@@ -1683,8 +1733,8 @@
 			if (!isFullscreen) {
 				// Save original styles
 				originalStyles = {
-					width: chatContainer.style.width || '380px',
-					height: chatContainer.style.height || '450px',
+					width: chatContainer.style.width || '350px',
+					height: chatContainer.style.height || '500px',
 					left: chatContainer.style.left || '',
 					top: chatContainer.style.top || '',
 					right: chatContainer.style.right || '20px',
@@ -1704,9 +1754,22 @@
 
 				// Update button icon to "minimize"
 				fullscreenButton.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->\
-						<path d="M439 7c9.4-9.4 24.6-9.4 33.9 0l32 32c9.4 9.4 9.4 24.6 0 33.9l-87 87 39 39c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8l-144 0c-13.3 0-24-10.7-24-24l0-144c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2l39 39L439 7zM72 272l144 0c13.3 0 24 10.7 24 24l0 144c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-39-39L73 505c-9.4 9.4-24.6 9.4-33.9 0L7 473c-9.4-9.4-9.4-24.6 0-33.9l87-87L55 313c-6.9-6.9-8.9-17.2-5.2-26.2s12.5-14.8 22.2-14.8z"/>
-					</svg>
+					<svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
+                        <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22">
+                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6)" fill="#fff"/>
+                            <circle id="Ellipse_2895" data-name="Ellipse 2895" cx="1.5" cy="1.5" r="1.5" transform="translate(6 21)" fill="#fff"/>
+                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" fill="#fff"/>
+                            <circle id="Ellipse_2892" data-name="Ellipse 2892" cx="1.5" cy="1.5" r="1.5" transform="translate(0 21)" fill="#fff"/>
+                            <circle id="Ellipse_2877" data-name="Ellipse 2877" cx="1.5" cy="1.5" r="1.5" transform="translate(6 7)" fill="#fff"/>
+                            <circle id="Ellipse_2896" data-name="Ellipse 2896" cx="1.5" cy="1.5" r="1.5" transform="translate(6 28)" fill="#fff"/>
+                            <circle id="Ellipse_2880" data-name="Ellipse 2880" cx="1.5" cy="1.5" r="1.5" transform="translate(0 7)" fill="#fff"/>
+                            <circle id="Ellipse_2893" data-name="Ellipse 2893" cx="1.5" cy="1.5" r="1.5" transform="translate(0 28)" fill="#fff"/>
+                            <circle id="Ellipse_2878" data-name="Ellipse 2878" cx="1.5" cy="1.5" r="1.5" transform="translate(6 14)" fill="#fff"/>
+                            <circle id="Ellipse_2897" data-name="Ellipse 2897" cx="1.5" cy="1.5" r="1.5" transform="translate(6 35)" fill="#fff"/>
+                            <circle id="Ellipse_2879" data-name="Ellipse 2879" cx="1.5" cy="1.5" r="1.5" transform="translate(0 14)" fill="#fff"/>
+                            <circle id="Ellipse_2894" data-name="Ellipse 2894" cx="1.5" cy="1.5" r="1.5" transform="translate(0 35)" fill="#fff"/>
+                        </g>
+                        </svg>
 				`;
 				fullscreenButton.title = 'Minimize';
 				isFullscreen = true;
@@ -1724,10 +1787,22 @@
 
 				// Restore full-screen button icon
 				fullscreenButton.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-						<path d="M344 0L488 0c13.3 0 24 10.7 24 24l0 144c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-39-39-87 87c-9.4 9.4-24.6 9.4-33.9 0l-32-32c-9.4-9.4-9.4-24.6 0-33.9l87-87L327 41c-6.9-6.9-8.9-17.2-5.2-26.2S334.3 0 344 0zM168 512L24 512c-13.3 0-24-10.7-24-24L0 344c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2l39 39 87-87c9.4-9.4 24.6-9.4 33.9 0l32 32c9.4 9.4 9.4 24.6 0 33.9l-87 87 39 39c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8z"/>
-					</svg>
-
+					<svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
+                        <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22">
+                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6)" fill="#fff"/>
+                            <circle id="Ellipse_2895" data-name="Ellipse 2895" cx="1.5" cy="1.5" r="1.5" transform="translate(6 21)" fill="#fff"/>
+                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" fill="#fff"/>
+                            <circle id="Ellipse_2892" data-name="Ellipse 2892" cx="1.5" cy="1.5" r="1.5" transform="translate(0 21)" fill="#fff"/>
+                            <circle id="Ellipse_2877" data-name="Ellipse 2877" cx="1.5" cy="1.5" r="1.5" transform="translate(6 7)" fill="#fff"/>
+                            <circle id="Ellipse_2896" data-name="Ellipse 2896" cx="1.5" cy="1.5" r="1.5" transform="translate(6 28)" fill="#fff"/>
+                            <circle id="Ellipse_2880" data-name="Ellipse 2880" cx="1.5" cy="1.5" r="1.5" transform="translate(0 7)" fill="#fff"/>
+                            <circle id="Ellipse_2893" data-name="Ellipse 2893" cx="1.5" cy="1.5" r="1.5" transform="translate(0 28)" fill="#fff"/>
+                            <circle id="Ellipse_2878" data-name="Ellipse 2878" cx="1.5" cy="1.5" r="1.5" transform="translate(6 14)" fill="#fff"/>
+                            <circle id="Ellipse_2897" data-name="Ellipse 2897" cx="1.5" cy="1.5" r="1.5" transform="translate(6 35)" fill="#fff"/>
+                            <circle id="Ellipse_2879" data-name="Ellipse 2879" cx="1.5" cy="1.5" r="1.5" transform="translate(0 14)" fill="#fff"/>
+                            <circle id="Ellipse_2894" data-name="Ellipse 2894" cx="1.5" cy="1.5" r="1.5" transform="translate(0 35)" fill="#fff"/>
+                        </g>
+                        </svg>
 				`;
 				fullscreenButton.title = 'Toggle Fullscreen';
 				isFullscreen = false;
@@ -1765,11 +1840,11 @@
             <path d="M0 0 C1.32 0.33 2.64 0.66 4 1 C1.36 3.64 -1.28 6.28 -4 9 C-4.33 7.68 -4.66 6.36 -5 5 C-2.8125 2.1875 -2.8125 2.1875 0 0 Z " fill="#152E63" transform="translate(37,27)"/>
             <path d="M0 0 C-2.6860286 1.79068573 -4.6626589 2.66055791 -7.6875 3.625 C-8.49574219 3.88539062 -9.30398437 4.14578125 -10.13671875 4.4140625 C-10.75160156 4.60742188 -11.36648437 4.80078125 -12 5 C-12 3.68 -12 2.36 -12 1 C-7.9472484 0.01751476 -4.16138263 -0.08159574 0 0 Z " fill="#BEC5CB" transform="translate(46,50)"/>
             <path d="M0 0 C1.98 0 3.96 0 6 0 C5.6875 1.9375 5.6875 1.9375 5 4 C4.01 4.33 3.02 4.66 2 5 C1.01 4.01 0.02 3.02 -1 2 C-0.67 1.34 -0.34 0.68 0 0 Z " fill="#30A9E4" transform="translate(33,38)"/>
-        </svg>`
+        </svg><div class="chatbot-tail"></div>`
 		
 		const resizeHandle = document.createElement('div');
 		speechSynthesis.cancel();
-		resizeHandle.className = 'resize-handle';
+		resizeHandle.className = 'resize-handle top-left';
 		chatContainer.appendChild(resizeHandle);
 
 		widgetContainer.appendChild(chatContainer);
@@ -1900,6 +1975,7 @@
         });
 
  
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2056,9 +2132,9 @@
 
         // Add the bot's greeting message
         const timeWithDate = new Date().toLocaleString([], {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
+            // year: 'numeric',
+            // month: 'short',
+            // day: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
             hour12: true
@@ -2079,8 +2155,8 @@
                     I am AARYA (Automated AI Responder at Your Assistance).<br>
                     How can I assist you today?
                 </div>
-                <div style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666;">
-                    ${timeWithDate}
+                <div style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666;display: flex; align-items: center;left: 0;">
+                   <div class='message-bot-who'>Aarya</div> ${timeWithDate}
                 </div>
             </div>
         `;
@@ -2305,9 +2381,9 @@
 			// Format the timestamp
 			// Format the timestamp
             const timeWithDate = new Date().toLocaleString([], {
-                day: 'numeric',      // e.g., "5"
-                month: 'short',      // e.g., "Jun"
-                year: 'numeric',     // e.g., "2025"
+                // day: 'numeric',      // e.g., "5"
+                // month: 'short',      // e.g., "Jun"
+                // year: 'numeric',     // e.g., "2025"
                 hour: '2-digit',     // e.g., "04"
                 minute: '2-digit',   // e.g., "17"
                 hour12: true         // e.g., "pm"
@@ -2327,7 +2403,16 @@
             timestampDiv.style.marginTop = '30px';
             timestampDiv.style.fontSize = '10px';
             timestampDiv.style.color = '#666';
+            timestampDiv.style.display = 'flex';
+            timestampDiv.style.justifyContent = 'flex-end';
             timestampDiv.textContent = timeWithDate;
+
+            const messageWhoDiv = document.createElement('div');
+            messageWhoDiv.className = 'message-bot-who';
+            messageWhoDiv.textContent = ' You';
+
+            // Append branding message to the timestamp div
+            timestampDiv.appendChild(messageWhoDiv);
 
             // Append timestamp to wrapper
             timestampWrapper.appendChild(timestampDiv);
@@ -2380,7 +2465,7 @@
                 
                 if (timeSinceLastActivity >= oneMinute && socket.readyState === WebSocket.OPEN) {
                     const pingMessage = { type: "ping" };
-                    // console.log("📤 Sending smart ping after", Math.round(timeSinceLastActivity / 1000), "seconds of inactivity");
+                    console.log("📤 Sending smart ping after", Math.round(timeSinceLastActivity / 1000), "seconds of inactivity");
                     socket.send(JSON.stringify(pingMessage));
                     updateLastActivity(); // Update activity time after sending ping
                 }
@@ -2496,18 +2581,18 @@
                             updateLastActivity(); // Update activity when receiving any message
                             
                             const receivedData = JSON.parse(event.data);
-                            // console.log("recvied------",receivedData);
+                            console.log("recvied------",receivedData);
                             if (receivedData.error) {
-                                // console.error('Server error:', receivedData.error);
+                                console.error('Server error:', receivedData.error);
                                 if (receivedData.receivedMessage) {
                                     try {
                                         const innerMessage = JSON.parse(receivedData.receivedMessage);
-                                        // console.log('Parsed inner message:', innerMessage);
+                                        console.log('Parsed inner message:', innerMessage);
                                         if (innerMessage.type === 'pong') {
-                                            // console.log('📥 Pong received 1:', innerMessage);
+                                            console.log('📥 Pong received 1:', innerMessage);
                                         } else if (innerMessage.type === 'ping') {
                                             const pongMessage = { type: 'pong' };
-                                            // console.log('📤 got ping so Sending pong:', pongMessage);
+                                            console.log('📤 got ping so Sending pong:', pongMessage);
                                             socket.send(JSON.stringify(pongMessage));
                                             updateLastActivity(); // Update activity after sending pong
                                         }
@@ -2517,11 +2602,11 @@
                                 }
                             } else if (receivedData.type && receivedData.type.includes('Send "PING"')) {
                                 const pongMessage = { type: 'ping' };
-                                // console.log('📤 got connection so Sending ping:', pongMessage);
+                                console.log('📤 got connection so Sending ping:', pongMessage);
                                 socket.send(JSON.stringify(pongMessage));
                                 updateLastActivity(); // Update activity after sending ping
                             } else if (receivedData.type && receivedData.type.includes('pong')) {
-                                // console.log('📥 Pong received:', receivedData);
+                                console.log('📥 Pong received:', receivedData);
                             } else {
                                 // console.log('📥 Received message:', receivedData);
                                 updateLastActivity();
@@ -2590,9 +2675,9 @@
 
 
                     const timeWithDate = new Date().toLocaleString([], {
-                        year: 'numeric',
-                        month: 'short',     // e.g., "Jun"
-                        day: 'numeric',
+                        // year: 'numeric',
+                        // month: 'short',     // e.g., "Jun"
+                        // day: 'numeric',
                         hour: '2-digit',
                         minute: '2-digit',
                         hour12: true
@@ -2637,7 +2722,7 @@
                     }
 
                     let footerHTML = `
-                        <div class="message-footer" style="position: absolute; order: 2;">
+                        <div class="message-footer" style="position: absolute; order: 2;top: -25px;right:0;">
                                 <button class="action-btn copy-btn" title="Copy">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z" fill="currentColor"/>
@@ -2668,8 +2753,8 @@
                             <div class="message-bubble">
                                 <div class="avatar bot-avatar"></div>                     
                                 <div class="message-content">${formatBotMessage(rawMessage)}</div>
-                                <div class="message-content1" style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666; order: 1;"                             >
-                                    ${timeWithDate}
+                                <div class="message-content1" style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666; order: 1;display: flex;align-items: center;left: 0;"                             >
+                                   <div class='message-bot-who'>Aarya</div> ${timeWithDate}
                                 </div>
                             </div>
                             ${messageBodyHTML}
@@ -3795,10 +3880,13 @@
     refreshButton.addEventListener('click', () => {
             speechSynthesis.cancel(); // Stop any ongoing text-to-speech
             showConfirmationDialog();
-    });
+        });
+    
 
     let isResizing = false;
     let startX, startY, startWidth, startHeight, startLeft, startTop;
+    const MIN_WIDTH = 300;
+    const MIN_HEIGHT = 350;
 
     resizeHandle.addEventListener('mousedown', function(e) {
         e.preventDefault();
@@ -3813,26 +3901,54 @@
         document.body.style.userSelect = 'none';
     });
 
-    document.addEventListener('mousemove', function(e) {
-        if (!isResizing) return;
-        const dx = startX - e.clientX;
-        const dy = startY - e.clientY;
-        let newWidth = Math.max(300, startWidth + dx);
-        let newHeight = Math.max(350, startHeight + dy);
-        let newLeft = startLeft - dx;
-        let newTop = startTop - dy;
+    // document.addEventListener('mousemove', function(e) {
+    //     if (!isResizing) return;
+    //     const dx = startX - e.clientX;
+    //     const dy = startY - e.clientY;
+    //     let newWidth = Math.max(300, startWidth + dx);
+    //     let newHeight = Math.max(350, startHeight + dy);
+    //     let newLeft = startLeft - dx;
+    //     let newTop = startTop - dy;
 
-        // Prevent moving out of viewport
-        newLeft = Math.max(0, newLeft);
-        newTop = Math.max(0, newTop);
+    //     // Prevent moving out of viewport
+    //     newLeft = Math.max(0, newLeft);
+    //     newTop = Math.max(0, newTop);
 
-        chatContainer.style.width = newWidth + 'px';
-        chatContainer.style.height = newHeight + 'px';
-        chatContainer.style.left = newLeft + 'px';
-        chatContainer.style.top = newTop + 'px';
-        chatContainer.style.right = 'auto';
-        chatContainer.style.bottom = 'auto';
-        chatContainer.style.position = 'fixed';
+    //     chatContainer.style.width = newWidth + 'px';
+    //     chatContainer.style.height = newHeight + 'px';
+    //     chatContainer.style.left = newLeft + 'px';
+    //     chatContainer.style.top = newTop + 'px';
+    //     chatContainer.style.right = 'auto';
+    //     chatContainer.style.bottom = 'auto';
+    //     chatContainer.style.position = 'fixed';
+    // });
+ 
+    document.addEventListener('mousemove', function (e) {
+       if (!isResizing) return;
+
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+
+    let desiredWidth = startWidth - dx;
+    let desiredHeight = startHeight - dy;
+
+    let newWidth = Math.max(MIN_WIDTH, desiredWidth);
+    let newHeight = Math.max(MIN_HEIGHT, desiredHeight);
+
+    let newLeft = startLeft + (startWidth - newWidth);
+    let newTop = startTop + (startHeight - newHeight);
+
+    // Prevent going off-screen
+    newLeft = Math.max(0, newLeft);
+    newTop = Math.max(0, newTop);
+
+    chatContainer.style.width = `${newWidth}px`;
+    chatContainer.style.height = `${newHeight}px`;
+    chatContainer.style.left = `${newLeft}px`;
+    chatContainer.style.top = `${newTop}px`;
+    chatContainer.style.right = 'auto';
+    chatContainer.style.bottom = 'auto';
+    chatContainer.style.position = 'fixed';
     });
 
     document.addEventListener('mouseup', function() {
@@ -3841,6 +3957,4 @@
             document.body.style.userSelect = '';
         }
     });
-
-    
     })();
