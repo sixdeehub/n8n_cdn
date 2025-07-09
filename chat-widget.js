@@ -73,7 +73,7 @@
 
 
     .n8n-chat-widget .brand-header {
-        padding: 7px;
+        padding: 0 7px 7px 7px;
         display: flex;
         align-items: center;
         gap: 12px;
