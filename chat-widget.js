@@ -1,9 +1,9 @@
-// Version: 0.0.9
+// Version: 0.0.10
 // Author:  Prathamesh Patil / Pavankumar K 
 // Date: 2025-07-01
-// modified Date: 2025-07-08
+// modified Date: 2025-07-10
 // Description: 1. Changes did according to ui designs.
-//              2. updated bugs found in ui
+//              2. updated class name with prefix n8n to prevent overwriting with other styles.
 
 
 (function() {
@@ -18,7 +18,7 @@
     }
 
 
-    .n8n-chat-widget .chat-container {
+    .n8n-chat-widget .n8n-chat-container {
         position: fixed;
         bottom: 20px;
         right: 20px;
@@ -38,29 +38,29 @@
         max-height: calc(100vh - 20px);
     }
 
-    .n8n-chat-widget .chat-container.position-left {
+    .n8n-chat-widget .n8n-chat-container.position-left {
         right: 20px;        
     }
 
-    .n8n-chat-widget .chat-container.open {
+    .n8n-chat-widget .n8n-chat-container.open {
         bottom: 20px;
         right: 20px;
         display: flex;
         flex-direction: column;
     }
 
-    .n8n-chat-widget .chat-container.position-left.open {
+    .n8n-chat-widget .n8n-chat-container.position-left.open {
         right: auto;
     }
 
-    .n8n-chat-widget .chat-container.open:not(.position-left) {
+    .n8n-chat-widget .n8n-chat-container.open:not(.position-left) {
         right: 20px;
     }
 
 
 
-    .n8n-chat-widget .chat-container,
-    .n8n-chat-widget .chat-container.open {
+    .n8n-chat-widget .n8n-chat-container,
+    .n8n-chat-widget .n8n-chat-container.open {
         bottom: 25px;
         right: 20px;
         padding: 5px;
@@ -72,8 +72,8 @@
     }
 
 
-    .n8n-chat-widget .brand-header {
-        padding: 0 7px 7px 7px;
+    .n8n-chat-widget .n8n-brand-header {
+        padding: 7px;
         display: flex;
         align-items: center;
         gap: 12px;
@@ -86,7 +86,7 @@
 
 
 
-    .n8n-chat-widget .fullscreen-button {
+    .n8n-chat-widget .n8n-fullscreen-button {
         position: absolute;
         right: 42%; /* Adjusted to place it to the left of the refresh button (48px + 28px) */
         top: 42%;
@@ -105,12 +105,12 @@
         height: auto;
     }
 
-    // .n8n-chat-widget .fullscreen-button:hover {
+    // .n8n-chat-widget .n8n-fullscreen-button:hover {
     //     opacity: 1;
     //     background-color: #333333;
     // }
 
-    // .n8n-chat-widget .fullscreen-button svg {
+    // .n8n-chat-widget .n8n-fullscreen-button svg {
     //     fill: currentColor;
     //     width: 16px;
     //     height: 16px;
@@ -123,7 +123,7 @@
     }
 
 
-    .n8n-chat-widget .refresh-button {
+    .n8n-chat-widget .n8n-refresh-button {
         position: absolute;
         right: 40px;
         top: 50%;
@@ -141,18 +141,18 @@
         width: 40px; 
     }
 
-    .n8n-chat-widget .refresh-button:hover {
+    .n8n-chat-widget .n8n-refresh-button:hover {
         opacity: 1;
         background-color: #333333;
     }
 
-    .n8n-chat-widget .refresh-button svg {
+    .n8n-chat-widget .n8n-refresh-button svg {
         fill: rgb(156 140 140);
         width: 20px;
         height: 20px;
     }
 
-    .n8n-chat-widget .close-button {
+    .n8n-chat-widget .n8n-close-button {
         position: absolute;
         right: 16px;
         top: 50%;
@@ -172,22 +172,22 @@
         height: 28px;
     }
 
-    // .n8n-chat-widget .close-button:hover {
+    // .n8n-chat-widget .n8n-close-button:hover {
     //     background-color: #333333;
     //     opacity: 1;
     // }
 
-    // .n8n-chat-widget .brand-header img {
+    // .n8n-chat-widget .n8n-brand-header img {
     //     width: 32px;
     //     height: 32px;
     //     border-radius: 50%;
     // }
     
-    .n8n-chat-widget .bot-avatar {
+    .n8n-chat-widget .n8n-bot-avatar {
         background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='54' height='56'%3E%3Cpath d='M0 0 C0 1.32 0 2.64 0 4 C-0.66 4 -1.32 4 -2 4 C-2 4.99 -2 5.98 -2 7 C-1.26394531 7.09796875 -0.52789063 7.1959375 0.23046875 7.296875 C10.33390242 8.84508941 10.33390242 8.84508941 14 13 C14.8125 15.25 14.8125 15.25 15 17 C16.32 17.33 17.64 17.66 19 18 C19 21.63 19 25.26 19 29 C18.01 29.33 17.02 29.66 16 30 C14.79117904 32.00016466 14.79117904 32.00016466 14 34 C13.34 34 12.68 34 12 34 C12 34.66 12 35.32 12 36 C9.73192796 37.0067004 7.46092246 38.00551766 5.1875 39 C4.54490234 39.28617188 3.90230469 39.57234375 3.24023438 39.8671875 C0.32243531 41.13711041 -1.78265714 42 -5 42 C-5 40.68 -5 39.36 -5 38 C-5.75925781 37.95101562 -6.51851562 37.90203125 -7.30078125 37.8515625 C-8.29464844 37.77679688 -9.28851562 37.70203125 -10.3125 37.625 C-11.29863281 37.55539063 -12.28476562 37.48578125 -13.30078125 37.4140625 C-16 37 -16 37 -19 35 C-19 34.34 -19 33.68 -19 33 C-19.66 33 -20.32 33 -21 33 C-21 32.01 -21 31.02 -21 30 C-21.639375 29.87625 -22.27875 29.7525 -22.9375 29.625 C-23.9584375 29.315625 -23.9584375 29.315625 -25 29 C-26.20272819 26.59454362 -26.10071472 25.05003047 -26.0625 22.375 C-26.05347656 21.55773437 -26.04445313 20.74046875 -26.03515625 19.8984375 C-26.02355469 19.27195312 -26.01195312 18.64546875 -26 18 C-25.03900391 17.82597656 -25.03900391 17.82597656 -24.05859375 17.6484375 C-23.37925781 17.43445313 -22.69992188 17.22046875 -22 17 C-21.690625 16.21625 -21.38125 15.4325 -21.0625 14.625 C-19.62590758 11.07577167 -18.52451269 10.51050544 -15 9 C-11.35427854 8.17842897 -7.69568037 7.55014506 -4 7 C-4 6.01 -4 5.02 -4 4 C-4.66 4 -5.32 4 -6 4 C-6 2.68 -6 1.36 -6 0 C-3.50907189 -1.24546405 -2.58919267 -0.7767578 0 0 Z ' fill='%23CACDD0' transform='translate(31,7)'/%3E%3Cpath d='M0 0 C1.58748047 -0.0299707 1.58748047 -0.0299707 3.20703125 -0.06054688 C4.72876953 -0.05958008 4.72876953 -0.05958008 6.28125 -0.05859375 C7.6744043 -0.06137329 7.6744043 -0.06137329 9.09570312 -0.06420898 C11.5 0.4375 11.5 0.4375 13.3034668 2.30029297 C14.82430072 5.01675494 14.86729985 6.90170081 14.8125 10 C14.80863281 10.95003906 14.80476563 11.90007813 14.80078125 12.87890625 C14.5 15.4375 14.5 15.4375 12.5 18.4375 C8.4951979 19.880311 4.26936741 19.62140746 0.0625 19.625 C-0.68837891 19.63724609 -1.43925781 19.64949219 -2.21289062 19.66210938 C-6.39120456 19.67313395 -9.74381715 19.50014376 -13.5 17.4375 C-14.85281371 14.73187257 -14.70609362 12.51856345 -14.75 9.5 C-14.77578125 8.43910156 -14.8015625 7.37820312 -14.828125 6.28515625 C-14.5 3.4375 -14.5 3.4375 -13.30566406 1.78662109 C-9.60321762 -0.97970111 -4.44163789 -0.02975519 0 0 Z ' fill='%23071942' transform='translate(27.5,20.5625)'/%3E%3Cpath d='M0 0 C1.60294922 0.04060547 1.60294922 0.04060547 3.23828125 0.08203125 C4.04652344 0.11683594 4.85476562 0.15164063 5.6875 0.1875 C5.6875 1.5075 5.6875 2.8275 5.6875 4.1875 C4.84445313 4.30867188 4.00140625 4.42984375 3.1328125 4.5546875 C2.03710938 4.72226562 0.94140625 4.88984375 -0.1875 5.0625 C-1.82332031 5.30613281 -1.82332031 5.30613281 -3.4921875 5.5546875 C-6.43182714 5.95006513 -6.43182714 5.95006513 -8.3125 8.1875 C-8.55627883 11.54494112 -8.55627883 11.54494112 -8.4375 15.3125 C-8.39625 17.58125 -8.355 19.85 -8.3125 22.1875 C-3.6925 22.8475 0.9275 23.5075 5.6875 24.1875 C5.6875 25.5075 5.6875 26.8275 5.6875 28.1875 C0.02975575 29.36619672 -3.81360636 29.08367022 -9.3125 27.1875 C-9.6425 26.1975 -9.9725 25.2075 -10.3125 24.1875 C-10.9725 24.1875 -11.6325 24.1875 -12.3125 24.1875 C-12.3125 23.1975 -12.3125 22.2075 -12.3125 21.1875 C-12.951875 21.06375 -13.59125 20.94 -14.25 20.8125 C-15.2709375 20.503125 -15.2709375 20.503125 -16.3125 20.1875 C-17.51522819 17.78204362 -17.41321472 16.23753047 -17.375 13.5625 C-17.36597656 12.74523438 -17.35695313 11.92796875 -17.34765625 11.0859375 C-17.33605469 10.45945312 -17.32445312 9.83296875 -17.3125 9.1875 C-16.67183594 9.07148438 -16.03117187 8.95546875 -15.37109375 8.8359375 C-14.69175781 8.62195312 -14.01242188 8.40796875 -13.3125 8.1875 C-13.003125 7.40375 -12.69375 6.62 -12.375 5.8125 C-10.12962936 0.26511373 -5.4692016 -0.18030335 0 0 Z ' fill='%23E1E3E5' transform='translate(22.3125,15.8125)'/%3E%3Cpath d='M0 0 C0 2.31 0 4.62 0 7 C0.66 7 1.32 7 2 7 C2 4.69 2 2.38 2 0 C2.99 0.33 3.98 0.66 5 1 C5.3125 3.6875 5.3125 3.6875 5 7 C2.6875 9.875 2.6875 9.875 0 12 C-0.99 12 -1.98 12 -3 12 C-4.52491998 8.95016004 -4.23562548 6.3576631 -4 3 C-1.77419355 0 -1.77419355 0 0 0 Z ' fill='%23122B5D' transform='translate(17,26)'/%3E%3Cpath d='M0 0 C0 1.32 0 2.64 0 4 C-0.66 4 -1.32 4 -2 4 C-2 4.99 -2 5.98 -2 7 C-1.01 7.33 -0.02 7.66 1 8 C1 8.33 1 8.66 1 9 C-1.97 9 -4.94 9 -8 9 C-6.68 8.34 -5.36 7.68 -4 7 C-4 6.01 -4 5.02 -4 4 C-4.66 4 -5.32 4 -6 4 C-6 2.68 -6 1.36 -6 0 C-3.50907189 -1.24546405 -2.58919267 -0.7767578 0 0 Z ' fill='%232881C5' transform='translate(31,7)'/%3E%3Cpath d='M0 0 C0.99 0 1.98 0 3 0 C3 4.29 3 8.58 3 13 C2.01 12.67 1.02 12.34 0 12 C-1.1898306 9.6203388 -1.13349966 8.08514265 -1.125 5.4375 C-1.12886719 4.22900391 -1.12886719 4.22900391 -1.1328125 2.99609375 C-1 1 -1 1 0 0 Z ' fill='%2332B6EF' transform='translate(6,24)'/%3E%3Cpath d='M0 0 C3.53571429 0.53571429 3.53571429 0.53571429 5 2 C5.04092937 4.33297433 5.04241723 6.66705225 5 9 C4.34 9 3.68 9 3 9 C2.67 7.02 2.34 5.04 2 3 C1.67 3 1.34 3 1 3 C0.67 4.98 0.34 6.96 0 9 C-0.66 9 -1.32 9 -2 9 C-2.125 5.625 -2.125 5.625 -2 2 C-1.34 1.34 -0.68 0.68 0 0 Z ' fill='%2335BAF7' transform='translate(34,24)'/%3E%3Cpath d='M0 0 C2.475 0.99 2.475 0.99 5 2 C5 4.31 5 6.62 5 9 C4.34 9 3.68 9 3 9 C2.87625 8.030625 2.7525 7.06125 2.625 6.0625 C2.315625 4.5465625 2.315625 4.5465625 2 3 C1.34 2.67 0.68 2.34 0 2 C0 4.31 0 6.62 0 9 C-0.66 9 -1.32 9 -2 9 C-2.125 5.625 -2.125 5.625 -2 2 C-1.34 1.34 -0.68 0.68 0 0 Z ' fill='%2335BBF8' transform='translate(19,24)'/%3E%3Cpath d='M0 0 C1.32 0.33 2.64 0.66 4 1 C4 4.63 4 8.26 4 12 C3.01 12 2.02 12 1 12 C0.67 8.04 0.34 4.08 0 0 Z ' fill='%232F7ADD' transform='translate(46,24)'/%3E%3Cpath d='M0 0 C-2.07143201 4.03384128 -3.96615872 5.92856799 -8 8 C-8.36075949 3.55063291 -8.36075949 3.55063291 -6.8125 1.1875 C-4.44017475 -0.36678206 -2.77958655 -0.22537188 0 0 Z ' fill='%23152E62' transform='translate(21,21)'/%3E%3Cpath d='M0 0 C0 2.64 0 5.28 0 8 C-1.98 8.99 -1.98 8.99 -4 10 C-4.36814024 3.49618902 -4.36814024 3.49618902 -2.5625 1.0625 C-1 0 -1 0 0 0 Z ' fill='%2306163E' transform='translate(17,26)'/%3E%3Cpath d='M0 0 C1.9453125 -0.29296875 1.9453125 -0.29296875 4.125 -0.1875 C5.40375 -0.125625 6.6825 -0.06375 8 0 C6.68 1.65 5.36 3.3 4 5 C2.02 4.34 0.04 3.68 -2 3 C-1.34 2.01 -0.68 1.02 0 0 Z ' fill='%23071B44' transform='translate(21,21)'/%3E%3Cpath d='M0 0 C1.32 0.33 2.64 0.66 4 1 C1.36 3.64 -1.28 6.28 -4 9 C-4.33 7.68 -4.66 6.36 -5 5 C-2.8125 2.1875 -2.8125 2.1875 0 0 Z ' fill='%23152E63' transform='translate(29,21)'/%3E%3Cpath d='M0 0 C1.98 0 3.96 0 6 0 C5.6875 1.9375 5.6875 1.9375 5 4 C4.01 4.33 3.02 4.66 2 5 C1.01 4.01 0.02 3.02 -1 2 C-0.67 1.34 -0.34 0.68 0 0 Z ' fill='%2330A9E4' transform='translate(25,32)'/%3E%3Cpath d='M0 0 C-6.625 3 -6.625 3 -10 3 C-10 2.01 -10 1.02 -10 0 C-3.375 -1.125 -3.375 -1.125 0 0 Z ' fill='%23D4D6D7' transform='translate(36,46)'/%3E%3C/svg%3E");
     }
 
-    .n8n-chat-widget .bot-message-container {
+    .n8n-chat-widget .n8n-bot-message-container {
         margin-top: 20px;
         display: table-column;
         position: relative;
@@ -197,7 +197,7 @@
 
 
 
-    .n8n-chat-widget .message-footer {
+    .n8n-chat-widget .n8n-message-footer {
         margin-left: 40px;
         margin-top: 4px;
         display: flex;
@@ -209,11 +209,11 @@
         margin: 5px 10px 0;
     }
 
-    .n8n-chat-widget .bot-message-container:hover .message-footer {
+    .n8n-chat-widget .n8n-bot-message-container:hover .n8n-message-footer {
         opacity: 1;
     }
 
-    .n8n-chat-widget .message-footer button {
+    .n8n-chat-widget .n8n-message-footer button {
         background: none;
         border: none;
         cursor: pointer;
@@ -227,31 +227,31 @@
         color: #666;
     }
 
-    .n8n-chat-widget .message-footer button:hover {
+    .n8n-chat-widget .n8n-message-footer button:hover {
         transform: translateY(-2px);
         // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
-    .n8n-chat-widget .message-footer button svg {
+    .n8n-chat-widget .n8n-message-footer button svg {
         width: 15px;
         height: 15px;
         fill: #666;
     }
 
-    .n8n-chat-widget .brand-header span {
+    .n8n-chat-widget .n8n-brand-header span {
         font-size: 18px;
         font-weight: 500;
         color: #ffffff;
         display: flex;
     }
 
-    .n8n-chat-widget .chat-interface {
+    .n8n-chat-widget .n8n-chat-interface {
         display: flex;
         flex-direction: column;
         height: 100%;
     }
 
-    .n8n-chat-widget .chat-messages {
+    .n8n-chat-widget .n8n-chat-messages {
         flex: 1;
         overflow-y: auto;
         padding: 20px 10px;
@@ -264,39 +264,39 @@
         border-radius: 17px 17px 0 0;
     }
 
-    .chat-container ::-webkit-scrollbar {
+    .n8n-chat-container ::-webkit-scrollbar {
         width: 5px;
     }
 
-    .chat-container ::-webkit-scrollbar-track {
+    .n8n-chat-container ::-webkit-scrollbar-track {
         background: transparent;
     }
 
-    .chat-container ::-webkit-scrollbar-thumb {
+    .n8n-chat-container ::-webkit-scrollbar-thumb {
         -webkit-border-radius: 10px;
         border-radius: 10px;
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
     }
 
-    .n8n-chat-widget .chat-message {
+    .n8n-chat-widget .n8n-chat-message {
         display: flex;
         align-items: flex-start;
         gap: 8px;
         margin: 8px 0;
     }
 
-    .n8n-chat-widget .chat-message.user {
+    .n8n-chat-widget .n8n-chat-message.user {
         flex-direction: row-reverse;
         align-self: flex-end;
         gap: 0;
     }
 
-    .n8n-chat-widget .chat-message.bot {
+    .n8n-chat-widget .n8n-chat-message.bot {
         flex-direction: column;
         align-self: flex-start;
     }
 
-    .n8n-chat-widget .avatar {
+    .n8n-chat-widget .n8n-avatar {
         width: 32px;
         height: 32px;
         border-radius: 50%;
@@ -306,7 +306,7 @@
         display: none;
     }
 
-    .n8n-chat-widget .message-bubble {        
+    .n8n-chat-widget .n8n-message-bubble {        
         display: flex;
         align-items: flex-start;
         gap: 10px;
@@ -315,11 +315,11 @@
         border-radius: 8px;
     }
 
-    .n8n-chat-widget .chat-message.user{
+    .n8n-chat-widget .n8n-chat-message.user{
         max-width: 100%;
     }
 
-    .n8n-chat-widget .chat-message.user .message-bubble-user {
+    .n8n-chat-widget .n8n-chat-message.user .n8n-message-bubble-user {
         white-space: pre-wrap;
         padding: 8px 12px;
         background: transparent linear-gradient(153deg, #DDF1FF 0%, #FFD8A3 100%) 0% 0% no-repeat padding-box;
@@ -329,38 +329,38 @@
         word-wrap: break-word;
         font-size: 13px;
         // line-height: 1.4;
-        margin: 20px 0 0 ;
+        margin: 25px 0 0 ;
         min-width: 40px;
         // display: inline-block;
     }
 
-    .n8n-chat-widget .message-bubble ul {
+    .n8n-chat-widget .n8n-message-bubble ul {
         list-style-type: disc;
         padding-left: 20px;
         margin: 5px 0;
     }
 
-    .n8n-chat-widget .message-bubble li {
+    .n8n-chat-widget .n8n-message-bubble li {
         margin-bottom: 5px;
         font-size: 13px;
         // line-height: 1.5;
         color: var(--chat--color-font);
     }
 
-    .n8n-chat-widget .message-bubble div {
+    .n8n-chat-widget .n8n-message-bubble div {
         margin-bottom: 5px;
         font-size: 13px;
         // line-height: 1.5;
         color: var(--chat--color-font);
     }
 
-    .n8n-chat-widget .chat-message.user .message-bubble {
+    .n8n-chat-widget .n8n-chat-message.user .n8n-message-bubble {
         white-space: pre-wrap;
         padding: 8px 12px;
         border-radius: 12px 12px 0 12px;
     }
 
-    .n8n-chat-widget .chat-message.bot .message-bubble {
+    .n8n-chat-widget .n8n-chat-message.bot .n8n-message-bubble {
         padding: 8px 12px;
         border-radius: 0px 20px 20px 20px;
         maxWidth = "80%";
@@ -371,7 +371,7 @@
         border: 1px solid #E5E5E5;
     }
 
-    .n8n-chat-widget .chat-message.bot .message-bubble-table {
+    .n8n-chat-widget .n8n-chat-message.bot .n8n-message-bubble-table {
         margin-top: -20px;
         padding: 8px 12px;
         border-radius: 0 0 12px 12px;
@@ -384,7 +384,7 @@
         background: #f1f1f1;
     }
 
-    .n8n-chat-widget .chat-message.bot .message-bubble-dropdown {
+    .n8n-chat-widget .n8n-chat-message.bot .n8n-message-bubble-dropdown {
         margin-top: -20px;
         padding: 10px 12px;
         border-radius: 0 0 12px 12px;
@@ -397,7 +397,7 @@
         background: #f1f1f1;
     }
 
-    .n8n-chat-widget .chat-message.bot .message-bubble-dropdown select {
+    .n8n-chat-widget .n8n-chat-message.bot .n8n-message-bubble-dropdown select {
         width: 100%;
         padding: 5px;
         border-radius: 4px;
@@ -407,13 +407,13 @@
     }
 
 
-    .n8n-chat-widget .chat-message.user .message-bubble::after,
-    .n8n-chat-widget .chat-message.bot .message-bubble::before {
+    .n8n-chat-widget .n8n-chat-message.user .n8n-message-bubble::after,
+    .n8n-chat-widget .n8n-chat-message.bot .n8n-message-bubble::before {
         content: none;
     }
 
 
-    .n8n-chat-widget .chat-input {
+    .n8n-chat-widget .n8n-chat-input {
         // margin-bottom: -10px;
         padding: 5px 12px;
         border-top: 1px solid rgba(133, 79, 255, 0.2);
@@ -434,19 +434,19 @@
     }
 
 
-    .n8n-chat-widget .input-row {
+    .n8n-chat-widget .n8n-input-row {
         display: flex;
         gap: 8px;
         width: 100%;
         align-items: center;
     }
 
-    .n8n-chat-widget .textarea-wrapper {
+    .n8n-chat-widget .n8n-textarea-wrapper {
         position: relative;
         flex: 1;
     }
 
-    .n8n-chat-widget .chat-input textarea {
+    .n8n-chat-widget .n8n-chat-input textarea {
         height : 50px !important;
         flex: 1;
         height: 100%;
@@ -465,21 +465,21 @@
         min-height: 40px;        
     }
 
-    // .n8n-chat-widget .chat-input textarea:focus {
+    // .n8n-chat-widget .n8n-chat-input textarea:focus {
     //     border: 1px solid #000000;
     //     outline: none;
     // }
 
-    .n8n-chat-widget .chat-input textarea:focus-visible{
+    .n8n-chat-widget .n8n-chat-input textarea:focus-visible{
         outline: none;
     }
 
-    .n8n-chat-widget .chat-input textarea::placeholder {
+    .n8n-chat-widget .n8n-chat-input textarea::placeholder {
         color: var(--chat--color-font);
         opacity: 0.6;
     }
 
-    .n8n-chat-widget .chat-input .send-button {
+    .n8n-chat-widget .n8n-chat-input .n8n-send-button {
         background-color: transparent;
         border: none;
         padding: 0;
@@ -496,7 +496,7 @@
         transform: translateY(-50%);
     }
 
-    .n8n-chat-widget .mic-button {
+    .n8n-chat-widget .n8n-mic-button {
 
         background: none;
         border: none;
@@ -514,7 +514,7 @@
         transform: translateY(-50%);
     }
 
-    .n8n-chat-widget .mic-button.recording {
+    .n8n-chat-widget .n8n-mic-button.recording {
         animation: pulse 1.5s infinite;
     }
 
@@ -524,7 +524,7 @@
         100% { transform: translateY(-50%) scale(1); }
     }
 
-    .n8n-chat-widget .chat-branding-message .chat-avatar-container{
+    .n8n-chat-widget .n8n-chat-branding-message .n8n-chat-avatar-container{
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -534,7 +534,7 @@
         flex-grow: 1;
     }
 
-    .n8n-chat-widget .chat-branding-message img {
+    .n8n-chat-widget .n8n-chat-branding-message img {
         width: 64px;
         height: 64px;
         margin-bottom: 8px;
@@ -542,13 +542,13 @@
         background-color: #ffffff;
     }
 
-    .n8n-chat-widget .chat-branding-message span {
+    .n8n-chat-widget .n8n-chat-branding-message span {
         font-size: 18px;
         font-weight: 500;
         color: var(--chat--color-font);
     }
 
-    .n8n-chat-widget .file-upload-button {
+    .n8n-chat-widget .n8n-file-upload-button {
         margin-left: 9px;
         margin-right: -10px;
         margin-top: -1px;
@@ -571,15 +571,15 @@
         transition: background-color 0.2s ease, transform 0.2s ease;
     }
 
-    .n8n-chat-widget .file-upload-button:hover { 
+    .n8n-chat-widget .n8n-file-upload-button:hover { 
         transform: translateY(-50%) scale(1.1);
     }
 
-    .n8n-chat-widget .file-input {
+    .n8n-chat-widget .n8n-file-input {
         display: none;
     }
 
-    .n8n-chat-widget .file-preview {
+    .n8n-chat-widget .n8n-file-preview {
         display: flex;
         align-items: center;
         background: rgba(133, 79, 255, 0.1);
@@ -593,7 +593,7 @@
         word-break: break-all;
     }        
 
-    .n8n-chat-widget .file-preview.audio {
+    .n8n-chat-widget .n8n-file-preview.audio {
         display: flex;
         flex-direction: column;
         gap: 4px;
@@ -601,12 +601,12 @@
         background: rgba(133, 79, 255, 0.2);
     }
 
-    .n8n-chat-widget .file-preview.audio audio {
+    .n8n-chat-widget .n8n-file-preview.audio audio {
         width: 100%;
         height: 40px;
     }
 
-    .n8n-chat-widget .file-preview-name {
+    .n8n-chat-widget .n8n-file-preview-name {
         flex: 1;
         white-space: nowrap;
         overflow: hidden;
@@ -616,7 +616,7 @@
         word-break: break-all;
     }
 
-    .n8n-chat-widget .file-preview-remove {
+    .n8n-chat-widget .n8n-file-preview-remove {
         background: none;
         border: none;
         cursor: pointer;
@@ -627,19 +627,19 @@
         border-radius: 4px;
     }
 
-    .n8n-chat-widget .file-preview-remove:hover {
+    .n8n-chat-widget .n8n-file-preview-remove:hover {
         background: rgba(133, 79, 255, 0.2);
         opacity: 1;
     }
 
-    .n8n-chat-widget .chat-footer {
+    .n8n-chat-widget .n8n-chat-footer {
         padding: 4px;
         text-align: center;
         background: var(--chat--color-background);
         display: none;
     }
 
-    .n8n-chat-widget .chat-footer a {
+    .n8n-chat-widget .n8n-chat-footer a {
         color: var(--chat--color-primary);
         text-decoration: none;
         font-size: 12px;
@@ -648,11 +648,11 @@
         font-family: inherit;
     }
 
-    .n8n-chat-widget .chat-footer a:hover {
+    .n8n-chat-widget .n8n-chat-footer a:hover {
         opacity: 1;
     }
 
-    .n8n-chat-widget .chat-toggle {
+    .n8n-chat-widget .n8n-chat-toggle {
         position: fixed;
         bottom: 33px;
         right: 53px;
@@ -677,43 +677,43 @@
         min-width: 120px;
     }
 
-.chatbot-tail {
-    position: absolute;
-    bottom: -8px;
-    right: 30px;
-    width: 0;
-    height: 0;
-    border-left: 0 solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 8px solid #6a1b9a;
-}
+    .n8n-chatbot-tail {
+        position: absolute;
+        bottom: -8px;
+        right: 30px;
+        width: 0;
+        height: 0;
+        border-left: 0 solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 8px solid #6a1b9a;
+    }
 
 
-.n8n-chat-widget .chat-toggle::after {
-    content: "Ask AARYA";
-    white-space: nowrap;
-    font-weight: normal;
-}
+    .n8n-chat-widget .n8n-chat-toggle::after {
+        content: "Ask AARYA";
+        white-space: nowrap;
+        font-weight: normal;
+    }
 
 
-.n8n-chat-widget .chat-toggle.position-left {
-    right: auto;
-    left: 20px;
-}
+    .n8n-chat-widget .n8n-chat-toggle.position-left {
+        right: auto;
+        left: 20px;
+    }
 
-.n8n-chat-widget .chat-toggle:hover {
-    transform: scale(1.05);
-}
+    .n8n-chat-widget .n8n-chat-toggle:hover {
+        transform: scale(1.05);
+    }
 
-.n8n-chat-widget .chat-toggle svg {
-    width: 32px;
-    height: 32px;
-    fill: currentColor;
-    flex-shrink: 0;
-    border-radius: 50%;
-}
+    .n8n-chat-widget .n8n-chat-toggle svg {
+        width: 32px;
+        height: 32px;
+        fill: currentColor;
+        flex-shrink: 0;
+        border-radius: 50%;
+    }
 
-    .n8n-chat-widget .confirmation-dialog {
+    .n8n-chat-widget .n8n-confirmation-dialog {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -728,26 +728,26 @@
         text-align: center;
     }
 
-    .n8n-chat-widget .confirmation-dialog h3 {
+    .n8n-chat-widget .n8n-confirmation-dialog h3 {
         margin: 0 0 12px;
         font-size: 16px;
         font-weight: 500;
         color: var(--chat--color-font);
     }
 
-    .n8n-chat-widget .confirmation-dialog p {
+    .n8n-chat-widget .n8n-confirmation-dialog p {
         margin: 0 0 16px;
         font-size: 13px;
         color: var(--chat--color-font);
     }
 
-    .n8n-chat-widget .confirmation-dialog .dialog-buttons {
+    .n8n-chat-widget .n8n-confirmation-dialog .n8n-dialog-buttons {
         display: flex;
         justify-content: flex-end;
         gap: 8px;
     }
 
-    .n8n-chat-widget .confirmation-dialog button {
+    .n8n-chat-widget .n8n-confirmation-dialog button {
         padding: 8px 16px;
         border: none;
         border-radius: 4px;
@@ -756,25 +756,25 @@
         font-family: inherit;
     }
 
-    .n8n-chat-widget .confirmation-dialog .cancel-button {
+    .n8n-chat-widget .n8n-confirmation-dialog .n8n-cancel-button {
         background: #F3F4F6;
         color: var(--chat--color-font);
     }
 
-    .n8n-chat-widget .confirmation-dialog .cancel-button:hover {
+    .n8n-chat-widget .n8n-confirmation-dialog .n8n-cancel-button:hover {
         background: #E5E7EB;
     }
 
-    .n8n-chat-widget .confirmation-dialog .restart-button {
+    .n8n-chat-widget .n8n-confirmation-dialog .n8n-restart-button {
         background: #007BFF;
         color: white;
     }
 
-    .n8n-chat-widget .confirmation-dialog .restart-button:hover {
+    .n8n-chat-widget .n8n-confirmation-dialog .n8n-restart-button:hover {
         background: #0056b3;
     }
 
-    .n8n-chat-widget .confirmation-dialog .dialog-close-button {
+    .n8n-chat-widget .n8n-confirmation-dialog .n8n-dialog-close-button {
         position: absolute;
         top: 8px;
         right: 8px;
@@ -785,7 +785,7 @@
         color: var(--chat--color-font);
     }
 
-    .n8n-chat-widget .dialog-backdrop {
+    .n8n-chat-widget .n8n-dialog-backdrop {
         position: absolute;
         top: 0;
         left: 0;
@@ -796,7 +796,7 @@
         transition: opacity 0.2s ease;
     }
 
-    .n8n-chat-widget .loading-indicator {
+    .n8n-chat-widget .n8n-loading-indicator {
         display: flex;
         align-items: center;
         gap: 4px;
@@ -808,7 +808,7 @@
         max-width: 80%;
     }
 
-    .n8n-chat-widget .loading-indicator .dot {
+    .n8n-chat-widget .n8n-loading-indicator .dot {
         width: 8px;
         height: 8px;
         background: #666;
@@ -816,11 +816,11 @@
         animation: bounce 1.2s infinite;
     }
 
-    .n8n-chat-widget .loading-indicator .dot:nth-child(2) {
+    .n8n-chat-widget .n8n-loading-indicator .dot:nth-child(2) {
         animation-delay: 0.2s;
     }
 
-    .n8n-chat-widget .loading-indicator .dot:nth-child(3) {
+    .n8n-chat-widget .n8n-loading-indicator .dot:nth-child(3) {
         animation-delay: 0.4s;
     }
 
@@ -836,25 +836,25 @@
         }
     }
 
-    .n8n-chat-widget .message-bubble img {
+    .n8n-chat-widget .n8n-message-bubble img {
         max-width: 100%;
         height: auto;
         border-radius: 8px;
         margin-bottom: 5px;
     }
 
-    .n8n-chat-widget .chat-message.user .message-bubble:has(img) {
+    .n8n-chat-widget .n8n-chat-message.user .n8n-message-bubble:has(img) {
         background: transparent;
         padding: 0;
     }
 
-    .n8n-chat-widget .chat-message.user .message-bubble div {
+    .n8n-chat-widget .n8n-chat-message.user .n8n-message-bubble div {
         background: #007BFF;
         padding: 12px 16px;
         border-radius: 12px 12px 0 12px;
     }
 
-    .n8n-chat-widget .message-bubble audio {
+    .n8n-chat-widget .n8n-message-bubble audio {
         width: 100%;
         height: 40px;
         background: rgb(249, 248, 237);
@@ -862,11 +862,11 @@
         margin: 5px 0;
     }
 
-    .n8n-chat-widget .chat-message.user .message-bubble audio {
+    .n8n-chat-widget .n8n-chat-message.user .n8n-message-bubble audio {
         background: rgba(255, 255, 255, 0.2);
     }
 
-    .n8n-chat-widget .file-message {
+    .n8n-chat-widget .n8n-file-message {
         display: flex;
         align-items: center;
         gap: 8px;
@@ -883,14 +883,14 @@
         display: inline-block;
     }
 
-    .n8n-chat-widget .file-message .file-icon {
+    .n8n-chat-widget .n8n-file-message .n8n-file-icon {
         width: 20px;
         height: 20px;
         fill: #fff;
         flex-shrink: 0;
     }
 
-    .n8n-chat-widget .file-message span {
+    .n8n-chat-widget .n8n-file-message span {
         display: inline-block;
         max-width: 160px;
         overflow: hidden;
@@ -900,7 +900,7 @@
         word-break: break-all;
     }
 
-    .n8n-chat-widget .chat-code-block {
+    .n8n-chat-widget .n8n-chat-code-block {
         background: #23272e;
         color: #f8f8f2;
         border-radius: 6px;
@@ -915,11 +915,11 @@
         overflow-x: hidden;
     }
 
-    .n8n-chat-widget .chat-code-block-wrapper {
+    .n8n-chat-widget .n8n-chat-code-block-wrapper {
         position: relative;
     }
 
-    .n8n-chat-widget .copy-code-btn {
+    .n8n-chat-widget .n8n-copy-code-btn {
         position: absolute;
         top: 8px;
         right: 12px;
@@ -935,22 +935,22 @@
         transition: opacity 0.2s;
     }
 
-    .n8n-chat-widget .copy-code-btn:hover {
+    .n8n-chat-widget .n8n-copy-code-btn:hover {
         opacity: 1;
     }
 
-    .n8n-chat-widget .copy-code-btn.copied svg rect {
+    .n8n-chat-widget .n8n-copy-code-btn.copied svg rect {
         stroke: #007bff;
     }
 
-    .n8n-chat-widget .file-preview {
+    .n8n-chat-widget .n8n-file-preview {
         max-width: 90%;
         box-sizing: border-box;
         overflow: hidden;
         word-break: break-all;
     }
 
-    .n8n-chat-widget .file-preview-name {
+    .n8n-chat-widget .n8n-file-preview-name {
         display: inline-block;
         max-width: 100%;
         overflow: hidden;
@@ -960,7 +960,7 @@
         word-break: break-all;
     }
 
-    .n8n-chat-widget .resize-handle {
+    .n8n-chat-widget .n8n-resize-handle {
         position: absolute;
         left: 0;
         top: 0;
@@ -971,7 +971,7 @@
         background: transparent;
     }
 
-    .n8n-chat-widget .resize-handle::after {
+    .n8n-chat-widget .n8n-resize-handle::after {
         content: '';
         display: block;
         width: 14px;
@@ -983,7 +983,7 @@
         left: 2px;
         top: 2px;
     }
-    .n8n-chat-widget .message-actions {
+    .n8n-chat-widget .n8n-message-actions {
         display: flex;
         gap: 8px;
         margin-top: 4px;
@@ -991,7 +991,7 @@
         transition: opacity 0.2s;
     }
 
-    .n8n-chat-widget .message-actions button {
+    .n8n-chat-widget .n8n-message-actions button {
         background: none;
         border: none;
         cursor: pointer;
@@ -1006,17 +1006,17 @@
         transition: background-color 0.2s;
     }
 
-    .n8n-chat-widget .message-actions button:hover {
+    .n8n-chat-widget .n8n-message-actions button:hover {
         opacity: 1;
         background-color: #555555; /* Darker shade on hover for feedback */
     }
 
-    .n8n-chat-widget .message-actions button:active {
+    .n8n-chat-widget .n8n-message-actions button:active {
         background-color: #007BFF; /* Blue background color on click */
         color: #ffffff; /* Optional: Change text/icon color to white for contrast */
     }
     
-    .n8n-chat-widget .csv-expand-button {
+    .n8n-chat-widget .n8n-csv-expand-button {
         background: var(--chat--color-primary);
         color: #ffffff;
         border: none;
@@ -1028,11 +1028,11 @@
         transition: background 0.2s;
     }
 
-    .n8n-chat-widget .csv-expand-button:hover {
+    .n8n-chat-widget .n8n-csv-expand-button:hover {
         background: var(--chat--color-secondary);
     }
 
-    .n8n-chat-widget .csv-modal-backdrop {
+    .n8n-chat-widget .n8n-csv-modal-backdrop {
         position: fixed;
         top: 0;
         left: 0;
@@ -1046,7 +1046,7 @@
         overflow: auto; /* Ensure backdrop can scroll if modal overflows */
     }
 
-    .n8n-chat-widget .csv-modal {
+    .n8n-chat-widget .n8n-csv-modal {
         background: #ffffff;
         border-radius: 8px;
         padding: 24px;
@@ -1059,7 +1059,7 @@
         flex-direction: column;
     }
 
-    .n8n-chat-widget .csv-modal-close {
+    .n8n-chat-widget .n8n-csv-modal-close {
         position: absolute;
         top: 12px;
         right: 12px;
@@ -1072,11 +1072,11 @@
         transition: color 0.2s;
     }
 
-    .n8n-chat-widget .csv-modal-close:hover {
+    .n8n-chat-widget .n8n-csv-modal-close:hover {
         color: #d93025; /* Google Sheets close button hover color */
     }
 
-    .n8n-chat-widget .table-container {
+    .n8n-chat-widget .n8n-table-container {
         max-width: 340px; /* Constrain width in widget */
         overflow-x: auto; /* Allow horizontal scrolling in widget */
     }
@@ -1084,7 +1084,7 @@
 
 
     /* Fullscreen Table Popup Styles */
-    .n8n-chat-widget .dialog-backdrop {
+    .n8n-chat-widget .n8n-dialog-backdrop {
         position: fixed;
         top: 0;
         left: 0;
@@ -1097,7 +1097,7 @@
         justify-content: center;
     }
 
-    .n8n-chat-widget .table-dialog {
+    .n8n-chat-widget .n8n-table-dialog {
         position: relative;
         width: 95vw;
         height: 90vh;
@@ -1112,7 +1112,7 @@
         z-index: 10000;
     }
 
-    .n8n-chat-widget .table-dialog .dialog-header {
+    .n8n-chat-widget .n8n-table-dialog .n8n-dialog-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -1122,14 +1122,14 @@
         flex-shrink: 0;
     }
 
-    .n8n-chat-widget .table-dialog h3 {
+    .n8n-chat-widget .n8n-table-dialog h3 {
         margin: 0;
         font-size: 24px;
         color: #333;
         font-weight: 600;
     }
 
-    .n8n-chat-widget .dialog-close-button {
+    .n8n-chat-widget .n8n-dialog-close-button {
         background: none;
         border: none;
         font-size: 32px;
@@ -1145,19 +1145,19 @@
         transition: all 0.2s ease;
     }
 
-    .n8n-chat-widget .dialog-close-button:hover {
+    .n8n-chat-widget .n8n-dialog-close-button:hover {
         background-color: #f0f0f0;
         color: #333;
     }
 
-    .n8n-chat-widget .table-dialog .table-container {
+    .n8n-chat-widget .n8n-table-dialog .n8n-table-container {
         flex: 1;
         overflow: auto;
         padding: 20px;
         max-width: none;
     }
 
-    .n8n-chat-widget .table-dialog table {
+    .n8n-chat-widget .n8n-table-dialog table {
         width: 100%;
         box-sizing: border-box;
         border-collapse: collapse;
@@ -1167,13 +1167,13 @@
         font-size: 13px;
     }
 
-    .n8n-chat-widget .table-dialog thead {
+    .n8n-chat-widget .n8n-table-dialog thead {
         position: sticky;
         top: 0;
         z-index: 10;
     }
 
-    .n8n-chat-widget .table-dialog th {
+    .n8n-chat-widget .n8n-table-dialog th {
         padding: 12px 16px;
         background-color: #f8f9fa;
         font-size: 16px;
@@ -1185,7 +1185,7 @@
         word-break: break-word;
     }
 
-    .n8n-chat-widget .table-dialog td {
+    .n8n-chat-widget .n8n-table-dialog td {
         padding: 12px 16px;
         font-size: 16px;
         border: 1px solid #dee2e6;
@@ -1195,24 +1195,24 @@
         vertical-align: top;
     }
 
-    .n8n-chat-widget .table-dialog tbody tr {
+    .n8n-chat-widget .n8n-table-dialog tbody tr {
         transition: background-color 0.15s ease;
     }
 
-    .n8n-chat-widget .table-dialog tbody tr:nth-child(even) {
+    .n8n-chat-widget .n8n-table-dialog tbody tr:nth-child(even) {
         background-color: #f8f9fa;
     }
 
-    .n8n-chat-widget .table-dialog tbody tr:nth-child(odd) {
+    .n8n-chat-widget .n8n-table-dialog tbody tr:nth-child(odd) {
         background-color: #ffffff;
     }
 
-    .n8n-chat-widget .table-dialog tbody tr:hover {
+    .n8n-chat-widget .n8n-table-dialog tbody tr:hover {
         background-color: #e3f2fd !important;
     }
 
     /* Ellipsis cells styling */
-    .n8n-chat-widget .table-dialog td.ellipsis {
+    .n8n-chat-widget .n8n-table-dialog td.ellipsis {
         text-align: center;
         color: #888;
         font-style: italic;
@@ -1220,32 +1220,32 @@
 
     /* Responsive adjustments for smaller screens */
     @media (max-width: 768px) {
-        .n8n-chat-widget .table-dialog {
+        .n8n-chat-widget .n8n-table-dialog {
             width: 98vw;
             height: 95vh;
             border-radius: 8px;
         }
         
-        .n8n-chat-widget .table-dialog .dialog-header {
+        .n8n-chat-widget .n8n-table-dialog .dialog-header {
             padding: 15px 20px;
         }
         
-        .n8n-chat-widget .table-dialog h3 {
+        .n8n-chat-widget .n8n-table-dialog h3 {
             font-size: 20px;
         }
         
-        .n8n-chat-widget .dialog-close-button {
+        .n8n-chat-widget .n8n-dialog-close-button {
             font-size: 28px;
             width: 35px;
             height: 35px;
         }
         
-        .n8n-chat-widget .table-dialog .table-container {
+        .n8n-chat-widget .n8n-table-dialog .n8n-table-container {
             padding: 15px;
         }
         
-        .n8n-chat-widget .table-dialog th,
-        .n8n-chat-widget .table-dialog td {
+        .n8n-chat-widget .n8n-table-dialog th,
+        .n8n-chat-widget .n8n-table-dialog td {
             padding: 8px 12px;
             font-size: 13px;
         }
@@ -1253,20 +1253,20 @@
 
     /* Extra small screens */
     @media (max-width: 480px) {
-        .n8n-chat-widget .table-dialog {
+        .n8n-chat-widget .n8n-table-dialog {
             width: 100vw;
             height: 100vh;
             border-radius: 0;
         }
         
-        .n8n-chat-widget .table-dialog th,
-        .n8n-chat-widget .table-dialog td {
+        .n8n-chat-widget .n8n-table-dialog th,
+        .n8n-chat-widget .n8n-table-dialog td {
             padding: 6px 8px;
             font-size: 12px;
         }
     }
 
-    .n8n-chat-widget .dialog-close-button {
+    .n8n-chat-widget .n8n-dialog-close-button {
         position: absolute;
         top: 10px;
         right: 10px;
@@ -1277,13 +1277,13 @@
         color: #333;
         flex-shrink: 0; /* Prevent the close button from shrinking */
     }
-    .n8n-chat-widget    .message-content {
+    .n8n-chat-widget .n8n-message-content {
         max-width: 600px;
         min-width: 200px;
 
     }
 
-    .n8n-chat-widget .message-content.typing::after {
+    .n8n-chat-widget .n8n-message-content.typing::after {
         content: '|';
         animation: blink 0.7s infinite;
         display: inline-block;
@@ -1296,14 +1296,14 @@
         100% { opacity: 1; }
     }
     
-    .dialog-backdrop {
+    .n8n-chat-widget .n8n-dialog-backdrop {
         position: fixed;
         inset: 0;
         background: rgba(0, 0, 0, 0.8);
         z-index: 9998;
     }
 
-    .image-dialog {
+    .n8n-chat-widget .n8n-image-dialog {
         position: fixed;
         top: 50%;
         left: 50%;
@@ -1321,7 +1321,7 @@
         overflow: auto;
     }
 
-    .dialog-close-button {
+    .n8n-chat-widget .n8n-dialog-close-button {
         background: white;
         border: none;
         font-size: 24px;
@@ -1330,7 +1330,7 @@
         align-self: flex-end;
     }
 
-    .responsive-popup-image {
+    .n8n-chat-widget .n8n-responsive-popup-image {
         max-width: 100%;
         max-height: 90vh;
         object-fit: contain;
@@ -1338,7 +1338,7 @@
     }
 
     /* Avatar container positioned below header */
-    .n8n-chat-widget #chat-avatar-container {
+    .n8n-chat-widget #n8n-chat-avatar-container {
         width: 100%;
         height: 180px; /* Less than half of typical chat widget height */
         max-height: 40vh; /* Responsive height limit */
@@ -1350,7 +1350,7 @@
         box-sizing: border-box;
     }
 
-    .n8n-chat-widget #chat-avatar-container canvas {
+    .n8n-chat-widget #n8n-chat-avatar-container canvas {
         width: 100% !important;
         height: 100% !important;
         display: block;
@@ -1358,7 +1358,7 @@
     }
 
     /* Branding message container */
-    .n8n-chat-widget .chat-branding-message {
+    .n8n-chat-widget .n8n-chat-branding-message {
         width: 100%;
         margin: 0;
         padding: 0;
@@ -1370,7 +1370,7 @@
     }
 
     /* Ensure messages container accounts for avatar space */
-    .n8n-chat-widget .messages-container {
+    .n8n-chat-widget .n8n-messages-container {
         padding-top: 0; /* Remove top padding since avatar is positioned */
     }
 
@@ -1381,7 +1381,7 @@
 
     /* For smaller screens, reduce avatar height further */
     @media (max-height: 600px) {
-        .n8n-chat-widget #chat-avatar-container {
+        .n8n-chat-widget #n8n-chat-avatar-container {
             height: 120px;
             max-height: 30vh;
         }
@@ -1389,20 +1389,20 @@
 
     /* Compact mode for very small screens */
     @media (max-height: 400px) {
-        .n8n-chat-widget #chat-avatar-container {
+        .n8n-chat-widget #n8n-chat-avatar-container {
             height: 80px;
             max-height: 25vh;
         }
     }
 
 
-    .n8n-chat-widget .toggle-switch {
+    .n8n-chat-widget .n8n-toggle-switch {
         display: flex;
         align-items: center;
         gap: 6px;
     }
 
-    .n8n-chat-widget .toggle-switch .toggle-label {
+    .n8n-chat-widget .n8n-toggle-switch .n8n-toggle-label {
         position: absolute;
         right: 152px;
         color: #ffffff;
@@ -1410,13 +1410,13 @@
         letter-spacing: 0.5px;
     }
 
-    .n8n-chat-widget .toggle-switch .toggle-input {
+    .n8n-chat-widget .n8n-toggle-switch .n8n-toggle-input {
         opacity: 0;
         width: 0;
         height: 0;
     }
 
-    .n8n-chat-widget .toggle-switch .toggle-slider {
+    .n8n-chat-widget .n8n-toggle-switch .n8n-toggle-slider {
         position: absolute;
         right: 109px;
         display: inline-block;
@@ -1428,7 +1428,7 @@
         transition: 0.4s;
     }
 
-    .n8n-chat-widget .toggle-switch .toggle-slider:before {
+    .n8n-chat-widget .n8n-toggle-switch .n8n-toggle-slider:before {
         content: "";
         position: absolute;
         height: 16px;
@@ -1440,15 +1440,15 @@
         transition: 0.4s;
     }
 
-    .n8n-chat-widget .toggle-switch .toggle-input:checked + .toggle-slider {
+    .n8n-chat-widget .n8n-toggle-switch .n8n-toggle-input:checked + .n8n-toggle-slider {
         background-color: #4CAF50;
     }
 
-    .n8n-chat-widget .toggle-switch .toggle-input:checked + .toggle-slider:before {
+    .n8n-chat-widget .n8n-toggle-switch .n8n-toggle-input:checked + .n8n-toggle-slider:before {
         transform: translateX(20px);
     }
 
-    .n8n-chat-widget .brand-header button {
+    .n8n-chat-widget .n8n-brand-header button {
         background: none;
         border: none;
         // color: #ffffff;
@@ -1458,13 +1458,13 @@
         // transition: color 0.3s;
     }
 
-    // .n8n-chat-widget .brand-header button:hover {
+    // .n8n-chat-widget .n8n-brand-header button:hover {
     //     color: #ddd;
     // }
 
 
 
-    .n8n-chat-widget .chat-branding-message-video-off {
+    .n8n-chat-widget .n8n-chat-branding-message-video-off {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1474,7 +1474,7 @@
         display: none;
     }
 
-    .n8n-chat-widget .chat-branding-message-video-off img {
+    .n8n-chat-widget .n8n-chat-branding-message-video-off img {
         width: 50px;
         height: 50px;
         margin-bottom: 8px;
@@ -1482,20 +1482,20 @@
         background-color: #ffffff;
     }
 
-    .n8n-chat-widget .chat-branding-message-video-off span {
+    .n8n-chat-widget .n8n-chat-branding-message-video-off span {
         font-size: 18px;
         font-weight: 500;
         color: var(--chat--color-font);
     }
 
-    .n8n-chat-widget .message-bubble div.message-bot-who, div.message-bot-who {
+    .n8n-chat-widget .n8n-message-bubble div.n8n-message-bot-who, div.n8n-message-bot-who {
         padding-right: 5px;
         font-size: 10px;
         margin-bottom: 0;
         font-weight: 600; 
     }
 
-    div.message-bot-who {
+    .n8n-chat-widget div.n8n-message-bot-who {
         padding-left: 3px;
     }
 
@@ -1542,7 +1542,7 @@
 
 
     window.addEventListener('resize', () => {
-    const chatContainer = document.querySelector('.n8n-chat-widget .chat-container');
+    const chatContainer = document.querySelector('.n8n-chat-widget .n8n-chat-container');
     if (chatContainer && chatContainer.classList.contains('open')) {
         chatContainer.style.bottom = '30px';
         chatContainer.style.right = '20px';
@@ -1585,11 +1585,11 @@
     widgetContainer.style.setProperty('--n8n-chat-font-color', config.style.fontColor);
 
     const chatContainer = document.createElement('div');
-    chatContainer.className = `chat-container${config.style.position === 'left' ? ' position-left' : ''}`;
+    chatContainer.className = `n8n-chat-container${config.style.position === 'left' ? ' position-left' : ''}`;
     
     const chatInterfaceHTML = `
-            <div class="chat-interface">
-                <div class="brand-header">
+            <div class="n8n-chat-interface">
+                <div class="n8n-brand-header">
                     <span>
                         <svg width="105" height="28" viewBox="0 0 105 28" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <g clip-path="url(#clip0_269_24536)">
@@ -1615,12 +1615,12 @@
                         </svg>
                     </span>
 
-                    <button class="fullscreen-button" title="Toggle Fullscreen">
-                       <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
+                    <button class="n8n-fullscreen-button" title="Toggle Fullscreen">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
                         <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22">
-                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6)" fill="#fff"/>
+                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6 0)" fill="#fff"/>
                             <circle id="Ellipse_2895" data-name="Ellipse 2895" cx="1.5" cy="1.5" r="1.5" transform="translate(6 21)" fill="#fff"/>
-                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" fill="#fff"/>
+                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" transform="translate(0 0)" fill="#fff"/>
                             <circle id="Ellipse_2892" data-name="Ellipse 2892" cx="1.5" cy="1.5" r="1.5" transform="translate(0 21)" fill="#fff"/>
                             <circle id="Ellipse_2877" data-name="Ellipse 2877" cx="1.5" cy="1.5" r="1.5" transform="translate(6 7)" fill="#fff"/>
                             <circle id="Ellipse_2896" data-name="Ellipse 2896" cx="1.5" cy="1.5" r="1.5" transform="translate(6 28)" fill="#fff"/>
@@ -1631,14 +1631,15 @@
                             <circle id="Ellipse_2879" data-name="Ellipse 2879" cx="1.5" cy="1.5" r="1.5" transform="translate(0 14)" fill="#fff"/>
                             <circle id="Ellipse_2894" data-name="Ellipse 2894" cx="1.5" cy="1.5" r="1.5" transform="translate(0 35)" fill="#fff"/>
                         </g>
-                        </svg>
+                        </svg>       
                     </button>
-                    <button class="refresh-button" title="Refresh chat">
+                
+                    <button class="n8n-refresh-button" title="Refresh chat">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
                             <path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                         </svg>
                     </button>
-                    <button class="close-button">
+                    <button class="n8n-close-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="6" viewBox="0 0 15 6">
                         <g id="Group_83625" data-name="Group 83625" opacity="0.437">
                         <rect id="Rectangle_31702" data-name="Rectangle 31702" width="15" height="2" fill="#fff"/>
@@ -1651,13 +1652,13 @@
                     </button>
 
                 </div>
-                <div class="chat-messages"></div>
-                <div class="chat-input">
-                    <div id="file-preview-container"></div>
-                    <div class="input-row">
-                        <div class="textarea-wrapper">
-                            <textarea id="chat-textarea" placeholder="Type your message.." rows="1" style="height: 40px !important;"></textarea>
-                            <button class="file-upload-button" title="Upload file">
+                <div class="n8n-chat-messages"></div>
+                <div class="n8n-chat-input">
+                    <div id="n8n-file-preview-container"></div>
+                    <div class="n8n-input-row">
+                        <div class="n8n-textarea-wrapper">
+                            <textarea id="n8n-chat-textarea" placeholder="Type your message.." rows="1" style="height: 40px !important;"></textarea>
+                            <button class="n8n-file-upload-button" title="Upload file">
                             <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                                 width="20" height="20" viewBox="0 0 512.000000 512.000000"
                                 preserveAspectRatio="xMidYMid meet">
@@ -1681,14 +1682,14 @@
                                 </g>
                             </svg>
                             </button>
-                            <button class="mic-button" title="Record voice">
+                            <button class="n8n-mic-button" title="Record voice">
                                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 512.000000 512.000000" fill="#0099ff">
                                     <path d="M0 0 C1.51671886 1.26424817 3.0593383 2.49722026 4.60253906 3.72900391 C19.28864031 15.68237492 33.1902857 29.28168978 44.33349609 44.62451172 C45.62066708 46.38127784 46.9453607 48.10442915 48.27832031 49.82666016 C72.45591287 81.38831197 88.32687017 120.12752123 94.56347656 159.30322266 C94.72428711 160.30675781 94.88509766 161.31029297 95.05078125 162.34423828 C99.15307909 189.19102865 98.85784384 216.50430539 94.56347656 243.30322266 C94.40782227 244.28097656 94.25216797 245.25873047 94.09179688 246.26611328 C83.83070262 307.66882901 48.55341729 366.91574741 -1.70214844 404.01318359 C-3.45613547 405.31781021 -5.18141301 406.65442649 -6.90527344 407.99853516 C-58.49573872 447.71022316 -126.64664264 463.36497081 -190.72607422 455.71557617 C-232.1290536 450.25493496 -271.20213463 435.19680584 -305.43652344 411.30322266 C-306.15565918 410.80177734 -306.87479492 410.30033203 -307.61572266 409.78369141 C-318.02591578 402.43816999 -327.32460976 394.18751632 -336.43652344 385.30322266 C-337.07509277 384.69043457 -337.71366211 384.07764648 -338.37158203 383.44628906 C-346.67181637 375.47831329 -354.27219981 367.3099454 -361.12597656 358.0625 C-362.45449434 356.27909852 -363.81012381 354.5191275 -365.17089844 352.76025391 C-404.6647793 301.10368044 -421.02435224 232.73318877 -412.84033203 168.60058594 C-412.40469949 165.49544331 -411.93264328 162.39924907 -411.43652344 159.30322266 C-411.28086914 158.32546875 -411.12521484 157.34771484 -410.96484375 156.34033203 C-402.66879853 106.69653249 -378.42754956 60.28925426 -343.43652344 24.30322266 C-342.82550781 23.66642578 -342.21449219 23.02962891 -341.58496094 22.37353516 C-333.27930111 13.73697254 -324.82481479 5.71874882 -315.1796875 -1.40234375 C-313.40167473 -2.7226552 -311.64898673 -4.07204745 -309.89746094 -5.42724609 C-231.90738178 -65.10203185 -121.53510399 -69.85830349 0 0 Z " fill="#2F6FDD" transform="translate(414.4365234375,54.69677734375)"/>
                                     <path d="M0 0 C12.42224174 10.39773082 19.76584284 22.52302065 23.8125 38.1875 C23.98958874 38.80172569 24.16667747 39.41595139 24.34913254 40.04878998 C24.87862699 42.49271446 24.94449123 44.71825806 24.95294189 47.21936035 C24.95865204 48.23404388 24.96436218 49.24872742 24.97024536 50.29415894 C24.97192215 51.95549362 24.97192215 51.95549362 24.97363281 53.65039062 C24.97859772 54.82163483 24.98356262 55.99287903 24.98867798 57.19961548 C25.00077656 60.41083164 25.0082431 63.62201141 25.01268864 66.83324623 C25.01562559 68.84415082 25.01973173 70.85504979 25.02419281 72.86595154 C25.03786635 79.17067833 25.04753158 85.47539218 25.0513947 91.78013277 C25.05586392 99.03259997 25.07335924 106.28487762 25.1023953 113.53728724 C25.12410805 119.15789494 25.1341042 124.77844973 25.13543582 130.39909887 C25.13647778 133.74854452 25.1437283 137.09767117 25.16025543 140.44709778 C25.1774211 144.1946929 25.17540931 147.94183402 25.16894531 151.68945312 C25.1781601 152.78081573 25.18737488 153.87217834 25.1968689 154.99661255 C25.14152213 165.30482332 23.00793096 174.98339502 18.3125 184.1875 C17.97210693 184.859021 17.63171387 185.53054199 17.28100586 186.22241211 C8.18571212 203.25357726 -8.13754902 214.27458502 -26.1875 220.1875 C-40.96035048 223.42695866 -57.47272057 222.52258239 -71.1875 216.1875 C-72.15429688 215.7646875 -73.12109375 215.341875 -74.1171875 214.90625 C-89.98826543 207.17303356 -102.02001346 192.36911802 -108.50275135 176.19633675 C-111.19925232 168.28565266 -111.48105258 160.32587591 -111.4621582 152.04345703 C-111.46726913 150.87133667 -111.47238007 149.69921631 -111.47764587 148.49157715 C-111.49146955 144.64276935 -111.49059054 140.79414207 -111.48828125 136.9453125 C-111.49059497 134.9344191 -111.49409906 132.92353004 -111.497688 130.91263855 C-111.50874341 124.59782809 -111.50924309 118.28307714 -111.50317383 111.96826172 C-111.49713751 105.48463012 -111.50944538 99.00121572 -111.5307439 92.51762116 C-111.54843871 86.9223599 -111.55434891 81.32716728 -111.55110615 75.73187912 C-111.54930558 72.40266223 -111.55314744 69.07372314 -111.56582069 65.74451065 C-111.57823904 62.02628374 -111.57136063 58.30855178 -111.55981445 54.59033203 C-111.56745819 53.50839569 -111.57510193 52.42645935 -111.58297729 51.31173706 C-111.45647745 32.76193832 -103.84802264 17.3438609 -91.171875 4.078125 C-65.69586911 -20.26561396 -27.45332059 -20.96435391 0 0 Z " fill="#FEFEFE" transform="translate(299.1875,103.8125)"/>
                                     <path d="M0 0 C2.87029869 1.79393668 4.49131638 2.98263276 6 6 C6.19375772 8.12291066 6.38273173 10.24640357 6.54345703 12.37207031 C8.67955691 39.55053259 18.92903508 63.9102293 40 82 C60.17214379 97.7804004 84.37234267 105.60533967 110 103 C136.11046367 99.09316278 159.09631304 86.76179985 175.1953125 65.5859375 C184.9892939 51.55213731 190.84389608 36.36245029 192.484375 19.2890625 C192.56212158 18.48428467 192.63986816 17.67950684 192.7199707 16.8503418 C192.86174081 15.2778233 192.98614651 13.7036127 193.09057617 12.12817383 C193.50778592 7.22582299 194.4871831 4.47282278 198 1 C201.47263273 -0.73631636 205.21193013 -0.60190402 209 0 C211.75569447 2.18159145 213.43588747 3.87177494 215 7 C217.33691368 35.85816665 204.52083635 63.88912672 186.75390625 85.765625 C167.41565338 108.24074242 140.16137552 121.08386245 111 124 C111 134.23 111 144.46 111 155 C114.26261719 154.96519531 117.52523437 154.93039062 120.88671875 154.89453125 C124.05069097 154.87112719 127.2146535 154.8529154 130.37866211 154.83520508 C132.57564621 154.82012948 134.77260026 154.79966574 136.96948242 154.77368164 C140.12947 154.73724498 143.28905924 154.72026116 146.44921875 154.70703125 C147.91979988 154.68380547 147.91979988 154.68380547 149.42008972 154.66011047 C155.66306293 154.65857381 159.0765136 155.46631179 163.875 159.625 C165.67939414 163.43427651 165.09501562 167.00209061 164 171 C161.75410675 173.99452434 160.55130633 174.81623122 157 176 C155.44024881 176.09947413 153.87665187 176.14350139 152.31376648 176.15390015 C150.86914536 176.16680084 150.86914536 176.16680084 149.39533997 176.17996216 C148.34021713 176.18422211 147.2850943 176.18848206 146.19799805 176.19287109 C145.08553711 176.20104858 143.97307617 176.20922607 142.8269043 176.21765137 C139.13851461 176.2425029 135.45016337 176.2590196 131.76171875 176.2734375 C130.50321421 176.27876118 129.24470966 176.28408485 127.94806862 176.28956985 C122.65940906 176.31079697 117.37075527 176.32992729 112.08206463 176.34119225 C104.5099254 176.35742891 96.93829944 176.3906072 89.36635369 176.44759309 C83.39537731 176.49099426 77.42451524 176.50694035 71.45337868 176.51332474 C68.91562048 176.52004887 66.3778701 176.53530082 63.84021568 176.55921555 C60.28980701 176.59076918 56.74069714 176.59091792 53.19018555 176.58349609 C52.14113541 176.59990143 51.09208527 176.61630676 50.01124573 176.63320923 C45.40157823 176.59374052 42.05074243 176.56127426 38.3618927 173.60391235 C35.37556546 170.31158058 34.91720764 168.52249614 34.6875 164.22265625 C35.23528501 160.32653534 37.16101017 158.64092077 40 156 C42.39582346 154.80208827 43.86777538 154.8793256 46.54150391 154.88647461 C47.48232819 154.88655014 48.42315247 154.88662567 49.39248657 154.88670349 C50.41023163 154.89186478 51.42797668 154.89702606 52.4765625 154.90234375 C54.03713882 154.90446617 54.03713882 154.90446617 55.62924194 154.90663147 C58.96119021 154.91224134 62.29307195 154.92479553 65.625 154.9375 C67.88020736 154.94251373 70.13541578 154.94707686 72.390625 154.95117188 C77.92712975 154.96136426 83.46349017 154.9809378 89 155 C89 144.77 89 134.54 89 124 C83.555 123.505 83.555 123.505 78 123 C50.2450228 118.50606785 24.57550623 101.40169471 8 79 C-6.17032116 59.1639511 -18.46131918 31.97360396 -15 7 C-11.61041298 0.09160417 -7.24944534 -1.06833931 0 0 Z " fill="#FCFDFE" transform="translate(156,247)"/>
                                 </svg>
                             </button>
-                            <button class="send-button" style="display: none;">
+                            <button class="n8n-send-button" style="display: none;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20.001" height="20" viewBox="0 0 20.001 20">
                                 <g id="Path_127105" data-name="Path 127105" transform="translate(0 20) rotate(-90)" fill="none" fill-rule="evenodd">
                                     <path d="M17.776,13.6,5.752,19.573a4,4,0,0,1-5.3-5.431L2.57,10,.457,5.859A4,4,0,0,1,5.752.428L17.776,6.4A4.021,4.021,0,0,1,17.776,13.6ZM11.592,9.412a.588.588,0,0,1,0,1.176h-8L1.506,14.674A2.819,2.819,0,0,0,5.233,18.52l12.026-5.975a2.849,2.849,0,0,0,0-5.09L5.232,1.481A2.819,2.819,0,0,0,1.5,5.326L3.589,9.412h8Z" stroke="none"/>
@@ -1698,10 +1699,10 @@
 
                             </button>
                         </div>
-                        <input type="file" class="file-input" multiple />
+                        <input type="file" class="n8n-file-input" multiple />
                     </div>
                 </div>
-                <div class="chat-footer">
+                <div class="n8n-chat-footer">
                     <a href="${config.branding.poweredBy.link}" target="_blank" style="display: inline-flex; align-items: center; gap: 6px;">
                         ${
                             config.branding.poweredBy.logo
@@ -1729,7 +1730,7 @@
         // });
 
 		// After the refreshButton event listener
-		const fullscreenButton = chatContainer.querySelector('.fullscreen-button');
+		const fullscreenButton = chatContainer.querySelector('.n8n-fullscreen-button');
 		let isFullscreen = false;
 		let originalStyles = {};
 
@@ -1758,11 +1759,11 @@
 
 				// Update button icon to "minimize"
 				fullscreenButton.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
                         <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22">
-                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6)" fill="#fff"/>
+                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6 0)" fill="#fff"/>
                             <circle id="Ellipse_2895" data-name="Ellipse 2895" cx="1.5" cy="1.5" r="1.5" transform="translate(6 21)" fill="#fff"/>
-                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" fill="#fff"/>
+                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" transform="translate(0 0)" fill="#fff"/>
                             <circle id="Ellipse_2892" data-name="Ellipse 2892" cx="1.5" cy="1.5" r="1.5" transform="translate(0 21)" fill="#fff"/>
                             <circle id="Ellipse_2877" data-name="Ellipse 2877" cx="1.5" cy="1.5" r="1.5" transform="translate(6 7)" fill="#fff"/>
                             <circle id="Ellipse_2896" data-name="Ellipse 2896" cx="1.5" cy="1.5" r="1.5" transform="translate(6 28)" fill="#fff"/>
@@ -1773,7 +1774,7 @@
                             <circle id="Ellipse_2879" data-name="Ellipse 2879" cx="1.5" cy="1.5" r="1.5" transform="translate(0 14)" fill="#fff"/>
                             <circle id="Ellipse_2894" data-name="Ellipse 2894" cx="1.5" cy="1.5" r="1.5" transform="translate(0 35)" fill="#fff"/>
                         </g>
-                        </svg>
+                    </svg>   
 				`;
 				fullscreenButton.title = 'Minimize';
 				isFullscreen = true;
@@ -1791,11 +1792,11 @@
 
 				// Restore full-screen button icon
 				fullscreenButton.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
                         <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22">
-                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6)" fill="#fff"/>
+                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6 0)" fill="#fff"/>
                             <circle id="Ellipse_2895" data-name="Ellipse 2895" cx="1.5" cy="1.5" r="1.5" transform="translate(6 21)" fill="#fff"/>
-                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" fill="#fff"/>
+                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" transform="translate(0 0)" fill="#fff"/>
                             <circle id="Ellipse_2892" data-name="Ellipse 2892" cx="1.5" cy="1.5" r="1.5" transform="translate(0 21)" fill="#fff"/>
                             <circle id="Ellipse_2877" data-name="Ellipse 2877" cx="1.5" cy="1.5" r="1.5" transform="translate(6 7)" fill="#fff"/>
                             <circle id="Ellipse_2896" data-name="Ellipse 2896" cx="1.5" cy="1.5" r="1.5" transform="translate(6 28)" fill="#fff"/>
@@ -1806,7 +1807,7 @@
                             <circle id="Ellipse_2879" data-name="Ellipse 2879" cx="1.5" cy="1.5" r="1.5" transform="translate(0 14)" fill="#fff"/>
                             <circle id="Ellipse_2894" data-name="Ellipse 2894" cx="1.5" cy="1.5" r="1.5" transform="translate(0 35)" fill="#fff"/>
                         </g>
-                        </svg>
+                    </svg>   
 				`;
 				fullscreenButton.title = 'Toggle Fullscreen';
 				isFullscreen = false;
@@ -1819,7 +1820,7 @@
 
 
 		const toggleButton = document.createElement('button');
-		toggleButton.className = `chat-toggle${config.style.position === 'left' ? ' position-left' : ''}`;
+		toggleButton.className = `n8n-chat-toggle${config.style.position === 'left' ? ' position-left' : ''}`;
 
 		// toggleButton.innerHTML = `
         // <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -1844,32 +1845,32 @@
             <path d="M0 0 C1.32 0.33 2.64 0.66 4 1 C1.36 3.64 -1.28 6.28 -4 9 C-4.33 7.68 -4.66 6.36 -5 5 C-2.8125 2.1875 -2.8125 2.1875 0 0 Z " fill="#152E63" transform="translate(37,27)"/>
             <path d="M0 0 C-2.6860286 1.79068573 -4.6626589 2.66055791 -7.6875 3.625 C-8.49574219 3.88539062 -9.30398437 4.14578125 -10.13671875 4.4140625 C-10.75160156 4.60742188 -11.36648437 4.80078125 -12 5 C-12 3.68 -12 2.36 -12 1 C-7.9472484 0.01751476 -4.16138263 -0.08159574 0 0 Z " fill="#BEC5CB" transform="translate(46,50)"/>
             <path d="M0 0 C1.98 0 3.96 0 6 0 C5.6875 1.9375 5.6875 1.9375 5 4 C4.01 4.33 3.02 4.66 2 5 C1.01 4.01 0.02 3.02 -1 2 C-0.67 1.34 -0.34 0.68 0 0 Z " fill="#30A9E4" transform="translate(33,38)"/>
-        </svg><div class="chatbot-tail"></div>`
+        </svg><div class="n8n-chatbot-tail"></div>`
 		
 		const resizeHandle = document.createElement('div');
 		speechSynthesis.cancel();
-		resizeHandle.className = 'resize-handle top-left';
+		resizeHandle.className = 'n8n-resize-handle top-left';
 		chatContainer.appendChild(resizeHandle);
 
 		widgetContainer.appendChild(chatContainer);
 		widgetContainer.appendChild(toggleButton);
 		document.body.appendChild(widgetContainer);
 
-		const messagesContainer = chatContainer.querySelector('.chat-messages');
+		const messagesContainer = chatContainer.querySelector('.n8n-chat-messages');
         const textarea = chatContainer.querySelector('textarea');
-		const sendButton = chatContainer.querySelector('.send-button');
-		const micButton = chatContainer.querySelector('.mic-button');
-		const fileInput = chatContainer.querySelector('.file-input');
-		const fileUploadButton = chatContainer.querySelector('.file-upload-button');
-		const filePreviewContainer = chatContainer.querySelector('#file-preview-container');
-		const refreshButton = chatContainer.querySelector('.refresh-button');
+		const sendButton = chatContainer.querySelector('.n8n-send-button');
+		const micButton = chatContainer.querySelector('.n8n-mic-button');
+		const fileInput = chatContainer.querySelector('.n8n-file-input');
+		const fileUploadButton = chatContainer.querySelector('.n8n-file-upload-button');
+		const filePreviewContainer = chatContainer.querySelector('#n8n-file-preview-container');
+		const refreshButton = chatContainer.querySelector('.n8n-refresh-button');
 
 
 
 
 
     function clampChatPosition() {
-        const chat = document.querySelector('.chat-container');
+        const chat = document.querySelector('.n8n-chat-container');
         
         // Don't clamp position if chat is hidden/closed
         if (!chat || chat.style.display === 'none' || !chat.offsetParent) {
@@ -1910,7 +1911,7 @@
     }
 
     // Clamp on mouseup (when user drags)
-    document.querySelector('.chat-container').addEventListener('mouseup', clampChatPosition);
+    document.querySelector('.n8n-chat-container').addEventListener('mouseup', clampChatPosition);
 
     // Also clamp on resize to prevent going off-screen
     window.addEventListener('resize', clampChatPosition);
@@ -2013,16 +2014,16 @@
 					.join('');
 				const lang = match[1] ? match[1] : '';
 				const code = escapeHtml(match[2]);
-				const thisId = `code-block-${Date.now()}-${codeBlockId++}`;
+				const thisId = `n8n-code-block-${Date.now()}-${codeBlockId++}`;
 				result += `
-					<div class="chat-code-block-wrapper">
-						<button class="copy-code-btn" data-target="${thisId}" title="Copy code">
+					<div class="n8n-chat-code-block-wrapper">
+						<button class="n8n-copy-code-btn" data-target="${thisId}" title="Copy code">
 							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
 								<rect x="9" y="9" width="13" height="13" rx="2" fill="#fff" stroke="#333" stroke-width="2"/>
 								<rect x="2" y="2" width="13" height="13" rx="2" fill="#fff" stroke="#333" stroke-width="2"/>
 							</svg>
 						</button>
-						<pre class="chat-code-block"><code id="${thisId}"${lang ? ` class="language-${lang}"` : ''}>${code}</code></pre>
+						<pre class="n8n-chat-code-block"><code id="${thisId}"${lang ? ` class="n8n-language-${lang}"` : ''}>${code}</code></pre>
 					</div>
 				`;
 				lastIndex = codeBlockRegex.lastIndex;
@@ -2045,18 +2046,18 @@
     // Function to update the branding message based on video state
     function updateBrandingMessage(videoState) {
         // Remove existing branding message if it exists
-        const existingBranding = document.querySelector('.chat-branding-message, .chat-branding-message-video-off');
+        const existingBranding = document.querySelector('.n8n-chat-branding-message, .n8n-chat-branding-message-video-off');
         if (existingBranding) {
             existingBranding.remove();
         }
 
         // Create new branding message
         const brandingMessageDiv = document.createElement('div');
-        brandingMessageDiv.className = videoState === 'on' ? 'chat-branding-message' : 'chat-branding-message-video-off';
+        brandingMessageDiv.className = videoState === 'on' ? 'n8n-chat-branding-message' : 'n8n-chat-branding-message-video-off';
 
         if (videoState === 'on') {
             const avatarContainer = document.createElement('div');
-            avatarContainer.id = 'chat-avatar-container';
+            avatarContainer.id = 'n8n-chat-avatar-container';
             avatarContainer.style.height = '250px';
             avatarContainer.style.margin = '0 auto';
             avatarContainer.style.background = 'transparent';
@@ -2145,25 +2146,27 @@
         });
 
         const botMessageDiv1 = document.createElement('div');
-        botMessageDiv1.className = 'chat-message bot';
+        botMessageDiv1.className = 'n8n-chat-message bot';
         botMessageDiv1.style.position = 'relative';
         botMessageDiv1.style.background = 'rgb(255, 255, 255)';
         botMessageDiv1.style.borderRadius = '8px';
         botMessageDiv1.style.margin = '10px 0';
 
         botMessageDiv1.innerHTML = `
-            <div class="message-bubble" style="position: relative;">
-                <div class="avatar bot-avatar"></div>
-                <div class="message-content">
+            <div class="n8n-message-bubble" style="position: relative;">
+                <div class="n8n-avatar n8n-bot-avatar"></div>
+                <div class="n8n-message-content">
                     Hi<br>
                     I am AARYA (Automated AI Responder at Your Assistance).<br>
                     How can I assist you today?
                 </div>
                 <div style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666;display: flex; align-items: center;left: 0;">
-                   <div class='message-bot-who'>Aarya</div> ${timeWithDate}
+                   <div class='n8n-message-bot-who'>Aarya</div> ${timeWithDate}
                 </div>
             </div>
         `;
+
+        
         messagesContainer.appendChild(botMessageDiv1);    
         if (globalAvatar) {
             globalAvatar.speak("Hi, I am AARYA Automated AI Responder at Your Assistance How can I assist you today?");
@@ -2207,15 +2210,15 @@
 
         function showImagePopup(imageUrl) {
             const backdrop = document.createElement('div');
-            backdrop.className = 'dialog-backdrop';
+            backdrop.className = 'n8n-dialog-backdrop';
             document.body.appendChild(backdrop);
 
             const dialog = document.createElement('div');
-            dialog.className = 'image-dialog';
+            dialog.className = 'n8n-image-dialog';
 
             dialog.innerHTML = `
-                <button class="dialog-close-button">×</button>
-                <img src="${imageUrl}" class="responsive-popup-image" />
+                <button class="n8n-dialog-close-button">×</button>
+                <img src="${imageUrl}" class="n8n-responsive-popup-image" />
             `;
             document.body.appendChild(dialog);
 
@@ -2224,7 +2227,7 @@
                 backdrop.remove();
             };
 
-            dialog.querySelector('.dialog-close-button').addEventListener('click', closeDialog);
+            dialog.querySelector('.n8n-dialog-close-button').addEventListener('click', closeDialog);
             backdrop.addEventListener('click', closeDialog);
         }
 
@@ -2269,11 +2272,11 @@
 			}
 
 			const userMessageDiv = document.createElement('div');
-			userMessageDiv.className = 'chat-message user';
+			userMessageDiv.className = 'n8n-chat-message user';
 
 			// Create the message bubble container
 			const messageBubble = document.createElement('div');
-			messageBubble.className = 'message-bubble-user';
+			messageBubble.className = 'n8n-message-bubble-user';
 
 			// Handle files (audio, images, etc.)
 			if (files.length > 0) {
@@ -2335,7 +2338,7 @@
 						} else {
 							// Create file message container
 							const fileMessageDiv = document.createElement('div');
-							fileMessageDiv.className = 'file-message';
+							fileMessageDiv.className = 'n8n-file-message';
 
 							// Create SVG icon
 							const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -2412,7 +2415,7 @@
             timestampDiv.textContent = timeWithDate;
 
             const messageWhoDiv = document.createElement('div');
-            messageWhoDiv.className = 'message-bot-who';
+            messageWhoDiv.className = 'n8n-message-bot-who';
             messageWhoDiv.textContent = ' You';
 
             // Append branding message to the timestamp div
@@ -2437,7 +2440,7 @@
 			updateButtonVisibility();
 
 			const loadingDiv = document.createElement('div');
-			loadingDiv.className = 'loading-indicator';
+			loadingDiv.className = 'n8n-loading-indicator';
 			loadingDiv.innerHTML = `
 				<div class="dot"></div>
 				<div class="dot"></div>
@@ -2469,7 +2472,7 @@
                 
                 if (timeSinceLastActivity >= oneMinute && socket.readyState === WebSocket.OPEN) {
                     const pingMessage = { type: "ping" };
-                    console.log("📤 Sending smart ping after", Math.round(timeSinceLastActivity / 1000), "seconds of inactivity");
+                    // console.log("📤 Sending smart ping after", Math.round(timeSinceLastActivity / 1000), "seconds of inactivity");
                     socket.send(JSON.stringify(pingMessage));
                     updateLastActivity(); // Update activity time after sending ping
                 }
@@ -2585,18 +2588,18 @@
                             updateLastActivity(); // Update activity when receiving any message
                             
                             const receivedData = JSON.parse(event.data);
-                            console.log("recvied------",receivedData);
+                            // console.log("recvied------",receivedData);
                             if (receivedData.error) {
                                 console.error('Server error:', receivedData.error);
                                 if (receivedData.receivedMessage) {
                                     try {
                                         const innerMessage = JSON.parse(receivedData.receivedMessage);
-                                        console.log('Parsed inner message:', innerMessage);
+                                        // console.log('Parsed inner message:', innerMessage);
                                         if (innerMessage.type === 'pong') {
-                                            console.log('📥 Pong received 1:', innerMessage);
+                                            // console.log('📥 Pong received 1:', innerMessage);
                                         } else if (innerMessage.type === 'ping') {
                                             const pongMessage = { type: 'pong' };
-                                            console.log('📤 got ping so Sending pong:', pongMessage);
+                                            // console.log('📤 got ping so Sending pong:', pongMessage);
                                             socket.send(JSON.stringify(pongMessage));
                                             updateLastActivity(); // Update activity after sending pong
                                         }
@@ -2606,11 +2609,11 @@
                                 }
                             } else if (receivedData.type && receivedData.type.includes('Send "PING"')) {
                                 const pongMessage = { type: 'ping' };
-                                console.log('📤 got connection so Sending ping:', pongMessage);
+                                // console.log('📤 got connection so Sending ping:', pongMessage);
                                 socket.send(JSON.stringify(pongMessage));
                                 updateLastActivity(); // Update activity after sending ping
                             } else if (receivedData.type && receivedData.type.includes('pong')) {
-                                console.log('📥 Pong received:', receivedData);
+                                // console.log('📥 Pong received:', receivedData);
                             } else {
                                 // console.log('📥 Received message:', receivedData);
                                 updateLastActivity();
@@ -2654,7 +2657,7 @@
                     // console.log('Received data:', data);
                     loadingDiv.remove();
                     const botMessageDiv = document.createElement('div');
-                    botMessageDiv.className = 'chat-message bot';
+                    botMessageDiv.className = 'n8n-chat-message bot';
 
                     // console.log('Received data-----------------------------------:', data);
                     const rawMessage = Array.isArray(data) ? data[0].output : data.output;
@@ -2694,18 +2697,18 @@
                         // console.log('Table data is valid, setting up table and download buttons');
                         messageBodyHTML = `
 
-                            <div class="message-bubble-table" id="message-body">
+                            <div class="n8n-message-bubble-table" id="n8n-message-body">
                                 <!-- Table will be appended here -->
                             </div>
-                            <div id="employee-table"></div>
+                            <div id="n8n-employee-table"></div>
                         `;
                         fulltableHTML = `
-                                    <button id="view-table-btn" title="View Full Table">
+                                    <button id="n8n-view-table-btn" title="View Full Table">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                                             <path d="M3 3h6v2H5v4H3V3zm18 0v6h-2V5h-4V3h6zM3 21v-6h2v4h4v2H3zm18-6v6h-6v-2h4v-4h2z"/>
                                         </svg>
                                     </button>
-                                    <button id="download-csv-btn" title="Download as CSV">
+                                    <button id="n8n-download-csv-btn" title="Download as CSV">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                                             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
                                         </svg>
@@ -2719,30 +2722,30 @@
                     if (dropdown_content && Array.isArray(dropdown_content.options) && dropdown_content.options.length > 0) {
                         // console.log('Dropdown data is valid, setting up dropdown');
                         messageBodyHTML += `
-                            <div class="message-bubble-dropdown" id="dropdown-body">
+                            <div class="n8n-message-bubble-dropdown" id="n8n-dropdown-body">
                                 <!-- Dropdown will be appended here -->
                             </div>
-                            <div id="dropdown-container"></div>`;
+                            <div id="n8n-dropdown-container"></div>`;
                     }
 
                     let footerHTML = `
-                        <div class="message-footer" style="position: absolute; order: 2;top: -25px;right:0;">
-                                <button class="action-btn copy-btn" title="Copy">
+                        <div class="n8n-message-footer" style="position: absolute; order: 2;top: -25px;right:0;">
+                                <button class="n8n-action-btn n8n-copy-btn" title="Copy">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z" fill="currentColor"/>
                                     </svg>
                                 </button>
-                                <button class="action-btn like-btn" title="Like">
+                                <button class="n8n-action-btn n8n-like-btn" title="Like">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-md-heavy">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M12.1318 2.50389C12.3321 2.15338 12.7235 1.95768 13.124 2.00775L13.5778 2.06447C16.0449 2.37286 17.636 4.83353 16.9048 7.20993L16.354 8.99999H17.0722C19.7097 8.99999 21.6253 11.5079 20.9313 14.0525L19.5677 19.0525C19.0931 20.7927 17.5124 22 15.7086 22H6C4.34315 22 3 20.6568 3 19V12C3 10.3431 4.34315 8.99999 6 8.99999H8C8.25952 8.99999 8.49914 8.86094 8.6279 8.63561L12.1318 2.50389ZM10 20H15.7086C16.6105 20 17.4008 19.3964 17.6381 18.5262L19.0018 13.5262C19.3488 12.2539 18.391 11 17.0722 11H15C14.6827 11 14.3841 10.8494 14.1956 10.5941C14.0071 10.3388 13.9509 10.0092 14.0442 9.70591L14.9932 6.62175C15.3384 5.49984 14.6484 4.34036 13.5319 4.08468L10.3644 9.62789C10.0522 10.1742 9.56691 10.5859 9 10.8098V19C9 19.5523 9.44772 20 10 20ZM7 11V19C7 19.3506 7.06015 19.6872 7.17071 20H6C5.44772 20 5 19.5523 5 19V12C5 11.4477 5.44772 11 6 11H7Z" fill="currentColor"/>
                                     </svg>
                                 </button>
-                                <button class="action-btn dislike-btn" title="Dislike">
+                                <button class="n8n-action-btn n8n-dislike-btn" title="Dislike">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-md-heavy">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M11.8727 21.4961C11.6725 21.8466 11.2811 22.0423 10.8805 21.9922L10.4267 21.9355C7.95958 21.6271 6.36855 19.1665 7.09975 16.7901L7.65054 15H6.93226C4.29476 15 2.37923 12.4921 3.0732 9.94753L4.43684 4.94753C4.91145 3.20728 6.49209 2 8.29589 2H18.0045C19.6614 2 21.0045 3.34315 21.0045 5V12C21.0045 13.6569 19.6614 15 18.0045 15H16.0045C15.745 15 15.5054 15.1391 15.3766 15.3644L11.8727 21.4961ZM14.0045 4H8.29589C7.39399 4 6.60367 4.60364 6.36637 5.47376L5.00273 10.4738C4.65574 11.746 5.61351 13 6.93226 13H9.00451C9.32185 13 9.62036 13.1506 9.8089 13.4059C9.99743 13.6612 10.0536 13.9908 9.96028 14.2941L9.01131 17.3782C8.6661 18.5002 9.35608 19.6596 10.4726 19.9153L13.6401 14.3721C13.9523 13.8258 14.4376 13.4141 15.0045 13.1902V5C15.0045 4.44772 14.5568 4 14.0045 4ZM17.0045 13V5C17.0045 4.64937 16.9444 4.31278 16.8338 4H18.0045C18.5568 4 19.0045 4.44772 19.0045 5V12C19.0045 12.5523 18.5568 13 18.0045 13H17.0045Z" fill="currentColor"/>
                                     </svg>
                                 </button>
-                                <button class="action-btn speak-btn" title="Read aloud">
+                                <button class="n8n-action-btn n8n-speak-btn" title="Read aloud">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-md-heavy">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M11 4.9099C11 4.47485 10.4828 4.24734 10.1621 4.54132L6.67572 7.7372C6.49129 7.90626 6.25019 8.00005 6 8.00005H4C3.44772 8.00005 3 8.44776 3 9.00005V15C3 15.5523 3.44772 16 4 16H6C6.25019 16 6.49129 16.0938 6.67572 16.2629L10.1621 19.4588C10.4828 19.7527 11 19.5252 11 19.0902V4.9099ZM8.81069 3.06701C10.4142 1.59714 13 2.73463 13 4.9099V19.0902C13 21.2655 10.4142 22.403 8.81069 20.9331L5.61102 18H4C2.34315 18 1 16.6569 1 15V9.00005C1 7.34319 2.34315 6.00005 4 6.00005H5.61102L8.81069 3.06701ZM20.3166 6.35665C20.8019 6.09313 21.409 6.27296 21.6725 6.75833C22.5191 8.3176 22.9996 10.1042 22.9996 12.0001C22.9996 13.8507 22.5418 15.5974 21.7323 17.1302C21.4744 17.6185 20.8695 17.8054 20.3811 17.5475C19.8927 17.2896 19.7059 16.6846 19.9638 16.1962C20.6249 14.9444 20.9996 13.5175 20.9996 12.0001C20.9996 10.4458 20.6064 8.98627 19.9149 7.71262C19.6514 7.22726 19.8312 6.62017 20.3166 6.35665ZM15.7994 7.90049C16.241 7.5688 16.8679 7.65789 17.1995 8.09947C18.0156 9.18593 18.4996 10.5379 18.4996 12.0001C18.4996 13.3127 18.1094 14.5372 17.4385 15.5604C17.1357 16.0222 16.5158 16.1511 16.0539 15.8483C15.5921 15.5455 15.4632 14.9255 15.766 14.4637C16.2298 13.7564 16.4996 12.9113 16.4996 12.0001C16.4996 10.9859 16.1653 10.0526 15.6004 9.30063C15.2687 8.85905 15.3578 8.23218 15.7994 7.90049Z" fill="currentColor"/>
                                     </svg>
@@ -2752,13 +2755,13 @@
 
 
                     botMessageDiv.innerHTML = `
-                        <div class="bot-message-container">
+                        <div class="n8n-bot-message-container">
                          
-                            <div class="message-bubble">
-                                <div class="avatar bot-avatar"></div>                     
-                                <div class="message-content">${formatBotMessage(rawMessage)}</div>
-                                <div class="message-content1" style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666; order: 1;display: flex;align-items: center;left: 0;"                             >
-                                   <div class='message-bot-who'>Aarya</div> ${timeWithDate}
+                            <div class="n8n-message-bubble">
+                                <div class="n8n-avatar n8n-bot-avatar"></div>                     
+                                <div class="n8n-message-content">${formatBotMessage(rawMessage)}</div>
+                                <div class="n8n-message-content1" style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666; order: 1;display: flex;align-items: center;left: 0;"                             >
+                                   <div class='n8n-message-bot-who'>Aarya</div> ${timeWithDate}
                                 </div>
                             </div>
                             ${messageBodyHTML}
@@ -2769,14 +2772,14 @@
                     // Add event listeners for table and download buttons
                     if (table_content && Array.isArray(table_content.columns) && Array.isArray(table_content.rows)) {
                         // console.log('Appending table to message-body');
-                        const messageBody = botMessageDiv.querySelector("#message-body");
+                        const messageBody = botMessageDiv.querySelector("#n8n-message-body");
                         if (messageBody) {
                             const table = createTableFromJSON(table_content);
                             messageBody.appendChild(table);
                             // console.log('Table appended to message-body:', table);
 
                             // Attach listener to view button
-                            const viewTableBtn = botMessageDiv.querySelector('#view-table-btn');
+                            const viewTableBtn = botMessageDiv.querySelector('#n8n-view-table-btn');
                             if (viewTableBtn) {
                                 viewTableBtn.addEventListener('click', () => {
                                     // console.log('View table button clicked, showing popup');
@@ -2792,7 +2795,7 @@
                                 showTablePopup(table_content);
                             });
 
-                            const downloadCsvBtn = botMessageDiv.querySelector('#download-csv-btn');
+                            const downloadCsvBtn = botMessageDiv.querySelector('#n8n-download-csv-btn');
                             if (downloadCsvBtn) {
                                 downloadCsvBtn.addEventListener('click', () => {
                                     // console.log('Download CSV button clicked');
@@ -2815,7 +2818,7 @@
                     if (dropdown_content && Array.isArray(dropdown_content.options) && dropdown_content.options.length > 0) {
                         // console.log('Dropdown options:', dropdown_content.options);
                         // console.log('Appending dropdown to dropdown-body');
-                        const dropdownBody = botMessageDiv.querySelector("#dropdown-body");
+                        const dropdownBody = botMessageDiv.querySelector("#n8n-dropdown-body");
                         if (dropdownBody) {
                             const dropdown = createDropdownFromJSON(dropdown_content);
                             dropdownBody.appendChild(dropdown);
@@ -2842,7 +2845,7 @@
                     }
             
                     // Only get the message text (without icons)
-                    const messageText = botMessageDiv.querySelector('.message-content').innerText;
+                    const messageText = botMessageDiv.querySelector('.n8n-message-content').innerText;
 
                     if (globalAvatar) {
                         globalAvatar.speak(messageText);
@@ -2850,12 +2853,12 @@
 
 
 
-                    botMessageDiv.querySelector('.copy-btn').onclick = () => {
+                    botMessageDiv.querySelector('.n8n-copy-btn').onclick = () => {
                         navigator.clipboard.writeText(messageText);
                     };
 
                     // Like button
-                    botMessageDiv.querySelector('.like-btn').onclick = () => {
+                    botMessageDiv.querySelector('.n8n-like-btn').onclick = () => {
                         fetch('http://localhost:5000/api/save-feedback', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -2870,7 +2873,7 @@
                     };
 
                     // Dislike button
-                    botMessageDiv.querySelector('.dislike-btn').onclick = () => {
+                    botMessageDiv.querySelector('.n8n-dislike-btn').onclick = () => {
                         fetch('http://localhost:5000/api/save-feedback', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -2885,7 +2888,7 @@
                     };
 
                     // Speak button
-                    const speakBtn = botMessageDiv.querySelector('.speak-btn');
+                    const speakBtn = botMessageDiv.querySelector('.n8n-speak-btn');
                     let isSpeaking = false;
 
                     speakBtn.onclick = () => {
@@ -2940,7 +2943,7 @@
                     };
 
                     // Handle copy buttons for code blocks
-                    messagesContainer.querySelectorAll('.copy-code-btn').forEach(btn => {
+                    messagesContainer.querySelectorAll('.n8n-copy-code-btn').forEach(btn => {
                         btn.onclick = function () {
                             const codeElem = document.getElementById(this.getAttribute('data-target'));
                             if (codeElem) {
@@ -2959,22 +2962,22 @@
             function showTablePopup(tableData) {
                 // console.log('Showing table popup with data:', tableData);
                 const backdrop = document.createElement('div');
-                backdrop.className = 'dialog-backdrop';
+                backdrop.className = 'n8n-dialog-backdrop';
                 chatContainer.appendChild(backdrop);
 
                 const dialog = document.createElement('div');
-                dialog.className = 'table-dialog';
+                dialog.className = 'n8n-table-dialog';
                 dialog.innerHTML = `
-                    <div class="dialog-header">
+                    <div class="n8n-dialog-header">
                         <h3>${tableData.title || 'Table Data'}</h3>
-                        <button class="dialog-close-button">×</button>
+                        <button class="n8n-dialog-close-button">×</button>
                     </div>
-                    <div class="table-container"></div>
+                    <div class="n8n-table-container"></div>
                 `;
                 
                 backdrop.appendChild(dialog);
 
-                const tableContainer = dialog.querySelector('.table-container');
+                const tableContainer = dialog.querySelector('.n8n-table-container');
                 const table = createTableFromJSON(tableData, true); // Pass isPopup: true
                 tableContainer.appendChild(table);
                 // console.log('Table appended to popup:', table);
@@ -2984,7 +2987,7 @@
                     backdrop.remove();
                 };
 
-                dialog.querySelector('.dialog-close-button').addEventListener('click', closeDialog);
+                dialog.querySelector('.n8n-dialog-close-button').addEventListener('click', closeDialog);
                 backdrop.addEventListener('click', (e) => {
                     if (e.target === backdrop) {
                         closeDialog();
@@ -3003,7 +3006,7 @@
 
             function createTableFromJSON(data, isPopup = false) {
                 const tableContainer = document.createElement("div");
-                tableContainer.className = "table-container";
+                tableContainer.className = "n8n-table-container";
                 if (!isPopup) tableContainer.style.cursor = "pointer";
 
                 const table = document.createElement("table");
@@ -3012,7 +3015,7 @@
                     table.style.width = "100%";
                     table.style.boxSizing = "border-box";
                     table.style.borderCollapse = "collapse";
-                    table.style.marginLeft = "40px";
+                    table.style.marginLeft = "0px";
                 }
 
                 // === Column truncation ===
@@ -3117,21 +3120,21 @@
                 // console.log('Creating dropdown or buttons from data:', data);
 
                 const container = document.createElement('div');
-                container.className = 'options-container';
+                container.className = 'n8n-options-container';
                 container.style.marginTop = '0px';
                 
                 // console.log('Option length:', data.options.length);
 
-                // Add a label for both buttons and dropdown
-                const label = document.createElement('label');
-                // label.innerText = 'Make a choice from the list below';
-                label.style.fontWeight = 'bold';
-                label.style.position = 'center';
-                label.style.display = 'block';
-                label.style.marginBottom = '10px';
-                label.style.marginTop = '10px';
+                // // Add a label for both buttons and dropdown
+                // const label = document.createElement('label');
+                // // label.innerText = 'Make a choice from the list below';
+                // label.style.fontWeight = 'bold';
+                // label.style.position = 'center';
+                // label.style.display = 'block';
+                // label.style.marginBottom = '10px';
+                // label.style.marginTop = '10px';
 
-                container.appendChild(label);
+                // container.appendChild(label);
 
 
                 // Check the number of options
@@ -3157,7 +3160,7 @@
                     container.style.gap = '15px'; // Space between buttons
                     container.style.flexWrap = 'wrap'; // Allow buttons to wrap if needed
                     container.style.background = 'rgb(241, 241, 241)'; // Light background like in the image
-                    container.style.padding = '5px 20px 8px 20px'; // Add padding for better appearance
+                    container.style.padding = '5px 0 5px 0px'; // Add padding for better appearance
                     container.style.borderRadius = '0px 0px 12px 12px';
                     
                     
@@ -3274,11 +3277,11 @@
 
             if (messageSessionId === currentSessionId && error.name !== 'AbortError') {
                 const errorMessageDiv = document.createElement('div');
-                errorMessageDiv.className = 'chat-message bot';
+                errorMessageDiv.className = 'n8n-chat-message bot';
                 errorMessageDiv.innerHTML = `
-                    <div class="avatar bot-avatar"></div>
-                    <div class="message-bubble">
-                        <div class="message-content">Sorry, there was an error processing your request. Please try again.</div>
+                    <div class="n8n-avatar n8n-bot-avatar"></div>
+                    <div class="n8n-message-bubble">
+                        <div class="n8n-message-content">Sorry, there was an error processing your request. Please try again.</div>
                         
                     </div>`;
                 messagesContainer.appendChild(errorMessageDiv);
@@ -3299,9 +3302,9 @@
         recognition.interimResults = true; // Show interim results while speaking
         recognition.lang = 'en-US'; // Set language to English (you can change this)
 
-        const micButton = document.querySelector('.n8n-chat-widget .mic-button');
-        const textarea = document.querySelector('.n8n-chat-widget .chat-input textarea');
-        const messagesContainer = document.querySelector('.n8n-chat-widget .chat-messages');
+        const micButton = document.querySelector('.n8n-chat-widget .n8n-mic-button');
+        const textarea = document.querySelector('.n8n-chat-widget .n8n-chat-input textarea');
+        const messagesContainer = document.querySelector('.n8n-chat-widget .n8n-chat-messages');
         let isRecording = false; // Track if currently recording
         let mediaRecorder = null;
         let audioChunks = [];
@@ -3514,10 +3517,10 @@
                 } catch (error) {
                     console.error('Error accessing microphone:', error);
                     const errorMessageDiv = document.createElement('div');
-                    errorMessageDiv.className = 'chat-message bot';
+                    errorMessageDiv.className = 'n8n-chat-message bot';
                     errorMessageDiv.innerHTML = `
-                        <div class="avatar bot-avatar"></div>
-                        <div class="message-bubble">Sorry, I couldn't access your microphone. Please check permissions and try again.</div>
+                        <div class="n8n-avatar n8n-bot-avatar"></div>
+                        <div class="n8n-message-bubble">Sorry, I couldn't access your microphone. Please check permissions and try again.</div>
                     `;
                     messagesContainer.appendChild(errorMessageDiv);
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -3724,7 +3727,7 @@
         };
     } else {
         // Fallback for unsupported browsers
-        const micButton = document.querySelector('.n8n-chat-widget .mic-button');
+        const micButton = document.querySelector('.n8n-chat-widget .n8n-mic-button');
         micButton.disabled = true;
         micButton.title = 'Speech recognition not supported in this browser';
         console.warn('Speech recognition is not supported in this browser.');
@@ -3752,14 +3755,14 @@
         chatContainer.appendChild(backdrop);
 
         const dialog = document.createElement('div');
-        dialog.className = 'confirmation-dialog';
+        dialog.className = 'n8n-confirmation-dialog';
         dialog.innerHTML = `
-            <button class="dialog-close-button">×</button>
+            <button class="n8n-dialog-close-button">×</button>
             <h3>Restart Conversation</h3>
             <p>Are you sure you want to restart a new conversation?</p>
-            <div class="dialog-buttons">
-                <button class="cancel-button">Cancel</button>
-                <button class="restart-button">Restart</button>
+            <div class="n8n-dialog-buttons">
+                <button class="n8n-cancel-button">Cancel</button>
+                <button class="n8n-restart-button">Restart</button>
             </div>
         `;
         chatContainer.appendChild(dialog);
@@ -3769,10 +3772,10 @@
             backdrop.remove();
         };
 
-        dialog.querySelector('.cancel-button').addEventListener('click', closeDialog);
-        dialog.querySelector('.dialog-close-button').addEventListener('click', closeDialog);
+        dialog.querySelector('.n8n-cancel-button').addEventListener('click', closeDialog);
+        dialog.querySelector('.n8n-dialog-close-button').addEventListener('click', closeDialog);
 
-        dialog.querySelector('.restart-button').addEventListener('click', () => {
+        dialog.querySelector('.n8n-restart-button').addEventListener('click', () => {
             speechSynthesis.cancel();
             closeDialog();
             refreshChat();
@@ -3780,26 +3783,26 @@
     }
 
     function renderFilePreviews() {
-        const filePreviewContainer = document.querySelector('.n8n-chat-widget .chat-input');
-        const existingPreviews = filePreviewContainer.querySelectorAll('.file-preview');
+        const filePreviewContainer = document.querySelector('.n8n-chat-widget .n8n-chat-input');
+        const existingPreviews = filePreviewContainer.querySelectorAll('.n8n-file-preview');
         existingPreviews.forEach(preview => preview.remove());
 
         if (!currentFiles || currentFiles.length === 0) return;
 
         currentFiles.forEach((file, index) => {
             const filePreview = document.createElement('div');
-            filePreview.className = `file-preview ${file.type.startsWith('audio/') ? 'audio' : ''}`;
+            filePreview.className = `n8n-file-preview ${file.type.startsWith('audio/') ? 'audio' : ''}`;
 
             const fileUrl = URL.createObjectURL(file);
             filePreview.innerHTML = `
-                <span class="file-preview-name">${file.name}</span>
+                <span class="n8n-file-preview-name">${file.name}</span>
                 ${file.type.startsWith('audio/') ? `<audio src="${fileUrl}" controls></audio>` : ''}
-                <button class="file-preview-remove" data-index="${index}">✕</button>
+                <button class="n8n-file-preview-remove" data-index="${index}">✕</button>
             `;
 
-            filePreviewContainer.insertBefore(filePreview, filePreviewContainer.querySelector('.input-row'));
+            filePreviewContainer.insertBefore(filePreview, filePreviewContainer.querySelector('.n8n-input-row'));
 
-            const removeButton = filePreview.querySelector('.file-preview-remove');
+            const removeButton = filePreview.querySelector('.n8n-file-preview-remove');
             removeButton.addEventListener('click', () => {
                 currentFiles.splice(index, 1);
                 renderFilePreviews();
@@ -3875,7 +3878,7 @@
         }
     });
 
-    const closeButton = chatContainer.querySelector('.close-button');
+    const closeButton = chatContainer.querySelector('.n8n-close-button');
     closeButton.addEventListener('click', () => {
         chatContainer.classList.remove('open');
     });
