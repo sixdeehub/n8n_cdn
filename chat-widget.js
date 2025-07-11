@@ -1,9 +1,10 @@
-// Version: 0.0.10
+// Version: 0.0.11
 // Author:  Prathamesh Patil / Pavankumar K 
 // Date: 2025-07-01
-// modified Date: 2025-07-10
+// modified Date: 2025-07-11
 // Description: 1. Changes did according to ui designs.
 //              2. updated class name with prefix n8n to prevent overwriting with other styles.
+//              3. updated svg code for full-screen 
 
 
 (function() {
@@ -42,25 +43,25 @@
         right: 20px;        
     }
 
-    .n8n-chat-widget .n8n-chat-container.open {
+    .n8n-chat-widget .n8n-chat-container.n8n-open {
         bottom: 20px;
         right: 20px;
         display: flex;
         flex-direction: column;
     }
 
-    .n8n-chat-widget .n8n-chat-container.position-left.open {
+    .n8n-chat-widget .n8n-chat-container.position-left.n8n-open {
         right: auto;
     }
 
-    .n8n-chat-widget .n8n-chat-container.open:not(.position-left) {
+    .n8n-chat-widget .n8n-chat-container.n8n-open:not(.position-left) {
         right: 20px;
     }
 
 
 
     .n8n-chat-widget .n8n-chat-container,
-    .n8n-chat-widget .n8n-chat-container.open {
+    .n8n-chat-widget .n8n-chat-container.n8n-open {
         bottom: 25px;
         right: 20px;
         padding: 5px;
@@ -514,7 +515,7 @@
         transform: translateY(-50%);
     }
 
-    .n8n-chat-widget .n8n-mic-button.recording {
+    .n8n-chat-widget .n8n-mic-button.n8n-recording {
         animation: pulse 1.5s infinite;
     }
 
@@ -939,7 +940,7 @@
         opacity: 1;
     }
 
-    .n8n-chat-widget .n8n-copy-code-btn.copied svg rect {
+    .n8n-chat-widget .n8n-copy-code-btn.n8n-copied svg rect {
         stroke: #007bff;
     }
 
@@ -1543,7 +1544,7 @@
 
     window.addEventListener('resize', () => {
     const chatContainer = document.querySelector('.n8n-chat-widget .n8n-chat-container');
-    if (chatContainer && chatContainer.classList.contains('open')) {
+    if (chatContainer && chatContainer.classList.contains('n8n-open')) {
         chatContainer.style.bottom = '30px';
         chatContainer.style.right = '20px';
         chatContainer.style.borderColor = 'rgb(50, 0, 107)  #5c006b  rgb(8, 49, 130)  rgb(8, 49, 130)';
@@ -1617,21 +1618,20 @@
 
                     <button class="n8n-fullscreen-button" title="Toggle Fullscreen">
                         <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
-                        <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22">
-                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6 0)" fill="#fff"/>
-                            <circle id="Ellipse_2895" data-name="Ellipse 2895" cx="1.5" cy="1.5" r="1.5" transform="translate(6 21)" fill="#fff"/>
-                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" transform="translate(0 0)" fill="#fff"/>
-                            <circle id="Ellipse_2892" data-name="Ellipse 2892" cx="1.5" cy="1.5" r="1.5" transform="translate(0 21)" fill="#fff"/>
-                            <circle id="Ellipse_2877" data-name="Ellipse 2877" cx="1.5" cy="1.5" r="1.5" transform="translate(6 7)" fill="#fff"/>
-                            <circle id="Ellipse_2896" data-name="Ellipse 2896" cx="1.5" cy="1.5" r="1.5" transform="translate(6 28)" fill="#fff"/>
-                            <circle id="Ellipse_2880" data-name="Ellipse 2880" cx="1.5" cy="1.5" r="1.5" transform="translate(0 7)" fill="#fff"/>
-                            <circle id="Ellipse_2893" data-name="Ellipse 2893" cx="1.5" cy="1.5" r="1.5" transform="translate(0 28)" fill="#fff"/>
-                            <circle id="Ellipse_2878" data-name="Ellipse 2878" cx="1.5" cy="1.5" r="1.5" transform="translate(6 14)" fill="#fff"/>
-                            <circle id="Ellipse_2897" data-name="Ellipse 2897" cx="1.5" cy="1.5" r="1.5" transform="translate(6 35)" fill="#fff"/>
-                            <circle id="Ellipse_2879" data-name="Ellipse 2879" cx="1.5" cy="1.5" r="1.5" transform="translate(0 14)" fill="#fff"/>
-                            <circle id="Ellipse_2894" data-name="Ellipse 2894" cx="1.5" cy="1.5" r="1.5" transform="translate(0 35)" fill="#fff"/>
+                        <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22" fill="#ffffff">
+                            <path d="M7.5,21a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                            <path d="M1.5,21a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                            <path d="M7.5,7a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                            <path d="M7.5,28a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                            <path d="M1.5,7a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                            <path d="M1.5,28a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                            <path d="M7.5,14a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                            <path d="M7.5,35a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                            <path d="M1.5,14a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                            <path d="M1.5,35a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
                         </g>
-                        </svg>       
+                        </svg>
+       
                     </button>
                 
                     <button class="n8n-refresh-button" title="Refresh chat">
@@ -1760,23 +1760,23 @@
 				// Update button icon to "minimize"
 				fullscreenButton.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
-                        <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22">
-                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6 0)" fill="#fff"/>
-                            <circle id="Ellipse_2895" data-name="Ellipse 2895" cx="1.5" cy="1.5" r="1.5" transform="translate(6 21)" fill="#fff"/>
-                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" transform="translate(0 0)" fill="#fff"/>
-                            <circle id="Ellipse_2892" data-name="Ellipse 2892" cx="1.5" cy="1.5" r="1.5" transform="translate(0 21)" fill="#fff"/>
-                            <circle id="Ellipse_2877" data-name="Ellipse 2877" cx="1.5" cy="1.5" r="1.5" transform="translate(6 7)" fill="#fff"/>
-                            <circle id="Ellipse_2896" data-name="Ellipse 2896" cx="1.5" cy="1.5" r="1.5" transform="translate(6 28)" fill="#fff"/>
-                            <circle id="Ellipse_2880" data-name="Ellipse 2880" cx="1.5" cy="1.5" r="1.5" transform="translate(0 7)" fill="#fff"/>
-                            <circle id="Ellipse_2893" data-name="Ellipse 2893" cx="1.5" cy="1.5" r="1.5" transform="translate(0 28)" fill="#fff"/>
-                            <circle id="Ellipse_2878" data-name="Ellipse 2878" cx="1.5" cy="1.5" r="1.5" transform="translate(6 14)" fill="#fff"/>
-                            <circle id="Ellipse_2897" data-name="Ellipse 2897" cx="1.5" cy="1.5" r="1.5" transform="translate(6 35)" fill="#fff"/>
-                            <circle id="Ellipse_2879" data-name="Ellipse 2879" cx="1.5" cy="1.5" r="1.5" transform="translate(0 14)" fill="#fff"/>
-                            <circle id="Ellipse_2894" data-name="Ellipse 2894" cx="1.5" cy="1.5" r="1.5" transform="translate(0 35)" fill="#fff"/>
-                        </g>
-                    </svg>   
+                    <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22" fill="#ffffff">
+                        <path d="M7.5,21a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M1.5,21a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M7.5,7a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M7.5,28a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M1.5,7a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M1.5,28a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M7.5,14a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M7.5,35a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M1.5,14a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M1.5,35a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                    </g>
+                    </svg>
+  
 				`;
 				fullscreenButton.title = 'Minimize';
+                fullscreenButton.style.right = '50%';
 				isFullscreen = true;
 			} else {
 				// Restore original styles
@@ -1793,23 +1793,23 @@
 				// Restore full-screen button icon
 				fullscreenButton.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
-                        <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22">
-                            <circle id="Ellipse_2876" data-name="Ellipse 2876" cx="1.5" cy="1.5" r="1.5" transform="translate(6 0)" fill="#fff"/>
-                            <circle id="Ellipse_2895" data-name="Ellipse 2895" cx="1.5" cy="1.5" r="1.5" transform="translate(6 21)" fill="#fff"/>
-                            <circle id="Ellipse_2881" data-name="Ellipse 2881" cx="1.5" cy="1.5" r="1.5" transform="translate(0 0)" fill="#fff"/>
-                            <circle id="Ellipse_2892" data-name="Ellipse 2892" cx="1.5" cy="1.5" r="1.5" transform="translate(0 21)" fill="#fff"/>
-                            <circle id="Ellipse_2877" data-name="Ellipse 2877" cx="1.5" cy="1.5" r="1.5" transform="translate(6 7)" fill="#fff"/>
-                            <circle id="Ellipse_2896" data-name="Ellipse 2896" cx="1.5" cy="1.5" r="1.5" transform="translate(6 28)" fill="#fff"/>
-                            <circle id="Ellipse_2880" data-name="Ellipse 2880" cx="1.5" cy="1.5" r="1.5" transform="translate(0 7)" fill="#fff"/>
-                            <circle id="Ellipse_2893" data-name="Ellipse 2893" cx="1.5" cy="1.5" r="1.5" transform="translate(0 28)" fill="#fff"/>
-                            <circle id="Ellipse_2878" data-name="Ellipse 2878" cx="1.5" cy="1.5" r="1.5" transform="translate(6 14)" fill="#fff"/>
-                            <circle id="Ellipse_2897" data-name="Ellipse 2897" cx="1.5" cy="1.5" r="1.5" transform="translate(6 35)" fill="#fff"/>
-                            <circle id="Ellipse_2879" data-name="Ellipse 2879" cx="1.5" cy="1.5" r="1.5" transform="translate(0 14)" fill="#fff"/>
-                            <circle id="Ellipse_2894" data-name="Ellipse 2894" cx="1.5" cy="1.5" r="1.5" transform="translate(0 35)" fill="#fff"/>
-                        </g>
-                    </svg>   
+                    <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22" fill="#ffffff">
+                        <path d="M7.5,21a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M1.5,21a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M7.5,7a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M7.5,28a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M1.5,7a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M1.5,28a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M7.5,14a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M7.5,35a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M1.5,14a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                        <path d="M1.5,35a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" transform="translate(-1.5 0)" />
+                    </g>
+                    </svg>
+  
 				`;
 				fullscreenButton.title = 'Toggle Fullscreen';
+                fullscreenButton.style.right = '42%';
 				isFullscreen = false;
 			}
 		});
@@ -2297,7 +2297,7 @@
 							const audioElement = document.createElement('audio');
 							audioElement.controls = true;
 							audioElement.style.width = '100%';
-							audioElement.style.background = 'rgb(255, 255, 255)';
+							audioElement.style.background = 'transparent linear-gradient(153deg, #DDF1FF 0%, #FFD8A3 100%) 0% 0% no-repeat padding-box';
 							audioElement.style.borderRadius = '8px';
 
 							// Create source element for audio
@@ -2342,7 +2342,7 @@
 
 							// Create SVG icon
 							const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-							svgElement.classList.add('file-icon');
+							svgElement.classList.add('n8n-file-icon');
 							svgElement.setAttribute('viewBox', '0 0 24 24');
 							const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 							pathElement.setAttribute('d', 'M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z');
@@ -2949,8 +2949,8 @@
                             if (codeElem) {
                                 navigator.clipboard.writeText(codeElem.innerText)
                                     .then(() => {
-                                        this.classList.add('copied');
-                                        setTimeout(() => { this.classList.remove('copied'); }, 1200);
+                                        this.classList.add('n8n-copied');
+                                        setTimeout(() => { this.classList.remove('n8n-copied'); }, 1200);
                                     });
                             }
                         };
@@ -3465,7 +3465,7 @@
                         <path d="M0 0 C0.66 0 1.32 0 2 0 C2.33 2.31 2.66 4.62 3 7 C2.01 7.495 2.01 7.495 1 8 C-0.35439668 5.29120665 -0.06501451 2.99066732 0 0 Z " fill="#FCF6EF" transform="translate(9,144)"/>
                         <path d="M0 0 C0 0.66 0 1.32 0 2 C0.66 2.33 1.32 2.66 2 3 C0.02 3.99 0.02 3.99 -2 5 C-2.99 3.68 -3.98 2.36 -5 1 C-2 0 -2 0 0 0 Z " fill="#ECF3F6" transform="translate(104,120)"/>
                         </svg>`;
-                        micButton.classList.remove('recording');
+                        micButton.classList.remove('n8n-recording');
 
                         if (audioChunks.length === 0) {
                             // console.log('No audio recorded');
@@ -3511,7 +3511,7 @@
                         </svg>
                     `;
                     micButton.title = 'Stop recording';
-                    micButton.classList.add('recording');
+                    micButton.classList.add('n8n-recording');
                     isRecording = true;
 
                 } catch (error) {
@@ -3658,7 +3658,7 @@
                         <path d="M0 0 C0 0.66 0 1.32 0 2 C0.66 2.33 1.32 2.66 2 3 C0.02 3.99 0.02 3.99 -2 5 C-2.99 3.68 -3.98 2.36 -5 1 C-2 0 -2 0 0 0 Z " fill="#ECF3F6" transform="translate(104,120)"/>
                         </svg>`;
                 micButton.title = 'Record voice';
-                micButton.classList.remove('recording');
+                micButton.classList.remove('n8n-recording');
             }
         });
 
@@ -3689,7 +3689,7 @@
         // Handle speech recognition errors
         recognition.onerror = (event) => {
             console.error('Speech recognition error:', event.error);
-            micButton.classList.remove('recording');
+            micButton.classList.remove('n8n-recording');
             isRecording = false;
             textarea.value += `\n[Error: ${event.error}]`;
             autoResizeTextarea(textarea); // Resize after error message
@@ -3708,11 +3708,11 @@
                 } catch (error) {
                     console.error('Error restarting speech recognition:', error);
                     isRecording = false;
-                    micButton.classList.remove('recording');
+                    micButton.classList.remove('n8n-recording');
                 }
             } else {
                 // Reset state when recognition is fully stopped
-                micButton.classList.remove('recording');
+                micButton.classList.remove('n8n-recording');
                 isRecording = false;
             }
         };
@@ -3871,16 +3871,16 @@
     
 
     toggleButton.addEventListener('click', () => {
-        chatContainer.classList.toggle('open');
+        chatContainer.classList.toggle('n8n-open');
         
-        if (chatContainer.classList.contains('open') && !currentSessionId) {
+        if (chatContainer.classList.contains('n8n-open') && !currentSessionId) {
             startNewConversation();
         }
     });
 
     const closeButton = chatContainer.querySelector('.n8n-close-button');
     closeButton.addEventListener('click', () => {
-        chatContainer.classList.remove('open');
+        chatContainer.classList.remove('n8n-open');
     });
 
 
