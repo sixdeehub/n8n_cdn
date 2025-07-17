@@ -1,10 +1,10 @@
-// Version: 0.0.12
-// Author:  Prathamesh Patil 
+// Version: 0.0.11
+// Author:  Prathamesh Patil / Pavankumar K 
 // Date: 2025-07-01
-// modified Date: 2025-07-17
+// modified Date: 2025-07-11
 // Description: 1. Changes did according to ui designs.
-//              2. added dropdown values can drag and drop in textarea.
-//              3. can drag and drop the widget to left or right side of the screen
+//              2. updated class name with prefix n8n to prevent overwriting with other styles.
+//              3. updated svg code for full-screen 
 
 
 (function() {
@@ -1816,201 +1816,6 @@
 
 
 
-        let container_open = false;
-        class DraggableN8NChatToggle {
-            constructor(toggleButton, chatContainer, config) {
-                this.toggleButton = toggleButton;
-                this.chatContainer = chatContainer;
-                this.config = config;
-                
-                this.isDragging = false;
-                this.hasMoved = false;
-                this.startX = 0;
-                this.startY = 0;
-                this.currentX = 0;
-                this.currentY = 0;
-                this.initialX = 0;
-                this.initialY = 0;
-                
-                this.isLeftSide = config.style.position === 'left';
-                
-                this.init();
-            }
-            
-            init() {
-                this.setupDragListeners();
-                this.updateToggleButtonStyles();
-            }
-            
-            updateToggleButtonStyles() {
-                // Add draggable cursor and user-select styles
-                this.toggleButton.style.cursor = 'grab';
-                this.toggleButton.style.userSelect = 'none';
-                this.toggleButton.style.transition = 'transform 0.3s ease';
-            }
-            
-            setupDragListeners() {
-                // Drag events
-                this.toggleButton.addEventListener('mousedown', this.startDrag.bind(this));
-                this.toggleButton.addEventListener('touchstart', this.startDrag.bind(this));
-                
-                document.addEventListener('mousemove', this.drag.bind(this));
-                document.addEventListener('touchmove', this.drag.bind(this));
-                
-                document.addEventListener('mouseup', this.endDrag.bind(this));
-                document.addEventListener('touchend', this.endDrag.bind(this));
-                
-                // Prevent default drag behavior
-                this.toggleButton.addEventListener('dragstart', (e) => e.preventDefault());
-                
-                // Update hover effects to work with dragging
-                this.toggleButton.addEventListener('mouseenter', () => {
-                    if (!this.isDragging) {
-                        this.toggleButton.style.transform = 'scale(1.05)';
-                    }
-                });
-                
-                this.toggleButton.addEventListener('mouseleave', () => {
-                    if (!this.isDragging) {
-                        this.toggleButton.style.transform = 'scale(1)';
-                    }
-                });
-            }
-            
-            startDrag(e) {
-                this.isDragging = true;
-                this.hasMoved = false;
-                this.toggleButton.style.cursor = 'grabbing';
-                this.toggleButton.style.transition = 'none';
-                
-                const clientX = e.clientX || e.touches[0].clientX;
-                const clientY = e.clientY || e.touches[0].clientY;
-                
-                this.startX = clientX;
-                this.startY = clientY;
-                
-                const rect = this.toggleButton.getBoundingClientRect();
-                this.initialX = rect.left;
-                this.initialY = rect.top;
-                
-                // Close chat window during drag if open
-                if (this.chatContainer.classList.contains('n8n-open')) {
-                    this.chatContainer.classList.remove('n8n-open');
-                }
-                
-                e.preventDefault();
-            }
-            
-            drag(e) {
-                if (!this.isDragging) return;
-                
-                e.preventDefault();
-                
-                const clientX = e.clientX || e.touches[0].clientX;
-                const clientY = e.clientY || e.touches[0].clientY;
-                
-                // Calculate movement
-                const deltaX = clientX - this.startX;
-                const deltaY = clientY - this.startY;
-                
-                // Check if mouse has moved significantly (more than 5px)
-                if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
-                    this.hasMoved = true;
-                }
-                
-                this.currentX = this.initialX + deltaX;
-                this.currentY = this.initialY + deltaY;
-                
-                // Constrain to viewport
-                const rect = this.toggleButton.getBoundingClientRect();
-                const maxX = window.innerWidth - rect.width;
-                const maxY = window.innerHeight - rect.height;
-                
-                this.currentX = Math.max(0, Math.min(maxX, this.currentX));
-                this.currentY = Math.max(0, Math.min(maxY, this.currentY));
-                
-                // Update position
-                this.toggleButton.style.position = 'fixed';
-                this.toggleButton.style.left = this.currentX + 'px';
-                this.toggleButton.style.top = this.currentY + 'px';
-                this.toggleButton.style.right = 'auto';
-                this.toggleButton.style.bottom = 'auto';
-            }
-            
-            endDrag(e) {
-                if (!this.isDragging) return;
-                
-                this.isDragging = false;
-                this.toggleButton.style.cursor = 'grab';
-                this.toggleButton.style.transition = 'transform 0.3s ease';
-                
-                // If mouse didn't move significantly, treat as click to toggle chat
-                if (!this.hasMoved) {
-                    this.handleToggleClick();
-                    return;
-                }
-                
-                // Determine which side to snap to
-                const screenMiddle = window.innerWidth / 2;
-                const shouldSnapLeft = this.currentX < screenMiddle;
-                
-                this.snapToSide(shouldSnapLeft);
-            }
-            
-            snapToSide(left) {
-                this.isLeftSide = left;
-                
-                // Reset position styles
-                this.toggleButton.style.left = '';
-                this.toggleButton.style.top = '';
-                this.toggleButton.style.right = '';
-                this.toggleButton.style.bottom = '';
-                
-                if (left) {
-                    // Snap to left side
-                    this.toggleButton.style.left = '20px';
-                    this.toggleButton.style.bottom = '33px';
-                    this.toggleButton.style.right = 'auto';
-                    
-                    // Update class for styling
-                    this.toggleButton.classList.add('position-left');
-                } else {
-                    // Snap to right side (default)
-                    this.toggleButton.style.right = '53px';
-                    this.toggleButton.style.bottom = '33px';
-                    this.toggleButton.style.left = 'auto';
-                    
-                    // Remove left position class
-                    this.toggleButton.classList.remove('position-left');
-                }
-                
-                // Update config position
-                this.config.style.position = left ? 'left' : 'right';
-            }
-            
-            handleToggleClick() {
-                    if (window.container_open) {
-                        // Chat is open, so close it
-                        this.chatContainer.classList.remove('n8n-open');
-                        window.container_open = false;
-                    } else {
-                        // Chat is closed, so open it
-                        this.chatContainer.classList.add('n8n-open');
-                        window.container_open = true;
-
-                        // Only start new conversation if there's no existing session
-                        if (!currentSessionId) {
-                            if (typeof startNewConversation === 'function') {
-                                startNewConversation();
-                            }
-                        }
-                    }
-                }
-        }
-
-
-
-
 
 
 
@@ -2059,9 +1864,6 @@
 		const fileUploadButton = chatContainer.querySelector('.n8n-file-upload-button');
 		const filePreviewContainer = chatContainer.querySelector('#n8n-file-preview-container');
 		const refreshButton = chatContainer.querySelector('.n8n-refresh-button');
-
-
-        const draggableToggle = new DraggableN8NChatToggle(toggleButton, chatContainer, config);
 
 
 
@@ -3012,44 +2814,34 @@
 
 
                     // Handle dropdown content
+                    // Handle dropdown content
                     if (dropdown_content && Array.isArray(dropdown_content.options) && dropdown_content.options.length > 0) {
+                        // console.log('Dropdown options:', dropdown_content.options);
+                        // console.log('Appending dropdown to dropdown-body');
                         const dropdownBody = botMessageDiv.querySelector("#n8n-dropdown-body");
                         if (dropdownBody) {
                             const dropdown = createDropdownFromJSON(dropdown_content);
                             dropdownBody.appendChild(dropdown);
+                            // console.log('Dropdown appended to dropdown-body:', dropdown);
 
-                            // Add event listener for select element
+                            // Add event listener to send selected option as a user message, only if a <select> element exists
                             const select = dropdown.querySelector('select');
                             if (select) {
-                                // Keep the existing change event
                                 select.addEventListener('change', (e) => {
                                     const selectedValue = e.target.value;
                                     if (selectedValue) {
+                                        // console.log('Dropdown selection:', selectedValue);
                                         sendMessage(selectedValue, [], 'dropdown');
                                     }
                                 });
-
-                                // Add drag-and-drop functionality
-                                Array.from(select.options).forEach(option => {
-                                    option.draggable = true;
-                                    
-                                    option.addEventListener('dragstart', (e) => {
-                                        e.dataTransfer.setData('text/plain', option.value);
-                                        e.dataTransfer.effectAllowed = 'copy';
-                                    });
-                                });
                             } else {
-                                // Handle button-based dropdowns if needed
-                                const buttons = dropdown.querySelectorAll('button');
-                                buttons.forEach(button => {
-                                    button.draggable = true;
-                                    button.addEventListener('dragstart', (e) => {
-                                        e.dataTransfer.setData('text/plain', button.textContent);
-                                        e.dataTransfer.effectAllowed = 'copy';
-                                    });
-                                });
+                                // console.log('No <select> element found; likely using buttons instead of a dropdown');
                             }
+                        } else {
+                            // console.error('dropdown-body element not found');
                         }
+                    } else {
+                        // console.warn('Dropdown content is invalid or missing:', dropdown_content);
                     }
             
                     // Only get the message text (without icons)
@@ -4078,13 +3870,13 @@
     
     
 
-    // toggleButton.addEventListener('click', () => {
-    //     chatContainer.classList.toggle('n8n-open');
+    toggleButton.addEventListener('click', () => {
+        chatContainer.classList.toggle('n8n-open');
         
-    //     if (chatContainer.classList.contains('n8n-open') && !currentSessionId) {
-    //         startNewConversation();
-    //     }
-    // });
+        if (chatContainer.classList.contains('n8n-open') && !currentSessionId) {
+            startNewConversation();
+        }
+    });
 
     const closeButton = chatContainer.querySelector('.n8n-close-button');
     closeButton.addEventListener('click', () => {
@@ -4173,5 +3965,3 @@
         }
     });
     })();
-
-
