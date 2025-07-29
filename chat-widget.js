@@ -234,8 +234,7 @@
         `;
     }
 
-    // Function to update iframe visibility
-    function updateIframeVisibility() {
+    function updateIframeVisibility() { 
         const container = document.getElementById('trulience-container');
         const headerDiv = document.querySelector('.n8n-brand-header');
         
@@ -251,6 +250,10 @@
                 const iframeHTML = createIframeDiv();
                 headerDiv.insertAdjacentHTML('afterend', iframeHTML);
             }
+            
+            if (container) {
+                container.style.display = 'block';
+            }
         } else {
 
             const chatMessages = chatContainer.querySelector('.n8n-chat-messages');
@@ -258,9 +261,9 @@
                 chatMessages.style.setProperty('border-radius', '20px 20px 0 0', 'important');
             }
 
-            // Remove iframe if it exists
+            
             if (container) {
-                container.remove();
+                container.style.display = 'none';
             }
         }
     }
