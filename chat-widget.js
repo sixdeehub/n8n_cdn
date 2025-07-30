@@ -1,11 +1,10 @@
-// Version: 0.0.15 updated
+// Version: 0.0.16
 // Author:  Prathamesh Patil / Pavankumar K 
 // Date: 2025-07-01
-// modified Date: 2025-07-25
-// Description: 1. Added avatar for chatbot
-//              2. separated css from js file 
-//		3. Added toggle button floating
-//		4. added typing animation
+// modified Date: 2025-07-30
+// Description: 1. Changes did according to ui designs.
+//              2. fix bug for avatar
+
 
 (function() {
 
@@ -234,39 +233,62 @@
         `;
     }
 
-    function updateIframeVisibility() { 
-        const container = document.getElementById('trulience-container');
-        const headerDiv = document.querySelector('.n8n-brand-header');
-        
-        if (video === 'on') {
+    function updateIframeVisibility() {
+        const containerId = 'trulience-container';
+    const container = document.getElementById(containerId);
+    const headerDiv = document.querySelector('.n8n-brand-header');
+    const chatMessages = chatContainer.querySelector('.n8n-chat-messages');
 
-            const chatMessages = chatContainer.querySelector('.n8n-chat-messages');
-            if (chatMessages) {
-                chatMessages.style.setProperty('border-radius', '0 0 0 0', 'important');
-            }
+    if (!headerDiv || !chatMessages) {
+      console.error('Required elements (.n8n-brand-header or .n8n-chat-messages) not found.');
+      return;
+    }
 
-            // Add iframe if it doesn't exist
-            if (!container) {
-                const iframeHTML = createIframeDiv();
-                headerDiv.insertAdjacentHTML('afterend', iframeHTML);
-            }
-            
-            if (container) {
-                container.style.display = 'block';
-            }
+    if (video === 'on') {
+      // Update chat messages border-radius
+      chatMessages.style.setProperty('border-radius', '0 0 0 0', 'important');
+
+      // Add iframe if it doesn't exist
+      if (!container) {
+        const iframeHTML = createIframeDiv();
+        headerDiv.insertAdjacentHTML('afterend', iframeHTML);
+      }
+      // Show the container
+      const newContainer = document.getElementById(containerId);
+      if (newContainer) {
+        newContainer.style.display = 'block';
+      }
+    } else {
+      // Update chat messages border-radius
+      chatMessages.style.setProperty('border-radius', '20px 20px 0 0', 'important');
+
+      // Hide the container if it exists
+      if (container) {
+        container.style.display = 'none';
+      }
+    }
+    }
+
+    // Set up toggle event listener
+    function setupToggleListener() {
+        const toggleInput = document.getElementById('videoToggle');
+        if (toggleInput) {
+        // Set initial state
+        updateIframeVisibility();
+
+        // Add event listener
+        toggleInput.addEventListener('change', () => {
+            video = toggleInput.checked ? 'on' : 'off';
+            console.log('Video state:', video); // Debug
+            updateIframeVisibility();
+        });
         } else {
-
-            const chatMessages = chatContainer.querySelector('.n8n-chat-messages');
-            if (chatMessages) {
-                chatMessages.style.setProperty('border-radius', '20px 20px 0 0', 'important');
-            }
-
-            
-            if (container) {
-                container.style.display = 'none';
-            }
+        console.warn('Video toggle input not found, retrying...');
+        setTimeout(setupToggleListener, 100); // Retry after 100ms
         }
     }
+
+    setupToggleListener()
 
     const chatInterfaceHTML = `
                 <div class="n8n-chat-interface">
