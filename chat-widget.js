@@ -1,9 +1,11 @@
-// Version: 0.0.16
+// Version: 0.0.17
 // Author:  Prathamesh Patil / Pavankumar K 
 // Date: 2025-07-01
-// modified Date: 2025-07-30
-// Description: 1. Changes did according to ui designs.
-//              2. fix bug for avatar
+// modified Date: 2025-08-04
+// Description: 1. Removed writing animation when video is off.
+//              2. For speaking avatar filter the emojis if its present in sentence.
+//		3. Updated the image preview function.
+//		4. Updated some CSS part.
 
 
 (function() {
@@ -279,7 +281,7 @@
         // Add event listener
         toggleInput.addEventListener('change', () => {
             video = toggleInput.checked ? 'on' : 'off';
-            console.log('Video state:', video); // Debug
+            // console.log('Video state:', video); // Debug
             updateIframeVisibility();
         });
         } else {
@@ -1077,6 +1079,10 @@
             </div>
         `;
 
+        if (video === "on") {
+            speakTextWithFallback("I am AARYA Automated AI Responder at Your Assistance How can I assist you today");
+        }
+
         
         messagesContainer.appendChild(botMessageDiv1);    
         if (globalAvatar) {
@@ -1116,41 +1122,190 @@
 
 
       
+    function showImagePopup(imageUrl, originalElement = null) {
+        
+        // Create backdrop
+        const backdrop = document.createElement('div');
+        backdrop.className = 'n8n-dialog-backdrop';
+        
+        // Create dialog container
+        const dialog = document.createElement('div');
+        dialog.className = 'n8n-image-dialog';
 
+        // Create close button
+        const closeButton = document.createElement('button');
+        closeButton.className = 'n8n-dialog-close-button';
+        closeButton.innerHTML = '&times;';
+        closeButton.setAttribute('aria-label', 'Close image popup');
 
+        // Create image element
+        const img = document.createElement('img');
+        img.className = 'n8n-responsive-popup-image';
+        img.alt = 'Popup image';
+        
+        // Add loading state
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'n8n-popup-loading';
+        dialog.appendChild(loadingDiv);
+        
+        // Error handling for image loading
+        img.onerror = () => {
+            console.error('Failed to load image in popup:', imageUrl);
+            loadingDiv.textContent = 'Failed to load image';
+            
+            if (originalElement && originalElement.complete) {
+                // console.log('Trying canvas fallback...');
+                try {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = originalElement.naturalWidth || originalElement.width;
+                    canvas.height = originalElement.naturalHeight || originalElement.height;
+                    ctx.drawImage(originalElement, 0, 0);
+                    img.src = canvas.toDataURL();
+                } catch (e) {
+                    console.error('Canvas fallback failed:', e);
+                }
+            }
+        };
+        
+        img.onload = () => {
+            // console.log('Image loaded successfully in popup');
+            // Remove loading state and show image
+            if (loadingDiv.parentNode) {
+                loadingDiv.remove();
+            }
+            dialog.appendChild(img);
+        };
 
-        function showImagePopup(imageUrl) {
-            const backdrop = document.createElement('div');
-            backdrop.className = 'n8n-dialog-backdrop';
-            document.body.appendChild(backdrop);
+        // Set image source
+        img.src = imageUrl;
 
-            const dialog = document.createElement('div');
-            dialog.className = 'n8n-image-dialog';
+        // Assemble dialog
+        dialog.appendChild(closeButton);
+        backdrop.appendChild(dialog);
+        document.body.appendChild(backdrop);
 
-            dialog.innerHTML = `
-                <button class="n8n-dialog-close-button">×</button>
-                <img src="${imageUrl}" class="n8n-responsive-popup-image" />
-            `;
-            document.body.appendChild(dialog);
+        // Close dialog function
+        const closeDialog = () => {
+            // console.log('Closing dialog');
+            backdrop.classList.add('closing');
+            setTimeout(() => {
+                if (backdrop.parentNode) {
+                    backdrop.remove();
+                }
+            }, 200);
+        };
 
-            const closeDialog = () => {
-                dialog.remove();
-                backdrop.remove();
-            };
+        // Event listeners
+        closeButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeDialog();
+        });
+        
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) {
+                closeDialog();
+            }
+        });
+        
+        // Close on Escape key
+        const escapeHandler = (e) => {
+            if (e.key === 'Escape') {
+                closeDialog();
+                document.removeEventListener('keydown', escapeHandler);
+            }
+        };
+        document.addEventListener('keydown', escapeHandler);
+        
+        // Prevent body scroll while popup is open
+        document.body.style.overflow = 'hidden';
+        
+        // Restore body scroll when popup closes
+        const originalCloseDialog = closeDialog;
+        closeDialog = () => {
+            document.body.style.overflow = '';
+            document.removeEventListener('keydown', escapeHandler);
+            originalCloseDialog();
+        };
+    }
 
-            dialog.querySelector('.n8n-dialog-close-button').addEventListener('click', closeDialog);
-            backdrop.addEventListener('click', closeDialog);
-        }
-
-
-
-        function enableImagePreview(imgElement, fileUrl) {
-            imgElement.style.cursor = 'pointer';
-            imgElement.addEventListener('click', () => {
-                showImagePopup(fileUrl);
+    function enableImagePreview(imgElement, fileUrl) {
+        // Add preview class for styling
+        imgElement.classList.add('n8n-image-preview');
+        
+        const setupClickHandler = () => {
+            imgElement.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                // console.log('Image clicked:', fileUrl);
+                // console.log('Image element:', imgElement);
+                // console.log('Image natural dimensions:', imgElement.naturalWidth, 'x', imgElement.naturalHeight);
+                
+                showImagePopup(fileUrl, imgElement);
+            });
+        };
+        
+        // Wait for image to load before enabling preview
+        if (imgElement.complete && imgElement.naturalWidth > 0) {
+            setupClickHandler();
+        } else {
+            imgElement.addEventListener('load', setupClickHandler);
+            imgElement.addEventListener('error', () => {
+                console.error('Failed to load preview image:', fileUrl);
             });
         }
+    }
 
+    // Convert blob to data URL for better compatibility (optional)
+    async function blobToDataURL(blobUrl) {
+        try {
+            const response = await fetch(blobUrl);
+            const blob = await response.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        } catch (error) {
+            console.error('Error converting blob to data URL:', error);
+            return blobUrl; // fallback to original URL
+        }
+    }
+
+    // Enhanced version with blob URL conversion
+    async function enableImagePreviewEnhanced(imgElement, fileUrl) {
+        imgElement.classList.add('n8n-image-preview');
+        
+        // Convert blob URL to data URL for better popup compatibility
+        let popupUrl = fileUrl;
+        if (fileUrl.startsWith('blob:')) {
+            try {
+                popupUrl = await blobToDataURL(fileUrl);
+                // console.log('Converted blob URL to data URL for popup');
+            } catch (error) {
+                console.warn('Failed to convert blob URL, using original:', error);
+            }
+        }
+        
+        const setupClickHandler = () => {
+            imgElement.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                // console.log('Image clicked:', fileUrl);
+                showImagePopup(popupUrl, imgElement);
+            });
+        };
+        
+        if (imgElement.complete && imgElement.naturalWidth > 0) {
+            setupClickHandler();
+        } else {
+            imgElement.addEventListener('load', setupClickHandler);
+            imgElement.addEventListener('error', () => {
+                console.error('Failed to load preview image:', fileUrl);
+            });
+        }
+    }
 		
         
         
@@ -1158,6 +1313,151 @@
         // Message queue system
         let typingQueue = [];
         let isCurrentlyTyping = false;
+        // Track speaking state
+        let isSpeaking = false;
+
+        // Speech queue system
+        let speechQueue = [];
+        let isProcessingQueue = false;
+
+        // Modified speakText function with queue support
+        function speakTextWithFallback(text) {
+            let trimmedText = text
+                .replace(/[\n]{2,}/g, ' ')            // Replace 2+ newlines with space
+                .replace(/!/g, '')                    // Remove exclamation marks
+                .replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '')  // Remove emojis
+                .trim();                              // Trim spaces
+            
+            // Add text to queue
+            speechQueue.push(trimmedText);
+            
+            // Start processing queue if not already processing
+            if (!isProcessingQueue) {
+                processNextInQueue();
+            }
+        }
+
+        // Process the next item in the speech queue
+        function processNextInQueue() {
+            if (speechQueue.length === 0) {
+                isProcessingQueue = false;
+                return;
+            }
+            
+            isProcessingQueue = true;
+            const currentText = speechQueue.shift(); // Remove first item from queue
+            
+            
+            // Hide textarea when starting to speak
+            hideTextarea();
+            isSpeaking = true;
+            
+            const iframe = document.getElementById('trulience-iframe');
+            const iframeWindow = iframe?.contentWindow;
+            if (iframeWindow) {
+                iframeWindow.postMessage(
+                    { command: 'trl-chat', message: currentText },
+                    'https://trulience.com'
+                );
+            }
+            
+            // Fallback: Show textarea after estimated duration if no completion message received
+            const estimatedDuration = estimateSpeechDuration(currentText);
+            setTimeout(() => {
+                if (isSpeaking) {
+                    isSpeaking = false;
+                    // Process next item in queue after current one completes
+                    processNextInQueue();
+                    // Only show textarea if queue is empty
+                    if (speechQueue.length === 0) {
+                        showTextarea();
+                    }
+                }
+            }, estimatedDuration);
+        }
+
+
+
+
+        // Function to disable textarea and show speaking message
+        function hideTextarea() {
+            const textarea = document.querySelector('.n8n-chat-widget .n8n-chat-input textarea');
+            // const fileInput = document.querySelector('.n8n-chat-widget .n8n-file-upload-button');
+            const micButton = document.querySelector('.n8n-chat-widget .n8n-mic-button');
+            const sendButton = document.querySelector('.n8n-chat-widget .n8n-send-button');
+
+            if (textarea) {
+
+                // // fileInput.style.display = 'none';
+                // micButton.style.display = 'none';
+                // sendButton.style.display = 'none';
+                micButton.disabled = true;
+                sendButton.disabled = true;
+                micButton.style.cursor = 'not-allowed';
+                sendButton.style.cursor = 'not-allowed';
+
+
+                // // Store original values
+                // textarea.dataset.originalValue = textarea.value;
+                // textarea.dataset.originalPlaceholder = textarea.placeholder || '';
+                
+                // // Set speaking message and disable input
+                // textarea.value = 'Speaking... Please wait';
+                // textarea.style.fontWeight = 'bold';
+                // textarea.disabled = true;
+                // textarea.style.cursor = 'not-allowed';
+                
+            }
+        }
+
+        // Function to restore textarea
+        function showTextarea() {
+            const textarea = document.querySelector('.n8n-chat-widget .n8n-chat-input textarea');
+            // const fileInput = document.querySelector('.n8n-chat-widget .n8n-file-upload-button');
+            const micButton = document.querySelector('.n8n-chat-widget .n8n-mic-button');
+            const sendButton = document.querySelector('.n8n-chat-widget .n8n-send-button');
+
+            
+            if (textarea) {
+                // // fileInput.style.display = '';
+                // micButton.style.display = '';
+                // sendButton.style.display = '';
+                micButton.disabled = false;
+                sendButton.disabled = false;
+                micButton.style.cursor = '';
+                sendButton.style.cursor = '';
+
+                // // Restore original values and enable input
+                // textarea.value = textarea.dataset.originalValue || '';
+                // textarea.placeholder = textarea.dataset.originalPlaceholder || '';
+                // textarea.style.fontWeight = '';
+                // textarea.disabled = false;
+                // textarea.style.cursor = '';
+                // textarea.style.backgroundColor = '';
+                
+                // // Clean up stored data
+                // delete textarea.dataset.originalValue;
+                // delete textarea.dataset.originalPlaceholder;
+                
+                // // Focus back to textarea
+                // textarea.focus();
+            }
+        }
+
+
+
+
+
+
+        function estimateSpeechDuration(text) {
+            // Rough estimate: 150 words per minute average speaking rate
+            const wordsPerMinute = 150;
+            const words = text.split(' ').length;
+            const durationMs = (words / wordsPerMinute) * 60 * 1000;
+            
+            // Add a small buffer
+            return durationMs + 1000;
+        }
 
 
 		async function sendMessage(message, files = []) {
@@ -1249,6 +1549,7 @@
 
                                 // Enable preview on click
                                 enableImagePreview(imgElement, fileUrl);
+
 
 						} else {
 							// Create file message container
@@ -1565,150 +1866,6 @@
 
 
                         
-            // Track speaking state
-            let isSpeaking = false;
-
-            // Speech queue system
-            let speechQueue = [];
-            let isProcessingQueue = false;
-
-            // Modified speakText function with queue support
-            function speakTextWithFallback(text) {
-                let trimmedText = text
-                                    .replace(/[\n]{2,}/g, ' ')   
-                                    .replace(/!/g, '')          
-                                    .trim();
-                
-                // Add text to queue
-                speechQueue.push(trimmedText);
-                
-                // Start processing queue if not already processing
-                if (!isProcessingQueue) {
-                    processNextInQueue();
-                }
-            }
-
-            // Process the next item in the speech queue
-            function processNextInQueue() {
-                if (speechQueue.length === 0) {
-                    isProcessingQueue = false;
-                    return;
-                }
-                
-                isProcessingQueue = true;
-                const currentText = speechQueue.shift(); // Remove first item from queue
-                
-                
-                // Hide textarea when starting to speak
-                hideTextarea();
-                isSpeaking = true;
-                
-                const iframe = document.getElementById('trulience-iframe');
-                const iframeWindow = iframe?.contentWindow;
-                if (iframeWindow) {
-                    iframeWindow.postMessage(
-                        { command: 'trl-chat', message: currentText },
-                        'https://trulience.com'
-                    );
-                }
-                
-                // Fallback: Show textarea after estimated duration if no completion message received
-                const estimatedDuration = estimateSpeechDuration(currentText);
-                setTimeout(() => {
-                    if (isSpeaking) {
-                        isSpeaking = false;
-                        // Process next item in queue after current one completes
-                        processNextInQueue();
-                        // Only show textarea if queue is empty
-                        if (speechQueue.length === 0) {
-                            showTextarea();
-                        }
-                    }
-                }, estimatedDuration);
-            }
-
-
-
-
-            // Function to disable textarea and show speaking message
-            function hideTextarea() {
-                const textarea = document.querySelector('.n8n-chat-widget .n8n-chat-input textarea');
-                // const fileInput = document.querySelector('.n8n-chat-widget .n8n-file-upload-button');
-                const micButton = document.querySelector('.n8n-chat-widget .n8n-mic-button');
-                const sendButton = document.querySelector('.n8n-chat-widget .n8n-send-button');
-
-                if (textarea) {
-
-                    // // fileInput.style.display = 'none';
-                    // micButton.style.display = 'none';
-                    // sendButton.style.display = 'none';
-                    micButton.disabled = true;
-                    sendButton.disabled = true;
-                    micButton.style.cursor = 'not-allowed';
-                    sendButton.style.cursor = 'not-allowed';
-
-
-                    // // Store original values
-                    // textarea.dataset.originalValue = textarea.value;
-                    // textarea.dataset.originalPlaceholder = textarea.placeholder || '';
-                    
-                    // // Set speaking message and disable input
-                    // textarea.value = 'Speaking... Please wait';
-                    // textarea.style.fontWeight = 'bold';
-                    // textarea.disabled = true;
-                    // textarea.style.cursor = 'not-allowed';
-                    
-                }
-            }
-
-            // Function to restore textarea
-            function showTextarea() {
-                const textarea = document.querySelector('.n8n-chat-widget .n8n-chat-input textarea');
-                // const fileInput = document.querySelector('.n8n-chat-widget .n8n-file-upload-button');
-                const micButton = document.querySelector('.n8n-chat-widget .n8n-mic-button');
-                const sendButton = document.querySelector('.n8n-chat-widget .n8n-send-button');
-
-                
-                if (textarea) {
-                    // // fileInput.style.display = '';
-                    // micButton.style.display = '';
-                    // sendButton.style.display = '';
-                    micButton.disabled = false;
-                    sendButton.disabled = false;
-                    micButton.style.cursor = '';
-                    sendButton.style.cursor = '';
-
-                    // // Restore original values and enable input
-                    // textarea.value = textarea.dataset.originalValue || '';
-                    // textarea.placeholder = textarea.dataset.originalPlaceholder || '';
-                    // textarea.style.fontWeight = '';
-                    // textarea.disabled = false;
-                    // textarea.style.cursor = '';
-                    // textarea.style.backgroundColor = '';
-                    
-                    // // Clean up stored data
-                    // delete textarea.dataset.originalValue;
-                    // delete textarea.dataset.originalPlaceholder;
-                    
-                    // // Focus back to textarea
-                    // textarea.focus();
-                }
-            }
-
-
-
-
-
-
-            function estimateSpeechDuration(text) {
-                // Rough estimate: 150 words per minute average speaking rate
-                const wordsPerMinute = 150;
-                const words = text.split(' ').length;
-                const durationMs = (words / wordsPerMinute) * 60 * 1000;
-                
-                // Add a small buffer
-                return durationMs + 1000;
-            }
 
 
 
@@ -1796,10 +1953,13 @@
                 
                 // Get the message content element for typing
                 const messageContent = botMessageDiv.querySelector('.n8n-message-content');
-                
+                botMessageDiv.scrollTop = botMessageDiv.scrollHeight;
+
+
                 // ADD THE MESSAGE DIV TO DOM RIGHT BEFORE TYPING STARTS
                 const chatContainer = document.querySelector('.n8n-chat-messages') || document.querySelector('#chat-container'); // Adjust selector as needed
                 if (chatContainer) {
+
                     chatContainer.appendChild(botMessageDiv);
                     // Scroll to bottom after adding message
                     chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -1813,6 +1973,7 @@
                     // Setup interactions after typing is complete
                     setupMessageInteractions(botMessageDiv, messageData.table_content, messageData.dropdown_content, rawMessage, messageData.rawMessage);
                     
+                    
                     // Resolve the promise for this typing request
                     currentRequest.resolve();
                     
@@ -1825,6 +1986,9 @@
                     }, 100); // Small delay between messages
                 });
             }
+
+            const chatContainer = document.querySelector('.n8n-chat-messages') || document.querySelector('#chat-container'); // Adjust selector as needed
+            chatContainer.scrollTop = chatContainer.scrollHeight;
 
             // The actual typing animation function
             function startSingleTypingAnimation(element, text, speed) {
@@ -1856,6 +2020,10 @@
                             element.innerHTML = html + '<span class="typing-cursor">|</span>';
                             i++;
                             setTimeout(typing, speed);
+                            
+                            const chatContainer = document.querySelector('.n8n-chat-messages') || document.querySelector('#chat-container'); // Adjust selector as needed
+                            chatContainer.scrollTop = chatContainer.scrollHeight;
+
                         } else {
                             // Remove cursor when typing is complete
                             element.innerHTML = html;
@@ -2054,6 +2222,292 @@
                         }
                     };
                 }
+
+                botMessageDiv.scrollTop = botMessageDiv.scrollHeight;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+
+
+            function if_video_is_off(botMessageDiv,rawMessage,table_content, dropdown_content) {
+                let messageBodyHTML = '';
+                    let fulltableHTML = '';
+                    if (table_content && Array.isArray(table_content.columns) && Array.isArray(table_content.rows)) {
+                        // console.log('Table data is valid, setting up table and download buttons');
+                        messageBodyHTML = `
+
+                            <div class="n8n-message-bubble-table" id="n8n-message-body">
+                                <!-- Table will be appended here -->
+                            </div>
+                            <div id="n8n-employee-table"></div>
+                        `;
+                        fulltableHTML = `
+                                    <button id="n8n-view-table-btn" title="View Full Table">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                            <path d="M3 3h6v2H5v4H3V3zm18 0v6h-2V5h-4V3h6zM3 21v-6h2v4h4v2H3zm18-6v6h-6v-2h4v-4h2z"/>
+                                        </svg>
+                                    </button>
+                                    <button id="n8n-download-csv-btn" title="Download as CSV">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                                        </svg>
+                                    </button>
+                        `;
+
+                    } else {
+                        // console.warn('Table content is invalid or missing:', table_content);
+                    }
+
+                    if (dropdown_content && Array.isArray(dropdown_content.options) && dropdown_content.options.length > 0) {
+                        // console.log('Dropdown data is valid, setting up dropdown');
+                        messageBodyHTML += `
+                            <div class="n8n-message-bubble-dropdown" id="n8n-dropdown-body">
+                                <!-- Dropdown will be appended here -->
+                            </div>
+                            <div id="n8n-dropdown-container"></div>`;
+                    }
+
+                    let footerHTML = `
+                        <div class="n8n-message-footer" style="position: absolute; order: 2;top: -25px;right:0;">
+                                <button class="n8n-action-btn n8n-copy-btn" title="Copy">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                                <button class="n8n-action-btn n8n-like-btn" title="Like">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-md-heavy">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.1318 2.50389C12.3321 2.15338 12.7235 1.95768 13.124 2.00775L13.5778 2.06447C16.0449 2.37286 17.636 4.83353 16.9048 7.20993L16.354 8.99999H17.0722C19.7097 8.99999 21.6253 11.5079 20.9313 14.0525L19.5677 19.0525C19.0931 20.7927 17.5124 22 15.7086 22H6C4.34315 22 3 20.6568 3 19V12C3 10.3431 4.34315 8.99999 6 8.99999H8C8.25952 8.99999 8.49914 8.86094 8.6279 8.63561L12.1318 2.50389ZM10 20H15.7086C16.6105 20 17.4008 19.3964 17.6381 18.5262L19.0018 13.5262C19.3488 12.2539 18.391 11 17.0722 11H15C14.6827 11 14.3841 10.8494 14.1956 10.5941C14.0071 10.3388 13.9509 10.0092 14.0442 9.70591L14.9932 6.62175C15.3384 5.49984 14.6484 4.34036 13.5319 4.08468L10.3644 9.62789C10.0522 10.1742 9.56691 10.5859 9 10.8098V19C9 19.5523 9.44772 20 10 20ZM7 11V19C7 19.3506 7.06015 19.6872 7.17071 20H6C5.44772 20 5 19.5523 5 19V12C5 11.4477 5.44772 11 6 11H7Z" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                                <button class="n8n-action-btn n8n-dislike-btn" title="Dislike">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-md-heavy">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M11.8727 21.4961C11.6725 21.8466 11.2811 22.0423 10.8805 21.9922L10.4267 21.9355C7.95958 21.6271 6.36855 19.1665 7.09975 16.7901L7.65054 15H6.93226C4.29476 15 2.37923 12.4921 3.0732 9.94753L4.43684 4.94753C4.91145 3.20728 6.49209 2 8.29589 2H18.0045C19.6614 2 21.0045 3.34315 21.0045 5V12C21.0045 13.6569 19.6614 15 18.0045 15H16.0045C15.745 15 15.5054 15.1391 15.3766 15.3644L11.8727 21.4961ZM14.0045 4H8.29589C7.39399 4 6.60367 4.60364 6.36637 5.47376L5.00273 10.4738C4.65574 11.746 5.61351 13 6.93226 13H9.00451C9.32185 13 9.62036 13.1506 9.8089 13.4059C9.99743 13.6612 10.0536 13.9908 9.96028 14.2941L9.01131 17.3782C8.6661 18.5002 9.35608 19.6596 10.4726 19.9153L13.6401 14.3721C13.9523 13.8258 14.4376 13.4141 15.0045 13.1902V5C15.0045 4.44772 14.5568 4 14.0045 4ZM17.0045 13V5C17.0045 4.64937 16.9444 4.31278 16.8338 4H18.0045C18.5568 4 19.0045 4.44772 19.0045 5V12C19.0045 12.5523 18.5568 13 18.0045 13H17.0045Z" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                                <button class="n8n-action-btn n8n-speak-btn" title="Read aloud">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-md-heavy">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M11 4.9099C11 4.47485 10.4828 4.24734 10.1621 4.54132L6.67572 7.7372C6.49129 7.90626 6.25019 8.00005 6 8.00005H4C3.44772 8.00005 3 8.44776 3 9.00005V15C3 15.5523 3.44772 16 4 16H6C6.25019 16 6.49129 16.0938 6.67572 16.2629L10.1621 19.4588C10.4828 19.7527 11 19.5252 11 19.0902V4.9099ZM8.81069 3.06701C10.4142 1.59714 13 2.73463 13 4.9099V19.0902C13 21.2655 10.4142 22.403 8.81069 20.9331L5.61102 18H4C2.34315 18 1 16.6569 1 15V9.00005C1 7.34319 2.34315 6.00005 4 6.00005H5.61102L8.81069 3.06701ZM20.3166 6.35665C20.8019 6.09313 21.409 6.27296 21.6725 6.75833C22.5191 8.3176 22.9996 10.1042 22.9996 12.0001C22.9996 13.8507 22.5418 15.5974 21.7323 17.1302C21.4744 17.6185 20.8695 17.8054 20.3811 17.5475C19.8927 17.2896 19.7059 16.6846 19.9638 16.1962C20.6249 14.9444 20.9996 13.5175 20.9996 12.0001C20.9996 10.4458 20.6064 8.98627 19.9149 7.71262C19.6514 7.22726 19.8312 6.62017 20.3166 6.35665ZM15.7994 7.90049C16.241 7.5688 16.8679 7.65789 17.1995 8.09947C18.0156 9.18593 18.4996 10.5379 18.4996 12.0001C18.4996 13.3127 18.1094 14.5372 17.4385 15.5604C17.1357 16.0222 16.5158 16.1511 16.0539 15.8483C15.5921 15.5455 15.4632 14.9255 15.766 14.4637C16.2298 13.7564 16.4996 12.9113 16.4996 12.0001C16.4996 10.9859 16.1653 10.0526 15.6004 9.30063C15.2687 8.85905 15.3578 8.23218 15.7994 7.90049Z" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                                ${fulltableHTML}
+                            </div>`;
+
+
+                    botMessageDiv.innerHTML = `
+                        <div class="n8n-bot-message-container">
+                         
+                            <div class="n8n-message-bubble">
+                                <div class="n8n-avatar n8n-bot-avatar"></div>                     
+                                <div class="n8n-message-content">${formatBotMessage(rawMessage)}</div>
+                                <div class="n8n-message-content1" style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666; order: 1;display: flex;align-items: center;left: 0;"                             >
+                                   <div class='n8n-message-bot-who'>Aarya</div> ${timeWithDate}
+                                </div>
+                            </div>
+                            ${messageBodyHTML}
+                            ${footerHTML}
+                    </div>`;
+
+
+                    // Add event listeners for table and download buttons
+                    if (table_content && Array.isArray(table_content.columns) && Array.isArray(table_content.rows)) {
+                        // console.log('Appending table to message-body');
+                        const messageBody = botMessageDiv.querySelector("#n8n-message-body");
+                        if (messageBody) {
+                            const table = createTableFromJSON(table_content);
+                            messageBody.appendChild(table);
+                            // console.log('Table appended to message-body:', table);
+
+                            // Attach listener to view button
+                            const viewTableBtn = botMessageDiv.querySelector('#n8n-view-table-btn');
+                            if (viewTableBtn) {
+                                viewTableBtn.addEventListener('click', () => {
+                                    // console.log('View table button clicked, showing popup');
+                                    showTablePopup(table_content);
+                                });
+                            } else {
+                                console.error('view-table-btn not found');
+                            }
+
+                            // ✅ Attach listener to message-body div
+                            messageBody.addEventListener('click', () => {
+                                // console.log('Message body clicked, showing popup');
+                                showTablePopup(table_content);
+                            });
+
+                            const downloadCsvBtn = botMessageDiv.querySelector('#n8n-download-csv-btn');
+                            if (downloadCsvBtn) {
+                                downloadCsvBtn.addEventListener('click', () => {
+                                    // console.log('Download CSV button clicked');
+                                    downloadTableAsCSV(table_content);
+                                });
+                            } else {
+                                // console.error('download-csv-btn not found');
+                            }
+                        } else {
+                            // console.error('message-body element not found');
+                        }
+                    } else {
+                        // console.warn('Table content is invalid or missing:', table_content);
+                    }
+
+
+
+                    // Handle dropdown content
+                    if (dropdown_content && Array.isArray(dropdown_content.options) && dropdown_content.options.length > 0) {
+                        const dropdownBody = botMessageDiv.querySelector("#n8n-dropdown-body");
+                        if (dropdownBody) {
+                            const dropdown = createDropdownFromJSON(dropdown_content);
+                            dropdownBody.appendChild(dropdown);
+
+                            // Add event listener for select element
+                            const select = dropdown.querySelector('select');
+                            if (select) {
+                                // Keep the existing change event
+                                select.addEventListener('change', (e) => {
+                                    const selectedValue = e.target.value;
+                                    if (selectedValue) {
+                                        sendMessage(selectedValue, [], 'dropdown');
+                                    }
+                                });
+
+                                // Add drag-and-drop functionality
+                                Array.from(select.options).forEach(option => {
+                                    option.draggable = true;
+                                    
+                                    option.addEventListener('dragstart', (e) => {
+                                        e.dataTransfer.setData('text/plain', option.value);
+                                        e.dataTransfer.effectAllowed = 'copy';
+                                    });
+                                });
+                            } else {
+                                // Handle button-based dropdowns if needed
+                                const buttons = dropdown.querySelectorAll('button');
+                                buttons.forEach(button => {
+                                    button.draggable = true;
+                                    button.addEventListener('dragstart', (e) => {
+                                        e.dataTransfer.setData('text/plain', button.textContent);
+                                        e.dataTransfer.effectAllowed = 'copy';
+                                    });
+                                });
+                            }
+                        }
+                    }
+            
+                    // Only get the message text (without icons)
+                    const messageText = botMessageDiv.querySelector('.n8n-message-content').innerText;
+
+                    if (globalAvatar) {
+                        globalAvatar.speak(messageText);
+                    }
+
+
+
+                    botMessageDiv.querySelector('.n8n-copy-btn').onclick = () => {
+                        navigator.clipboard.writeText(messageText);
+                    };
+
+                    // Like button
+                    botMessageDiv.querySelector('.n8n-like-btn').onclick = () => {
+                        fetch('http://localhost:5000/api/save-feedback', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                sessionId: currentSessionId,
+                                message: messageText,
+                                feedback: 'like'
+                            })
+                        }).then(res => res.json())
+                        .then(data => console.log('Feedback saved:', data))
+                        .catch(err => console.error('Error saving feedback:', err));
+                    };
+
+                    // Dislike button
+                    botMessageDiv.querySelector('.n8n-dislike-btn').onclick = () => {
+                        fetch('http://localhost:5000/api/save-feedback', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                sessionId: currentSessionId,
+                                message: messageText,
+                                feedback: 'dislike'
+                            })
+                        }).then(res => res.json())
+                        .then(data => console.log('Feedback saved:', data))
+                        .catch(err => console.error('Error saving feedback:', err));
+                    };
+
+                    // Speak button
+                    const speakBtn = botMessageDiv.querySelector('.n8n-speak-btn');
+                    if (speakBtn) {
+                        let isSpeaking = false;
+
+                        speakBtn.onclick = () => {
+                            if (video === "on") {
+                                speakTextWithFallback(text);
+                            } else { 
+                                if (!isSpeaking) {
+                                    const utterance = new SpeechSynthesisUtterance(text);
+                                    
+                                    // Get available voices and find Heera or similar female Indian English voice
+                                    const voices = speechSynthesis.getVoices();
+                                    const heeraVoice = voices.find(voice => 
+                                        voice.name === 'Microsoft Heera - English (India)' || 
+                                        voice.name.includes('Heera') && voice.lang === 'en-IN'
+                                    );
+                                    
+                                    // Set voice if found, otherwise use default
+                                    if (heeraVoice) {
+                                        utterance.voice = heeraVoice;
+                                    }
+                                    
+                                    speechSynthesis.cancel();
+                                    speechSynthesis.speak(utterance);
+
+                                    isSpeaking = true;
+                                    speakBtn.innerHTML = '⏹';
+
+                                    utterance.onend = utterance.onerror = () => {
+                                        isSpeaking = false;
+                                        speakBtn.innerHTML = `
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-md-heavy">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M11 4.9099C11 4.47485 10.4828 4.24734 10.1621 4.54132L6.67572 7.7372C6.49129 7.90626 6.25019 8.00005 6 8.00005H4C3.44772 8.00005 3 8.44776 3 9.00005V15C3 15.5523 3.44772 16 4 16H6C6.25019 16 6.49129 16.0938 6.67572 16.2629L10.1621 19.4588C10.4828 19.7527 11 19.5252 11 19.0902V4.9099ZM8.81069 3.06701C10.4142 1.59714 13 2.73463 13 4.9099V19.0902C13 21.2655 10.4142 22.403 8.81069 20.9331L5.61102 18H4C2.34315 18 1 16.6569 1 15V9.00005C1 7.34319 2.34315 6.00005 4 6.00005H5.61102L8.81069 3.06701ZM20.3166 6.35665C20.8019 6.09313 21.409 6.27296 21.6725 6.75833C22.5191 8.3176 22.9996 10.1042 22.9996 12.0001C22.9996 13.8507 22.5418 15.5974 21.7323 17.1302C21.4744 17.6185 20.8695 17.8054 20.3811 17.5475C19.8927 17.2896 19.7059 16.6846 19.9638 16.1962C20.6249 14.9444 20.9996 13.5175 20.9996 12.0001C20.9996 10.4458 20.6064 8.98627 19.9149 7.71262C19.6514 7.22726 19.8312 6.62017 20.3166 6.35665ZM15.7994 7.90049C16.241 7.5688 16.8679 7.65789 17.1995 8.09947C18.0156 9.18593 18.4996 10.5379 18.4996 12.0001C18.4996 13.3127 18.1094 14.5372 17.4385 15.5604C17.1357 16.0222 16.5158 16.1511 16.0539 15.8483C15.5921 15.5455 15.4632 14.9255 15.766 14.4637C16.2298 13.7564 16.4996 12.9113 16.4996 12.0001C16.4996 10.9859 16.1653 10.0526 15.6004 9.30063C15.2687 8.85905 15.3578 8.23218 15.7994 7.90049Z" fill="currentColor"/>
+                                            </svg>
+                                        `;
+                                    };
+                                } else {
+                                    speechSynthesis.cancel();
+                                    isSpeaking = false;
+                                    speakBtn.innerHTML = `
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-md-heavy">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M11 4.9099C11 4.47485 10.4828 4.24734 10.1621 4.54132L6.67572 7.7372C6.49129 7.90626 6.25019 8.00005 6 8.00005H4C3.44772 8.00005 3 8.44776 3 9.00005V15C3 15.5523 3.44772 16 4 16H6C6.25019 16 6.49129 16.0938 6.67572 16.2629L10.1621 19.4588C10.4828 19.7527 11 19.5252 11 19.0902V4.9099ZM8.81069 3.06701C10.4142 1.59714 13 2.73463 13 4.9099V19.0902C13 21.2655 10.4142 22.403 8.81069 20.9331L5.61102 18H4C2.34315 18 1 16.6569 1 15V9.00005C1 7.34319 2.34315 6.00005 4 6.00005H5.61102L8.81069 3.06701ZM20.3166 6.35665C20.8019 6.09313 21.409 6.27296 21.6725 6.75833C22.5191 8.3176 22.9996 10.1042 22.9996 12.0001C22.9996 13.8507 22.5418 15.5974 21.7323 17.1302C21.4744 17.6185 20.8695 17.8054 20.3811 17.5475C19.8927 17.2896 19.7059 16.6846 19.9638 16.1962C20.6249 14.9444 20.9996 13.5175 20.9996 12.0001C20.9996 10.4458 20.6064 8.98627 19.9149 7.71262C19.6514 7.22726 19.8312 6.62017 20.3166 6.35665ZM15.7994 7.90049C16.241 7.5688 16.8679 7.65789 17.1995 8.09947C18.0156 9.18593 18.4996 10.5379 18.4996 12.0001C18.4996 13.3127 18.1094 14.5372 17.4385 15.5604C17.1357 16.0222 16.5158 16.1511 16.0539 15.8483C15.5921 15.5455 15.4632 14.9255 15.766 14.4637C16.2298 13.7564 16.4996 12.9113 16.4996 12.0001C16.4996 10.9859 16.1653 10.0526 15.6004 9.30063C15.2687 8.85905 15.3578 8.23218 15.7994 7.90049Z" fill="currentColor"/>
+                                        </svg>
+                                    `;
+                                }
+                            }
+                        };
+                    }
+
+                    messagesContainer.appendChild(botMessageDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                    // Ensure voices are loaded before attempting to use them
+                    window.speechSynthesis.onvoiceschanged = () => {
+                        window.speechSynthesis.getVoices();
+                    };
+
+                    // Handle copy buttons for code blocks
+                    messagesContainer.querySelectorAll('.n8n-copy-code-btn').forEach(btn => {
+                        btn.onclick = function () {
+                            const codeElem = document.getElementById(this.getAttribute('data-target'));
+                            if (codeElem) {
+                                navigator.clipboard.writeText(codeElem.innerText)
+                                    .then(() => {
+                                        this.classList.add('n8n-copied');
+                                        setTimeout(() => { this.classList.remove('n8n-copied'); }, 1200);
+                                    });
+                            }
+                        };
+                    });
             }
 
             function handleResponse(data) {
@@ -2106,9 +2560,17 @@
                         });
                     }else {
                         // Pass only the data to typeWriter - div will be created when typing starts
-                        typeWriter(messageData, formated_text, 20, rawMessage).then(() => {
-                            // console.log('Typing completed for message:', formated_text);
-                        });
+                        
+                        
+                        // typeWriter(messageData, formated_text, 20, rawMessage).then(() => {
+                        //     // console.log('Typing completed for message:', formated_text);
+                        // });
+
+                        /*      for video off */
+                        const botMessageDiv = document.createElement('div');
+                        botMessageDiv.className = 'n8n-chat-message bot';
+                        if_video_is_off(botMessageDiv,rawMessage,table_content, dropdown_content)
+
                     }
                 }
             }
