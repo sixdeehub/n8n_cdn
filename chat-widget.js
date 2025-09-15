@@ -1,8 +1,8 @@
-// Version: 0.0.18
+// Version: 0.0.19
 // Author:  Prathamesh Patil / Pavankumar K 
 // Date: 2025-07-01
 // modified Date: 2025-08-04
-// Description: 1. removed the audio file sharing
+// Description: 1. removed the video toggle button
 //              2. Added only speach to text functionality.
 
 
@@ -284,7 +284,7 @@
             updateIframeVisibility();
         });
         } else {
-        console.warn('Video toggle input not found, retrying...');
+        // console.warn('Video toggle input not found, retrying...');
         setTimeout(setupToggleListener, 100); // Retry after 100ms
         }
     }
@@ -318,11 +318,6 @@
                                 </defs>
                             </svg>
                         </span>
-                        <label class="n8n-toggle-switch" style="margin-left: auto;">
-                            <span class="n8n-toggle-label">Video</span>
-                            <input type="checkbox" id="videoToggle" class="n8n-toggle-input" >
-                            <span class="n8n-toggle-slider"></span>
-                        </label>
                         <button class="n8n-fullscreen-button" title="Toggle Fullscreen">
                             <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
                             <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22" fill="#ffffff">
@@ -433,13 +428,13 @@
         // Set initial state and add iframe if video is on
         updateIframeVisibility();
         
-        // Add event listener for toggle changes
-        toggleInput.addEventListener('change', () => {
-            video = toggleInput.checked ? 'on' : 'off';
+        // // Add event listener for toggle changes
+        // toggleInput.addEventListener('change', () => {
+        //     video = toggleInput.checked ? 'on' : 'off';
             
-            // console.log('Video state:', video);
-            updateIframeVisibility();
-        });
+        //     // console.log('Video state:', video);
+        //     updateIframeVisibility();
+        // });
     });
 
 
