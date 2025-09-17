@@ -1,9 +1,9 @@
-// Version: 0.0.19
+// Version: 0.0.20
 // Author:  Prathamesh Patil / Pavankumar K 
 // Date: 2025-07-01
 // modified Date: 2025-08-04
-// Description: 1. removed the video toggle button
-//              2. Added only speach to text functionality.
+// Description: 1. removed the audio file sharing
+//              2. sending header and parameters through WebSocket 
 
 
 
@@ -167,12 +167,18 @@
             branding: { ...defaultConfig.branding, ...window.ChatWidgetConfig.branding },
             style: { ...defaultConfig.style, ...window.ChatWidgetConfig.style },
             options: { ...defaultConfig.options, ...window.ChatWidgetConfig.options },
-            wss: {...defaultConfig.wss, ...window.ChatWidgetConfig.wss }
+            wss: {...defaultConfig.wss, ...window.ChatWidgetConfig.wss },
+            header: { ...defaultConfig.header, ...window.ChatWidgetConfig.header },
+            params: { ...defaultConfig.params, ...window.ChatWidgetConfig.params }
+
         } : defaultConfig;
+    
+
 
     // Prevent multiple initializations
     if (window.N8NChatWidgetInitialized) return;
     window.N8NChatWidgetInitialized = true;
+
 
     let currentSessionId = '';
     let currentFiles = [];
@@ -288,6 +294,11 @@
         setTimeout(setupToggleListener, 100); // Retry after 100ms
         }
     }
+
+    // localStorage.setItem("username", "Prathamesh");
+
+    // const username = localStorage.getItem("username");
+    // console.log(username); // "Prathamesh"
 
     setupToggleListener()
 
@@ -1083,14 +1094,23 @@
             globalAvatar.speak("Hi, I am AARYA Automated AI Responder at Your Assistance How can I assist you today?");
         }
 
+        // console.log('WebSocket inside URL:', socket);
+        
 
         // WebSocket setup
         if (config.wss && config.wss.url) {
-            socket = new WebSocket(config.wss.url);
+            let wsUrl = config.wss.url;
+            if (config.wss.params && Object.keys(config.wss.params).length > 0) {
+                const urlParams = new URLSearchParams(config.wss.params);
+                const separator = wsUrl.includes('?') ? '&' : '?';
+                wsUrl = `${wsUrl}${separator}${urlParams.toString()}`;
+            }
+
+            socket = new WebSocket(wsUrl);
             socket.onopen = () => {
                 // console.log('WebSocket connection established');
             };
-            socket.onerror = (error) => {
+            socket.onerror = (error) => {                   
                 // console.error('WebSocket error:', error);
             };
             socket.onclose = () => {
@@ -1461,15 +1481,25 @@
 			const messageSessionId = currentSessionId; // Capture the session ID at the time of sending
 
 			const messageData = {
-				action: "sendMessage",
-				sessionId: currentSessionId,
-				route: config.webhook.route,
-				chatInput: message,
-				message: {
-					payload: message,
-				}
+                action: "sendMessage",
+                sessionId: currentSessionId,
+                route: config.webhook.route,
+                chatInput: message,
+                message: {
+                    payload: message,
+                },
+            };
 
-			};
+            
+
+            // Add headers if present
+            if (config.wss.header) {
+                messageData.headers = config.wss.header;
+            } 
+
+            // console.log('Prepared messageData:', messageData);
+
+            
 
 			formData.append('json', new Blob([JSON.stringify(messageData)], { type: 'application/json' }));
 			formData.append('sessionId', currentSessionId);
@@ -1693,13 +1723,14 @@
                 // console.log("message ", messageData);
 
                 if (config.wss && config.wss.url) {
-                    // console.log('WebSocket inside URL:', socket);
+                    // // console.log('WebSocket inside URL:', socket);
 
+                    // console.log("WebSocket URL:", socket);
                     // Create socket if not defined or closed
                     if (!socket || socket.readyState > 1) {
-                        socket = new WebSocket(config.wss.url);
+                        socket = new WebSocket(socket);
                         socket.binaryType = "arraybuffer"; // Support binary messages
-                        // console.log('New WebSocket created. State:', socket.readyState);
+                        // console.log('New WebSocket created. State:', so/cket.readyState);
                     }
 
                     socket.onerror = (err) => {
@@ -1728,7 +1759,7 @@
                             updateLastActivity(); // Update activity after sending
                             return;
                         }
-
+                        
                         for (const file of files) {
                             try {
                                 // Read the file data first
@@ -1745,9 +1776,12 @@
                                             binarySize: arrayBuffer.byteLength
                                         }]
                                     },
-                                    
+
                                     binaryData: Array.from(new Uint8Array(arrayBuffer)) // Convert to plain array
                                 };
+
+                                // console.log("combinedMessage ", JSON.stringify(combinedMessage, null, 2));
+ 
 
                                 if (socket.readyState === WebSocket.OPEN) {
                                     // console.log("JSON.stringify(combinedMessage)",JSON.stringify(combinedMessage));
@@ -2142,7 +2176,7 @@
                                 message: rawMessage,
                                 feedback: 'like'
                             })
-                        }).then(res => res.json())
+                        }).then(res => res.json())  
                         .then(data => console.log('Feedback saved:', data))
                         .catch(err => console.error('Error saving feedback:', err));
                     };
