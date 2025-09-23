@@ -2239,9 +2239,9 @@
     }
 
     .n8n-chatbot-version {
-        color: #bab8b8;
-        top: 8px;
-        right: 60px;
+        color: #828588;
+        top: 5px;
+        right: 10px;
         position: relative;
         font-size: 0.6em;
         opacity: 0.3;
@@ -5778,4 +5778,5 @@ document.addEventListener('mouseup', function() {
 
 
 })();
+
 
