@@ -1,10 +1,11 @@
-// Version: 1.0.1
+// Version: 1.0.2
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-09-018
 // Description: 1. created chat-widget with iframe. 
 //				2. added fullscreen button.
 //				3. added resizing functionality.
+//              4. solving some bugs
 
 
 
@@ -2237,6 +2238,16 @@
         backface-visibility: hidden;
     }
 
+    .n8n-chatbot-version {
+        color: #bab8b8;
+        top: 8px;
+        right: 60px;
+        position: relative;
+        font-size: 0.6em;
+        opacity: 0.3;
+        margin-top: 2px;
+    }
+
 
 
 
@@ -2416,7 +2427,9 @@
                                 </defs>
                             </svg>
                         </span>
-                        
+                        <div class="n8n-chatbot-version">
+                            v1.0.2
+                        </div>
                         <button class="n8n-fullscreen-button" title="Toggle Fullscreen">
                             <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
                             <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22" fill="#ffffff">
@@ -5585,7 +5598,7 @@ window.addEventListener('message', (event) => {
                 left: 0;
                 width: 100vw;
                 height: 100vh;
-                background: rgba(0, 0, 0, 0.8);
+                // background: rgba(0, 0, 0, 0.8);
                 z-index: 9998;
                 pointer-events: none;
             `;
@@ -5621,7 +5634,7 @@ window.addEventListener('message', (event) => {
             iframe.style.position = originalStyles.position;
             iframe.style.borderRadius = originalStyles.borderRadius;
             iframe.style.boxShadow = originalStyles.boxShadow;
-            iframe.style.zIndex = originalStyles.zIndex;
+            iframe.style.zIndex = '9999';
 
             // Remove fullscreen class
             iframe.classList.remove('chat-iframe-fullscreen');
@@ -5765,3 +5778,4 @@ document.addEventListener('mouseup', function() {
 
 
 })();
+
