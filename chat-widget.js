@@ -1,4 +1,4 @@
-// Version: 1.0.2
+// Version: 1.0.3
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-09-018
@@ -5778,5 +5778,6 @@ document.addEventListener('mouseup', function() {
 
 
 })();
+
 
 
