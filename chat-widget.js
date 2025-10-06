@@ -1,10 +1,11 @@
-// Version: 1.0.4
+// Version: 1.0.5
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-10-06
 // Description: 1. created chat-widget with iframe.
 //              2. Added msg_id to append response sequence in ui.
-//              3. Arrow up will append users previous messages in textarea.
+//              3. Arrow up will append users previous messages in textarea.      
+//              4. Added auto remove loading indicator if bot not responding.    
 
 
 (function() {
@@ -2429,7 +2430,7 @@
                             </svg>
                         </span>
                         <div class="n8n-chatbot-version">
-                            v1.0.4
+                            v1.0.5
                         </div>
                         <button class="n8n-fullscreen-button" title="Toggle Fullscreen">
                             <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
@@ -2832,6 +2833,8 @@
                         
                         const textarea = e.target;
                         
+
+                        
                         if (e.key === 'ArrowUp') {
                             e.preventDefault();
                             if (messages.length === 0) return;
@@ -2845,6 +2848,7 @@
                             
                             textarea.value = messages[currentIndex];
                             textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+                            updateButtonVisibility();
                             
                         } else if (e.key === 'ArrowDown') {
                             e.preventDefault();
@@ -2859,7 +2863,8 @@
                             }
                             
                             textarea.setSelectionRange(textarea.value.length, textarea.value.length);
-                            
+                            updateButtonVisibility();
+
                         } else if (e.key === 'Enter' && !e.shiftKey) {
                             // Optional: Handle Enter key to save message
                             const message = textarea.value.trim();
@@ -2900,10 +2905,7 @@
                 // Initialize the dynamic system
                 const dynamicHistory = createDynamicTextareaHistory();
 
-                // Now in your send button handler, just add:
-                // dynamicHistory.addMessage(message);
-                // or
-                // window.addToTextareaHistory(message);
+
                     
             
             
@@ -3349,55 +3351,55 @@
                 }
 
 
-            // Track messages and their positions
-            const messageTracker = new Map(); // Store message elements by msg_id
-            const messageSequences = new Map(); // Track sequences of responses for each user message
+                // Track messages and their positions
+                const messageTracker = new Map(); // Store message elements by msg_id
+                const messageSequences = new Map(); // Track sequences of responses for each user message
 
-            let msg_id = 1;
+                let msg_id = 1;
 
-            function extractMsgIdNumber(msgId) {
-                // Extract the number from msg_id format like "msg_id-1", "msg_id-2", etc.
-                const match = msgId.match(/msg_id-(\\d+)/);
-                return match ? parseInt(match[1]) : null;
-            }
+                function extractMsgIdNumber(msgId) {
+                    // Extract the number from msg_id format like "msg_id-1", "msg_id-2", etc.
+                    const match = msgId.match(/msg_id-(\\d+)/);
+                    return match ? parseInt(match[1]) : null;
+                }
 
-            function findInsertionPointForUserMessage(msgId) {
-                const parsedId = extractMsgIdNumber(msgId);
-                if (!parsedId) return messagesContainer.children.length;
-                
-                // Find the position where this user message should be inserted
-                const existingMessages = Array.from(messagesContainer.children);
-                
-                for (let i = 0; i < existingMessages.length; i++) {
-                    const element = existingMessages[i];
-                    const elementMsgId = element.getAttribute('data-msg-id');
+                function findInsertionPointForUserMessage(msgId) {
+                    const parsedId = extractMsgIdNumber(msgId);
+                    if (!parsedId) return messagesContainer.children.length;
                     
-                    if (elementMsgId) {
-                        const elementParsedId = extractMsgIdNumber(elementMsgId);
-                        if (elementParsedId && elementParsedId > parsedId) {
-                            return i;
+                    // Find the position where this user message should be inserted
+                    const existingMessages = Array.from(messagesContainer.children);
+                    
+                    for (let i = 0; i < existingMessages.length; i++) {
+                        const element = existingMessages[i];
+                        const elementMsgId = element.getAttribute('data-msg-id');
+                        
+                        if (elementMsgId) {
+                            const elementParsedId = extractMsgIdNumber(elementMsgId);
+                            if (elementParsedId && elementParsedId > parsedId) {
+                                return i;
+                            }
                         }
                     }
+                    
+                    return existingMessages.length;
                 }
-                
-                return existingMessages.length;
-            }
 
-            function findInsertionPointForBotResponse(responseMsgId) {
-                const sequence = messageSequences.get(responseMsgId);
-                if (!sequence) return null;
-                
-                // Find the last response in this sequence
-                const lastResponse = sequence.responses[sequence.responses.length - 1];
-                
-                if (lastResponse && lastResponse.parentNode === messagesContainer) {
-                    // Insert after the last response
-                    return lastResponse.nextSibling;
-                } else {
-                    // Insert right after user message if no responses yet
-                    return sequence.userMessage.nextSibling;
+                function findInsertionPointForBotResponse(responseMsgId) {
+                    const sequence = messageSequences.get(responseMsgId);
+                    if (!sequence) return null;
+                    
+                    // Find the last response in this sequence
+                    const lastResponse = sequence.responses[sequence.responses.length - 1];
+                    
+                    if (lastResponse && lastResponse.parentNode === messagesContainer) {
+                        // Insert after the last response
+                        return lastResponse.nextSibling;
+                    } else {
+                        // Insert right after user message if no responses yet
+                        return sequence.userMessage.nextSibling;
+                    }
                 }
-            }
 
 
 
@@ -3598,58 +3600,58 @@
 
 
                     // Find correct insertion point for user message
-    const insertionPoint = findInsertionPointForUserMessage(currentMsgId);
-    
-    if (insertionPoint >= messagesContainer.children.length) {
-        messagesContainer.appendChild(timestampWrapper);
-        messagesContainer.appendChild(userMessageDiv);
-    } else {
-        messagesContainer.insertBefore(timestampWrapper, messagesContainer.children[insertionPoint]);
-        messagesContainer.insertBefore(userMessageDiv, messagesContainer.children[insertionPoint + 1]);
-    }
+                    const insertionPoint = findInsertionPointForUserMessage(currentMsgId);
+                    
+                    if (insertionPoint >= messagesContainer.children.length) {
+                        messagesContainer.appendChild(timestampWrapper);
+                        messagesContainer.appendChild(userMessageDiv);
+                    } else {
+                        messagesContainer.insertBefore(timestampWrapper, messagesContainer.children[insertionPoint]);
+                        messagesContainer.insertBefore(userMessageDiv, messagesContainer.children[insertionPoint + 1]);
+                    }
 
-    // Initialize sequence tracking for this message
-    messageSequences.set(currentSequenceKey, {
-        userMessage: userMessageDiv,
-        timestamp: timestampWrapper,
-        responses: [],
-        responseCount: 0 // Track number of responses received
-    });
+                    // Initialize sequence tracking for this message
+                    messageSequences.set(currentSequenceKey, {
+                        userMessage: userMessageDiv,
+                        timestamp: timestampWrapper,
+                        responses: [],
+                        responseCount: 0 // Track number of responses received
+                    });
 
-    // Store the user message element
-    messageTracker.set(currentMsgId, {
-        userMessage: userMessageDiv,
-        timestamp: timestampWrapper,
-        sequenceKey: currentSequenceKey
-    });
+                    // Store the user message element
+                    messageTracker.set(currentMsgId, {
+                        userMessage: userMessageDiv,
+                        timestamp: timestampWrapper,
+                        sequenceKey: currentSequenceKey
+                    });
 
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    updateButtonVisibility();
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    updateButtonVisibility();
 
-    // Create initial loading indicator
-    const loadingDiv = createLoadingIndicator(currentSequenceKey);
-    
-    // Insert loading indicator right after the user message
-    userMessageDiv.parentNode.insertBefore(loadingDiv, userMessageDiv.nextSibling);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    // Create initial loading indicator
+                    const loadingDiv = createLoadingIndicator(currentSequenceKey);
+                    
+                    // Insert loading indicator right after the user message
+                    userMessageDiv.parentNode.insertBefore(loadingDiv, userMessageDiv.nextSibling);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-    // Store loading element in sequence
-    const sequence = messageSequences.get(currentSequenceKey);
-    sequence.loadingDiv = loadingDiv;
+                    // Store loading element in sequence
+                    const sequence = messageSequences.get(currentSequenceKey);
+                    sequence.loadingDiv = loadingDiv;
 
-    // Set timestamps on loading indicators for the auto-remove feature
-    function createLoadingIndicator(sequenceKey) {
-        const loadingDiv = document.createElement('div');
-        loadingDiv.className = 'n8n-loading-indicator';
-        loadingDiv.setAttribute('data-loading-for', sequenceKey);
-        loadingDiv.dataset.created = Date.now().toString();
-        loadingDiv.innerHTML = \`
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        \`;
-        return loadingDiv;
-    }
+                    // Set timestamps on loading indicators for the auto-remove feature
+                    function createLoadingIndicator(sequenceKey) {
+                        const loadingDiv = document.createElement('div');
+                        loadingDiv.className = 'n8n-loading-indicator';
+                        loadingDiv.setAttribute('data-loading-for', sequenceKey);
+                        loadingDiv.dataset.created = Date.now().toString();
+                        loadingDiv.innerHTML = \`
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        \`;
+                        return loadingDiv;
+                    }
 
 
 
@@ -4052,7 +4054,7 @@ function createLoadingIndicator(msgId) {
 
 // Call cleanup periodically
 setInterval(cleanupMessageTracker, 60000); // Every minute
-setInterval(autoRemoveLoadingIndicators, 5000); // Every 5 seconds
+setInterval(autoRemoveLoadingIndicators, 500000); // Every 5 seconds
 
 // Utility functions for external use
 window.chatMessageUtils = {
@@ -4779,17 +4781,17 @@ function handleUnorderedResponse(rawMessage, table_content, dropdown_content) {
 
 
                                 // Extract msg_id from response (same as the original message)
-    const responseMsgId = data.msg_id || data[0]?.msg_id;
-    
-    // Check if this indicates end of responses
-    const isLastResponse = data.is_final || data[0]?.is_final || false;
-    
-    if (responseMsgId) {
-        handleOrderedResponse(responseMsgId, rawMessage, table_content, dropdown_content, isLastResponse);
-    } else {
-        // Fallback to old behavior if no msg_id
-        handleUnorderedResponse(rawMessage, table_content, dropdown_content);
-    }
+                                const responseMsgId = data.msg_id || data[0]?.msg_id;
+                                
+                                // Check if this indicates end of responses
+                                const isLastResponse = data.is_final || data[0]?.is_final || false;
+                                
+                                if (responseMsgId) {
+                                    handleOrderedResponse(responseMsgId, rawMessage, table_content, dropdown_content, isLastResponse);
+                                } else {
+                                    // Fallback to old behavior if no msg_id
+                                    handleUnorderedResponse(rawMessage, table_content, dropdown_content);
+                                }
 
 
 
