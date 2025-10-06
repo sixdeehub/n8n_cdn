@@ -1,12 +1,10 @@
-// Version: 1.0.3
+// Version: 1.0.4
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
-// modified Date: 2025-09-018
-// Description: 1. created chat-widget with iframe. 
-//				2. added fullscreen button.
-//				3. added resizing functionality.
-//              4. solving some bugs
-
+// modified Date: 2025-10-06
+// Description: 1. created chat-widget with iframe.
+//              2. Added msg_id to append response sequence in ui.
+//              3. Arrow up will append users previous messages in textarea.
 
 
 (function() {
@@ -1317,6 +1315,9 @@
             white-space: nowrap;
             vertical-align: middle;
             word-break: break-all;
+            padding: 10px 0 0 10px;
+            font-size: 14px;
+            position: relative;
         }
 
         .n8n-resize-handle {
@@ -2237,7 +2238,7 @@
         transform: translateZ(0);
         backface-visibility: hidden;
     }
-
+    
     .n8n-chatbot-version {
         color: #828588;
         top: 5px;
@@ -2428,7 +2429,7 @@
                             </svg>
                         </span>
                         <div class="n8n-chatbot-version">
-                            v1.0.2
+                            v1.0.4
                         </div>
                         <button class="n8n-fullscreen-button" title="Toggle Fullscreen">
                             <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
@@ -2508,7 +2509,6 @@
                                         <path d="M 3.981279611587524 20.00092697143555 C 1.232009768486023 20.00092697143555 -0.9926430583000183 16.98419761657715 0.4566248953342438 14.14200210571289 L 2.570134878158569 10.00046253204346 L 0.4574649035930634 5.858922481536865 C -1.296665191650391 2.420552492141724 2.327553033828735 -1.273617386817932 5.751864910125732 0.4278825223445892 L 17.77585411071777 6.403352737426758 C 20.74137496948242 7.876242637634277 20.74137496948242 12.12471294403076 17.77585411071777 13.59758281707764 L 5.751864910125732 19.57304191589355 C 5.158058643341064 19.86808395385742 4.558011054992676 20.00092697143555 3.981279611587524 20.00092697143555 Z M 3.589724779129028 10.58847236633301 L 1.505814909934998 14.67401218414307 C 0.2615449130535126 17.10984420776367 2.810936450958252 19.72336006164551 5.232824802398682 18.51955223083496 L 17.25849533081055 12.54408264160156 C 19.34981536865234 11.50459289550781 19.34981536865234 8.493912696838379 17.25849533081055 7.454312324523926 L 5.231985092163086 1.48053252696991 C 2.81089448928833 0.2773919999599457 0.2607449889183044 2.890092849731445 1.504974842071533 5.326072692871094 L 3.588884830474854 9.411612510681152 L 11.59238529205322 9.412452697753906 C 11.91559505462646 9.412452697753906 12.17957496643066 9.675612449645996 12.17957496643066 10.00046253204346 C 12.17957496643066 10.32531261444092 11.91559505462646 10.58847236633301 11.59238529205322 10.58847236633301 L 3.589724779129028 10.58847236633301 Z" stroke="none" fill="#09f"/>
                                     </g>
                                     </svg>
-
                                 </button>
                             </div>
                             <input type="file" class="n8n-file-input" multiple />
@@ -2719,6 +2719,192 @@
                         })[m];
                     });
                 }
+
+                // Lazy-loaded Textarea History - Only initializes when arrow keys are pressed
+                let textareaHistory = null;
+
+                function setupLazyTextareaHistory() {
+                    let messages = [];
+                    let currentIndex = -1;
+                    let currentDraft = '';
+                    let isInitialized = false;
+
+                    // Global keydown listener that works even before textarea exists
+                    document.addEventListener('keydown', function(e) {
+                        // Only handle arrow keys when focused on textarea
+                        if (e.target.tagName !== 'TEXTAREA') return;
+                        
+                        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                            e.preventDefault();
+                            
+                            // Lazy initialize - find textarea when first arrow key is pressed
+                            const textarea = e.target;
+                            
+                            if (e.key === 'ArrowUp') {
+                                navigateUp(textarea);
+                            } else if (e.key === 'ArrowDown') {
+                                navigateDown(textarea);
+                            }
+                        }
+                    });
+
+                    function navigateUp(textarea) {
+                        if (messages.length === 0) return;
+                        
+                        if (currentIndex === -1) {
+                            currentDraft = textarea.value;
+                            currentIndex = messages.length - 1;
+                        } else if (currentIndex > 0) {
+                            currentIndex--;
+                        }
+                        
+                        textarea.value = messages[currentIndex];
+                        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+                    }
+
+                    function navigateDown(textarea) {
+                        if (currentIndex === -1) return;
+                        
+                        currentIndex++;
+                        if (currentIndex >= messages.length) {
+                            textarea.value = currentDraft;
+                            currentIndex = -1;
+                        } else {
+                            textarea.value = messages[currentIndex];
+                        }
+                        
+                        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+                    }
+
+                    // Function to add message to history (call this from your send button)
+                    function addToHistory(message) {
+                        if (message && message.trim()) {
+                            messages.push(message.trim());
+                            currentIndex = -1;
+                            currentDraft = '';
+                        }
+                    }
+
+                    // Return API to interact with history
+                    return {
+                        addMessage: addToHistory,
+                        getMessages: () => [...messages],
+                        clearHistory: () => {
+                            messages = [];
+                            currentIndex = -1;
+                            currentDraft = '';
+                        }
+                    };
+                }
+
+                // Initialize the lazy history system
+                const historyAPI = setupLazyTextareaHistory();
+
+                // Modified version of your send button handler
+                // Replace your existing sendButton.addEventListener with this:
+
+                /*
+                sendButton.addEventListener('click', () => {
+                    const message = textarea.value.trim();
+                    if (message || currentFiles.length > 0) {
+                        // Add message to history BEFORE sending
+                        historyAPI.addMessage(message);
+                        
+                        sendMessage(message, currentFiles);
+                        textarea.value = '';
+                        autoResizeTextarea(textarea);
+                        currentFiles = [];
+                        updateButtonVisibility();
+                    }
+                });
+                */
+
+                // Alternative: Even more dynamic approach
+                function createDynamicTextareaHistory() {
+                    let messages = [];
+                    let currentIndex = -1;
+                    let currentDraft = '';
+
+                    // Listen for keydown on document
+                    document.addEventListener('keydown', function(e) {
+                        // Only handle if target is a textarea
+                        if (e.target.tagName !== 'TEXTAREA') return;
+                        
+                        const textarea = e.target;
+                        
+                        if (e.key === 'ArrowUp') {
+                            e.preventDefault();
+                            if (messages.length === 0) return;
+                            
+                            if (currentIndex === -1) {
+                                currentDraft = textarea.value;
+                                currentIndex = messages.length - 1;
+                            } else if (currentIndex > 0) {
+                                currentIndex--;
+                            }
+                            
+                            textarea.value = messages[currentIndex];
+                            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+                            
+                        } else if (e.key === 'ArrowDown') {
+                            e.preventDefault();
+                            if (currentIndex === -1) return;
+                            
+                            currentIndex++;
+                            if (currentIndex >= messages.length) {
+                                textarea.value = currentDraft;
+                                currentIndex = -1;
+                            } else {
+                                textarea.value = messages[currentIndex];
+                            }
+                            
+                            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+                            
+                        } else if (e.key === 'Enter' && !e.shiftKey) {
+                            // Optional: Handle Enter key to save message
+                            const message = textarea.value.trim();
+                            if (message) {
+                                messages.push(message);
+                                currentIndex = -1;
+                                currentDraft = '';
+                            }
+                        }
+                    });
+
+                    // Global function to add messages from your send button
+                    window.addToTextareaHistory = function(message) {
+                        if (message && message.trim()) {
+                            messages.push(message.trim());
+                            currentIndex = -1;
+                            currentDraft = '';
+                        }
+                    };
+
+                    return {
+                        addMessage: (message) => {
+                            if (message && message.trim()) {
+                                messages.push(message.trim());
+                                currentIndex = -1;
+                                currentDraft = '';
+                            }
+                        },
+                        getMessages: () => [...messages],
+                        clearHistory: () => {
+                            messages = [];
+                            currentIndex = -1;
+                            currentDraft = '';
+                        }
+                    };
+                }
+
+                // Initialize the dynamic system
+                const dynamicHistory = createDynamicTextareaHistory();
+
+                // Now in your send button handler, just add:
+                // dynamicHistory.addMessage(message);
+                // or
+                // window.addToTextareaHistory(message);
+                    
             
             
 
@@ -3083,6 +3269,7 @@
                     }, estimatedDuration);
                 }
 
+                
 
 
 
@@ -3162,22 +3349,80 @@
                 }
 
 
+            // Track messages and their positions
+            const messageTracker = new Map(); // Store message elements by msg_id
+            const messageSequences = new Map(); // Track sequences of responses for each user message
+
+            let msg_id = 1;
+
+            function extractMsgIdNumber(msgId) {
+                // Extract the number from msg_id format like "msg_id-1", "msg_id-2", etc.
+                const match = msgId.match(/msg_id-(\\d+)/);
+                return match ? parseInt(match[1]) : null;
+            }
+
+            function findInsertionPointForUserMessage(msgId) {
+                const parsedId = extractMsgIdNumber(msgId);
+                if (!parsedId) return messagesContainer.children.length;
+                
+                // Find the position where this user message should be inserted
+                const existingMessages = Array.from(messagesContainer.children);
+                
+                for (let i = 0; i < existingMessages.length; i++) {
+                    const element = existingMessages[i];
+                    const elementMsgId = element.getAttribute('data-msg-id');
+                    
+                    if (elementMsgId) {
+                        const elementParsedId = extractMsgIdNumber(elementMsgId);
+                        if (elementParsedId && elementParsedId > parsedId) {
+                            return i;
+                        }
+                    }
+                }
+                
+                return existingMessages.length;
+            }
+
+            function findInsertionPointForBotResponse(responseMsgId) {
+                const sequence = messageSequences.get(responseMsgId);
+                if (!sequence) return null;
+                
+                // Find the last response in this sequence
+                const lastResponse = sequence.responses[sequence.responses.length - 1];
+                
+                if (lastResponse && lastResponse.parentNode === messagesContainer) {
+                    // Insert after the last response
+                    return lastResponse.nextSibling;
+                } else {
+                    // Insert right after user message if no responses yet
+                    return sequence.userMessage.nextSibling;
+                }
+            }
+
+
+
+                            
                 async function sendMessage(message, files = []) {
-                    // console.log('sendMessage called with message:', message, 'and files:', files);
-
                     const formData = new FormData();
-                    const messageSessionId = currentSessionId; // Capture the session ID at the time of sending
+                    const messageSessionId = currentSessionId;
 
+                    const currentMsgId = \`msg_id-\${msg_id}\`;
+                    
                     const messageData = {
                         action: "sendMessage",
                         sessionId: currentSessionId,
                         route: config.webhook.route,
                         chatInput: message,
-                            message: {
-                                payload: message,
-                            }
-
+                        message: {
+                            payload: message,
+                        },
+                        msg_id: currentMsgId,
                     };
+                    
+                    // Store the current msg_id before incrementing
+                    const currentSequenceKey = currentMsgId;
+                    msg_id += 1;
+
 
                     // Add headers if present
                     if (config.wss.header) {
@@ -3197,6 +3442,7 @@
 
                     const userMessageDiv = document.createElement('div');
                     userMessageDiv.className = 'n8n-chat-message user';
+                    userMessageDiv.setAttribute('data-msg-id', currentMsgId);
 
                     // Create the message bubble container
                     const messageBubble = document.createElement('div');
@@ -3311,7 +3557,6 @@
                     // Append the message bubble to the user message div
                     userMessageDiv.appendChild(messageBubble);
                     // Format the timestamp
-                    // Format the timestamp
                     const timeWithDate = new Date().toLocaleString([], {
                         // day: 'numeric',      // e.g., "5"
                         // month: 'short',      // e.g., "Jun"
@@ -3349,28 +3594,88 @@
                     // Append timestamp to wrapper
                     timestampWrapper.appendChild(timestampDiv);
 
-                    // Append message bubble and timestamp to the message container
-                    userMessageDiv.appendChild(messageBubble);
-                    // Now timestamp is under the bubble, right aligned
 
-                    // Append the user message div to the main messages container
-                    messagesContainer.appendChild(timestampWrapper);
-                    messagesContainer.appendChild(userMessageDiv);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-                    // Clear input + preview
-                    filePreviewContainer.innerHTML = '';
-                    fileInput.value = '';
-                    currentFiles = [];
-                    updateButtonVisibility();
 
-                    const loadingDiv = document.createElement('div');
-                    loadingDiv.className = 'n8n-loading-indicator';
-                    loadingDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+                    // Find correct insertion point for user message
+    const insertionPoint = findInsertionPointForUserMessage(currentMsgId);
+    
+    if (insertionPoint >= messagesContainer.children.length) {
+        messagesContainer.appendChild(timestampWrapper);
+        messagesContainer.appendChild(userMessageDiv);
+    } else {
+        messagesContainer.insertBefore(timestampWrapper, messagesContainer.children[insertionPoint]);
+        messagesContainer.insertBefore(userMessageDiv, messagesContainer.children[insertionPoint + 1]);
+    }
 
-                    messagesContainer.appendChild(loadingDiv);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                    // console.log('Sending message data:', JSON.stringify(messageData));
+    // Initialize sequence tracking for this message
+    messageSequences.set(currentSequenceKey, {
+        userMessage: userMessageDiv,
+        timestamp: timestampWrapper,
+        responses: [],
+        responseCount: 0 // Track number of responses received
+    });
+
+    // Store the user message element
+    messageTracker.set(currentMsgId, {
+        userMessage: userMessageDiv,
+        timestamp: timestampWrapper,
+        sequenceKey: currentSequenceKey
+    });
+
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    updateButtonVisibility();
+
+    // Create initial loading indicator
+    const loadingDiv = createLoadingIndicator(currentSequenceKey);
+    
+    // Insert loading indicator right after the user message
+    userMessageDiv.parentNode.insertBefore(loadingDiv, userMessageDiv.nextSibling);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    // Store loading element in sequence
+    const sequence = messageSequences.get(currentSequenceKey);
+    sequence.loadingDiv = loadingDiv;
+
+    // Set timestamps on loading indicators for the auto-remove feature
+    function createLoadingIndicator(sequenceKey) {
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'n8n-loading-indicator';
+        loadingDiv.setAttribute('data-loading-for', sequenceKey);
+        loadingDiv.dataset.created = Date.now().toString();
+        loadingDiv.innerHTML = \`
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        \`;
+        return loadingDiv;
+    }
+
+
+
+
+                    // // Append message bubble and timestamp to the message container
+                    // userMessageDiv.appendChild(messageBubble);
+                    // // Now timestamp is under the bubble, right aligned
+
+                    // // Append the user message div to the main messages container
+                    // messagesContainer.appendChild(timestampWrapper);
+                    // messagesContainer.appendChild(userMessageDiv);
+                    // messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                    // // Clear input + preview
+                    // filePreviewContainer.innerHTML = '';
+                    // fileInput.value = '';
+                    // currentFiles = [];
+                    // updateButtonVisibility();
+
+                    // const loadingDiv = document.createElement('div');
+                    // loadingDiv.className = 'n8n-loading-indicator';
+                    // loadingDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+
+                    // messagesContainer.appendChild(loadingDiv);
+                    // messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    // // console.log('Sending message data:', JSON.stringify(messageData));
 
                     
                     try {
@@ -3569,6 +3874,210 @@
                         // ✅ Call the function
                         connectWebSocket(messageData);
                         
+                        
+function handleOrderedResponse(responseMsgId, rawMessage, table_content, dropdown_content, isLastResponse = false) {
+    const sequence = messageSequences.get(responseMsgId);
+    
+    if (!sequence) {
+        console.warn('No sequence found for:', responseMsgId);
+        return handleUnorderedResponse(rawMessage, table_content, dropdown_content);
+    }
+
+    // Remove loading indicator for the first response or if this is the final response
+    if (sequence.responseCount === 0 || isLastResponse) {
+        if (sequence.loadingDiv) {
+            sequence.loadingDiv.remove();
+            sequence.loadingDiv = null;
+        }
+    }
+
+    // Create bot response message
+    const botMessageDiv = document.createElement('div');
+    botMessageDiv.className = 'n8n-chat-message bot';
+    botMessageDiv.setAttribute('data-msg-id', responseMsgId);
+    botMessageDiv.setAttribute('data-response-index', sequence.responseCount);
+
+    // Apply your existing message formatting
+    if_video_is_off(botMessageDiv, rawMessage, table_content, dropdown_content);
+
+    // Find insertion point for this response
+    const insertionPoint = findInsertionPointForBotResponse(responseMsgId);
+    
+    if (insertionPoint && insertionPoint.parentNode === messagesContainer) {
+        // Insert at the correct position
+        messagesContainer.insertBefore(botMessageDiv, insertionPoint);
+    } else {
+        // Find the last response in this sequence and insert after it
+        const lastResponse = sequence.responses[sequence.responses.length - 1];
+        if (lastResponse && lastResponse.parentNode === messagesContainer) {
+            if (lastResponse.nextSibling) {
+                messagesContainer.insertBefore(botMessageDiv, lastResponse.nextSibling);
+            } else {
+                messagesContainer.appendChild(botMessageDiv);
+            }
+        } else {
+            // Insert right after user message
+            if (sequence.userMessage.nextSibling) {
+                messagesContainer.insertBefore(botMessageDiv, sequence.userMessage.nextSibling);
+            } else {
+                messagesContainer.appendChild(botMessageDiv);
+            }
+        }
+    }
+
+    // Update tracking
+    const responseKey = \`\${responseMsgId}-response-\${sequence.responseCount}\`;
+    messageTracker.set(responseKey, {
+        botMessage: botMessageDiv,
+        sequenceKey: responseMsgId,
+        responseIndex: sequence.responseCount
+    });
+
+    // Add to sequence responses
+    sequence.responses.push(botMessageDiv);
+    sequence.responseCount++;
+
+    // Show new loading indicator if more responses are expected and this isn't marked as final
+    const expectMoreResponses = data.has_more || data.streaming || false; // Adjust based on your server response
+    
+    if (expectMoreResponses && !isLastResponse && !sequence.loadingDiv) {
+        const newLoadingDiv = createLoadingIndicator(responseMsgId);
+        
+        // Insert loading after the current response
+        if (botMessageDiv.nextSibling) {
+            messagesContainer.insertBefore(newLoadingDiv, botMessageDiv.nextSibling);
+        } else {
+            messagesContainer.appendChild(newLoadingDiv);
+        }
+        
+        sequence.loadingDiv = newLoadingDiv;
+    }
+
+    // Scroll to bottom for latest messages
+    const shouldScrollToBottom = checkIfShouldScroll(responseMsgId);
+    if (shouldScrollToBottom) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+}
+
+function checkIfShouldScroll(msgId) {
+    // Only scroll to bottom if this is one of the latest message conversations
+    const allMsgIds = Array.from(messageSequences.keys())
+        .map(key => extractMsgIdNumber(key))
+        .filter(id => id !== null)
+        .sort((a, b) => b - a); // Sort descending
+    
+    const currentMsgIdNumber = extractMsgIdNumber(msgId);
+    
+    // Scroll if this is one of the 3 most recent conversations
+    const recentMessageIds = allMsgIds.slice(0, 3);
+    return recentMessageIds.includes(currentMsgIdNumber);
+}
+
+// Utility function to clean up old message tracking data
+function cleanupMessageTracker() {
+    // Keep only the last 20 message sequences to prevent memory leaks
+    const maxSequences = 20;
+    const allSequenceKeys = Array.from(messageSequences.keys())
+        .map(key => extractMsgIdNumber(key))
+        .filter(id => id !== null)
+        .sort((a, b) => b - a); // Sort descending (newest first)
+    
+    if (allSequenceKeys.length > maxSequences) {
+        const idsToRemove = allSequenceKeys.slice(maxSequences);
+        
+        idsToRemove.forEach(id => {
+            const msgIdKey = \`msg_id-\${id}\`;
+            const sequence = messageSequences.get(msgIdKey);
+            
+            if (sequence) {
+                // Clean up all related message tracker entries
+                messageTracker.delete(msgIdKey);
+                
+                // Clean up response entries
+                for (let i = 0; i < sequence.responseCount; i++) {
+                    const responseKey = \`\${msgIdKey}-response-\${i}\`;
+                    messageTracker.delete(responseKey);
+                }
+            }
+            
+            messageSequences.delete(msgIdKey);
+        });
+    }
+}
+
+// Optional: Function to manually mark a sequence as complete
+function markSequenceComplete(msgId) {
+    const sequence = messageSequences.get(msgId);
+    if (sequence && sequence.loadingDiv) {
+        sequence.loadingDiv.remove();
+        sequence.loadingDiv = null;
+    }
+}
+
+
+
+
+// Optional: Add a timeout to auto-remove loading indicators
+function autoRemoveLoadingIndicators() {
+    const loadingIndicators = messagesContainer.querySelectorAll('.n8n-loading-indicator[data-loading-for]');
+    loadingIndicators.forEach(indicator => {
+        const msgId = indicator.getAttribute('data-loading-for');
+        const sequence = messageSequences.get(msgId);
+        
+        // Remove loading indicators that have been showing for more than 10 seconds
+        const createdTime = indicator.dataset.created || Date.now();
+        if (Date.now() - parseInt(createdTime) > 10000) {
+            indicator.remove();
+            if (sequence) {
+                sequence.loadingDiv = null;
+            }
+        }
+    });
+}
+
+// Set timestamps on loading indicators for the auto-remove feature
+function createLoadingIndicator(msgId) {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'n8n-loading-indicator';
+    loadingDiv.setAttribute('data-loading-for', msgId);
+    loadingDiv.dataset.created = Date.now().toString();
+    loadingDiv.innerHTML =\`
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    \`;
+    return loadingDiv;
+}
+
+// Call cleanup periodically
+setInterval(cleanupMessageTracker, 60000); // Every minute
+setInterval(autoRemoveLoadingIndicators, 5000); // Every 5 seconds
+
+// Utility functions for external use
+window.chatMessageUtils = {
+    markSequenceComplete,
+    cleanupMessageTracker,
+    getSequenceInfo: (msgId) => messageSequences.get(msgId),
+    getAllSequences: () => Array.from(messageSequences.entries())
+};
+
+
+
+
+function handleUnorderedResponse(rawMessage, table_content, dropdown_content) {
+    // Remove any loading indicators without sequence keys
+    const loadingIndicators = messagesContainer.querySelectorAll('.n8n-loading-indicator:not([data-loading-for])');
+    loadingIndicators.forEach(indicator => indicator.remove());
+
+    // Create bot message div
+    const botMessageDiv = document.createElement('div');
+    botMessageDiv.className = 'n8n-chat-message bot';
+    
+    if_video_is_off(botMessageDiv, rawMessage, table_content, dropdown_content);
+    messagesContainer.appendChild(botMessageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
 
 
 
@@ -4231,7 +4740,7 @@
                                 loadingDiv.remove();
 
                                 const rawMessage = Array.isArray(data) ? data[0].output : data.output;
-                                // console.log('data message received:', data);
+                                // console.log('data:', data);
                                 // console.log('Raw message:', rawMessage);
 
                                 if (video === "on") {
@@ -4269,26 +4778,44 @@
                                 const formated_text = formatBotMessage(rawMessage);
 
 
+                                // Extract msg_id from response (same as the original message)
+    const responseMsgId = data.msg_id || data[0]?.msg_id;
+    
+    // Check if this indicates end of responses
+    const isLastResponse = data.is_final || data[0]?.is_final || false;
+    
+    if (responseMsgId) {
+        handleOrderedResponse(responseMsgId, rawMessage, table_content, dropdown_content, isLastResponse);
+    } else {
+        // Fallback to old behavior if no msg_id
+        handleUnorderedResponse(rawMessage, table_content, dropdown_content);
+    }
 
-                                if (video === "on") {
-                                    // Pass only the data to typeWriter - div will be created when typing starts
-                                    typeWriter(messageData, formated_text, 50, rawMessage).then(() => {
-                                        // console.log('Typing completed for message:', formated_text);
-                                    });
-                                }else {
-                                    // Pass only the data to typeWriter - div will be created when typing starts
-                                    
-                                    
-                                    // typeWriter(messageData, formated_text, 20, rawMessage).then(() => {
-                                    //     // console.log('Typing completed for message:', formated_text);
-                                    // });
 
-                                    /*      for video off */
-                                    const botMessageDiv = document.createElement('div');
-                                    botMessageDiv.className = 'n8n-chat-message bot';
-                                    if_video_is_off(botMessageDiv,rawMessage,table_content, dropdown_content)
 
-                                }
+
+
+                                // if (video === "on") {
+                                //     // Pass only the data to typeWriter - div will be created when typing starts
+                                //     typeWriter(messageData, formated_text, 50, rawMessage).then(() => {
+                                //         // console.log('Typing completed for message:', formated_text);
+                                //     });
+                                // }else {
+                                //     // // Pass only the data to typeWriter - div will be created when typing starts
+                                //     // // typeWriter(messageData, formated_text, 20, rawMessage).then(() => {
+                                //     // //     // console.log('Typing completed for message:', formated_text);
+                                //     // // });
+
+                                //     // /*      for video off */
+                                //     // const botMessageDiv = document.createElement('div');
+                                //     // botMessageDiv.className = 'n8n-chat-message bot';
+                                //     // if_video_is_off(botMessageDiv,rawMessage,table_content, dropdown_content)
+
+
+
+                                //     // Extract msg_id from response
+    
+                                // }
                             }
                         }
                         
@@ -4902,16 +5429,45 @@
                 updateButtonVisibility();
             });
 
+            // sendButton.addEventListener('click', () => {
+            //     const message = textarea.value.trim();
+            //     if (message || currentFiles.length > 0) {
+            //         sendMessage(message, currentFiles);
+            //         textarea.value = '';
+            //         autoResizeTextarea(textarea);
+            //         currentFiles = [];
+            //         updateButtonVisibility();
+            //     }
+            // });
+
+            // Your existing send button code - just add one line:
             sendButton.addEventListener('click', () => {
                 const message = textarea.value.trim();
                 if (message || currentFiles.length > 0) {
+                    // ADD THIS LINE - Save message to history
+                    dynamicHistory.addMessage(message);
+                    
                     sendMessage(message, currentFiles);
                     textarea.value = '';
                     autoResizeTextarea(textarea);
                     currentFiles = [];
                     updateButtonVisibility();
+                    renderFilePreviews();
                 }
             });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             textarea.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -5293,6 +5849,7 @@ toggleButton.innerHTML =
         <path d="M0 0 C-2.6860286 1.79068573 -4.6626589 2.66055791 -7.6875 3.625 C-8.49574219 3.88539062 -9.30398437 4.14578125 -10.13671875 4.4140625 C-10.75160156 4.60742188 -11.36648437 4.80078125 -12 5 C-12 3.68 -12 2.36 -12 1 C-7.9472484 0.01751476 -4.16138263 -0.08159574 0 0 Z " fill="#BEC5CB" transform="translate(46,50)"/>
         <path d="M0 0 C1.98 0 3.96 0 6 0 C5.6875 1.9375 5.6875 1.9375 5 4 C4.01 4.33 3.02 4.66 2 5 C1.01 4.01 0.02 3.02 -1 2 C-0.67 1.34 -0.34 0.68 0 0 Z " fill="#30A9E4" transform="translate(33,38)"/>
     </svg>
+    
     <div class="n8n-chatbot-tail"></div>`;
 
 // Dragging state variables
@@ -5398,15 +5955,19 @@ function snapToSide() {
     toggleButton.style.transition = 'all 0.3s ease-out';
     
     if (centerX < screenCenterX) {
-        // Snap to left side
+        // Snap to left bottom position
         toggleButton.style.left = '20px';
         toggleButton.style.right = 'auto';
+        toggleButton.style.bottom = '30px';
+        toggleButton.style.top = 'auto';
         toggleButton.classList.add('position-left');
         currentSide = 'left';
     } else {
-        // Snap to right side
+        // Snap to right bottom position
         toggleButton.style.right = '20px';
         toggleButton.style.left = 'auto';
+        toggleButton.style.bottom = '30px';
+        toggleButton.style.top = 'auto';
         toggleButton.classList.remove('position-left');
         currentSide = 'right';
     }
@@ -5451,17 +6012,41 @@ makeDraggable(toggleButton);
 
 // Handle window resize to reposition button if needed
 window.addEventListener('resize', () => {
-    // Reposition button on resize to maintain side preference
+    // Reposition button on resize to maintain side preference at bottom
     setTimeout(() => {
         if (currentSide === 'left') {
             toggleButton.style.left = '20px';
             toggleButton.style.right = 'auto';
+            toggleButton.style.bottom = '30px';
+            toggleButton.style.top = 'auto';
         } else {
             toggleButton.style.right = '20px';
             toggleButton.style.left = 'auto';
+            toggleButton.style.bottom = '30px';
+            toggleButton.style.top = 'auto';
         }
     }, 100);
 });
+
+// Set initial position to bottom-right (or bottom-left based on config)
+function setInitialPosition() {
+    if (config.style.position === 'left') {
+        toggleButton.style.left = '20px';
+        toggleButton.style.right = 'auto';
+        toggleButton.style.bottom = '30px';
+        toggleButton.style.top = 'auto';
+        currentSide = 'left';
+    } else {
+        toggleButton.style.right = '20px';
+        toggleButton.style.left = 'auto';
+        toggleButton.style.bottom = '30px';
+        toggleButton.style.top = 'auto';
+        currentSide = 'right';
+    }
+}
+
+// Call initial positioning
+setInitialPosition();
 
 widgetContainer.appendChild(chatIframe);
 widgetContainer.appendChild(toggleButton);
@@ -5475,12 +6060,10 @@ function initializeIframe() {
         iframeDoc.write(iframeContent);
         iframeDoc.close();
         iframeInitialized = true;
-        // console.log('Iframe content initialized');
         
         // Wait for iframe to be fully loaded before marking as ready
         chatIframe.onload = () => {
-            // console.log('Iframe fully loaded');
-            toggleButton.style.display = 'none'; // Hide toggle button until iframe is ready
+            toggleButton.style.display = ''; // Show toggle button when iframe is ready
         };
     }
 }
@@ -5490,7 +6073,6 @@ function sendMessageToIframe(message, retries = 3) {
     if (chatIframe.contentWindow && iframeInitialized) {
         try {
             chatIframe.contentWindow.postMessage(message, '*');
-            // console.log('Message sent to iframe:', message);
         } catch (error) {
             console.error('Error sending message to iframe:', error);
             if (retries > 0) {
@@ -5509,12 +6091,10 @@ function sendMessageToIframe(message, retries = 3) {
 // Listen for messages from iframe (including close button clicks)
 window.addEventListener('message', (event) => {
     if (event.data.type === 'closeChat') {
-        // console.log('Received close message from iframe');
         chatIframe.classList.remove('open');
         toggleButton.style.display = ''; // Show toggle button again
     }
 });
-
 
 
 
@@ -5531,8 +6111,8 @@ let fullscreenButton = null;
 // Listen for messages from iframe (including close button clicks)
 window.addEventListener('message', (event) => {
     if (event.data.type === 'fullscreenButton') {
-        console.log('Received fullscreenButton message from iframe');
-        console.log('Current fullscreen state:', isFullscreen);
+        // console.log('Received fullscreenButton message from iframe');
+        // console.log('Current fullscreen state:', isFullscreen);
         
         // Try multiple ways to find the iframe
         let iframe = window.chatIframeRef || 
@@ -5553,12 +6133,12 @@ window.addEventListener('message', (event) => {
 
         
 
-        console.log('Toggling fullscreen mode. Will be:', !isFullscreen);
-        console.log('iframe element:', iframe);
+        // console.log('Toggling fullscreen mode. Will be:', !isFullscreen);
+        // console.log('iframe element:', iframe);
 
         if (!isFullscreen) {
             // ENTER FULLSCREEN MODE
-            console.log('Entering fullscreen mode');
+            // console.log('Entering fullscreen mode');
             
             // Save original styles before changing them
             originalStyles = {
@@ -5607,8 +6187,8 @@ window.addEventListener('message', (event) => {
             // Prevent body scroll
             document.body.style.overflow = 'hidden';
 
-            console.log('Fullscreen overlay added');
-            console.log('Original iframe styles saved:', fullscreenButton);
+            // console.log('Fullscreen overlay added');
+            // console.log('Original iframe styles saved:', fullscreenButton);
             
             // Update button icon to "minimize" if button exists
             if (fullscreenButton) {
@@ -5622,8 +6202,8 @@ window.addEventListener('message', (event) => {
         }
         else {
             // EXIT FULLSCREEN MODE
-            console.log('Exiting fullscreen mode');
-            
+            // console.log('Exiting fullscreen mode');
+            // console.log('Original iframe styles to restore:', originalStyles);
             // Restore original styles
             iframe.style.width = originalStyles.width;
             iframe.style.height = originalStyles.height;
@@ -5634,7 +6214,7 @@ window.addEventListener('message', (event) => {
             iframe.style.position = originalStyles.position;
             iframe.style.borderRadius = originalStyles.borderRadius;
             iframe.style.boxShadow = originalStyles.boxShadow;
-            iframe.style.zIndex = '9999';
+            iframe.style.zIndex = '9999'; // Ensure it's above overlay during transition
 
             // Remove fullscreen class
             iframe.classList.remove('chat-iframe-fullscreen');
@@ -5659,7 +6239,7 @@ window.addEventListener('message', (event) => {
             isFullscreen = false;
         }
         
-        console.log('Fullscreen state after toggle:', isFullscreen);
+        // console.log('Fullscreen state after toggle:', isFullscreen);
     }
 });
 
@@ -5778,6 +6358,3 @@ document.addEventListener('mouseup', function() {
 
 
 })();
-
-
-
