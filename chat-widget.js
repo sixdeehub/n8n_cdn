@@ -1,4 +1,4 @@
-// Version: 1.0.5
+// Version: 1.0.6
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-10-06
@@ -2059,7 +2059,7 @@
 
         .n8n-fullscreen-button {
             position: absolute;
-            right: 42%; /* Adjusted to place it to the left of the refresh button (48px + 28px) */
+            right: 45%; /* Adjusted to place it to the left of the refresh button (48px + 28px) */
             top: 47%;
             transform: translateY(-50%);
             background: none;
@@ -2250,8 +2250,45 @@
         margin-top: 2px;
     }
 
+    .n8n-processing {
+        opacity: 0.7;
+        cursor: wait;
+    }
 
+    .loader {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    position: relative;
+    }
+    .loader::after,
+    .loader::before {
+    content: '';  
+    box-sizing: border-box;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #0056b3;
+    opacity: 0.6;
+    position: absolute;
+    left: 0;
+    top: 0;
+    animation: animloader 2s linear infinite;
+    }
+    .loader::after {
+    animation-delay: 1s;
+    }
 
+    @keyframes animloader {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+    }
 
     `;
     
@@ -2308,7 +2345,7 @@
                 var messagesLoaded = window.messagesLoaded;
 
 
-                // Configuration variables
+                // // Configuration variables
                 // var TrulienceAvatarID= "2673128051696289574"; 
                 // var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.g9knMTj1_lwt_QjAuVuXMjvHLLRnV3LADTQqPdzoDwMxcMhrCPLxRFm_29hYg3mEO2E4AT4KrPV1r7DCGTYQmg";  
     
@@ -2316,12 +2353,34 @@
                 // const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
                 
 
+                // var TrulienceAvatarID= "2673128051696289574"; 
+                // var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.g9knMTj1_lwt_QjAuVuXMjvHLLRnV3LADTQqPdzoDwMxcMhrCPLxRFm_29hYg3mEO2E4AT4KrPV1r7DCGTYQmg";  
+                
+                // const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
+                // const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
                 
 
 
+                // var TrulienceAvatarID= "9157726394911311097"; 
+                // var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.dgxWkX1WXbL7a880_yGksZNVTcvKNsozn3np5CGsjOmwKga_UO6lJqdXGUviuyzclvrVZAHYcnycfUF9AsypuQ";  
+                
+                // const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
+                // const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
+                
+
+                // var TrulienceAvatarID= "5781920685918277464"; 
+                // var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.hiHEPEOZZvl5fVN2S8hCwGIEwCCsh-_G53yq8uAGE8RlFF1H9NBV3E_kXSQyKmLLfTyNRL9LfXmINKT0UGqGHA";  
+                
+                // const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
+                // const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
+                
 
 
-
+                var TrulienceAvatarID= "3717332205976043879"; 
+                var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.ex4hzHlK9H7FlzJrQueS1KvMgTX9tBBTy8ptkdw4Vp93W4z3NEwdOSGBg8jZxhdKLYtZW2qJOdCqmMdRjoahBw";  
+                
+                const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
+                const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
 
 
 
@@ -2382,26 +2441,26 @@
                     }
                 }
 
-                // // Set up toggle event listener
-                // function setupToggleListener() {
-                //     const toggleInput = document.getElementById('videoToggle');
-                //     if (toggleInput) {
-                //     // Set initial state
-                //     updateIframeVisibility();
+                // Set up toggle event listener
+                function setupToggleListener() {
+                    const toggleInput = document.getElementById('videoToggle');
+                    if (toggleInput) {
+                    // Set initial state
+                    updateIframeVisibility();
 
-                //     // Add event listener
-                //     toggleInput.addEventListener('change', () => {
-                //         video = toggleInput.checked ? 'on' : 'off';
-                //         // console.log('Video state:', video); // Debug
-                //         updateIframeVisibility();
-                //     });
-                //     } else {
-                //     console.warn('Video toggle input not found, retrying...');
-                //     setTimeout(setupToggleListener, 100); // Retry after 100ms
-                //     }
-                // }
+                    // Add event listener
+                    toggleInput.addEventListener('change', () => {
+                        video = toggleInput.checked ? 'on' : 'off';
+                        // console.log('Video state:', video); // Debug
+                        updateIframeVisibility();
+                    });
+                    } else {
+                    console.warn('Video toggle input not found, retrying...');
+                    setTimeout(setupToggleListener, 100); // Retry after 100ms
+                    }
+                }
 
-                // setupToggleListener()
+                setupToggleListener()
 
                 const defaultChatInterfaceHTML = \`
                     <div class="n8n-brand-header">
@@ -2430,8 +2489,15 @@
                             </svg>
                         </span>
                         <div class="n8n-chatbot-version">
-                            v1.0.5
+                            v1.0.6
                         </div>
+                        
+                        <label class="n8n-toggle-switch" style="margin-left: auto;">
+                            <span class="n8n-toggle-label">Video</span>
+                            <input type="checkbox" id="videoToggle" class="n8n-toggle-input" >
+                            <span class="n8n-toggle-slider"></span>
+                        </label>
+                        
                         <button class="n8n-fullscreen-button" title="Toggle Fullscreen">
                             <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
                             <g id="Group_83673" data-name="Group 83673" transform="translate(0 9) rotate(-90)" opacity="0.22" fill="#ffffff">
@@ -2537,21 +2603,21 @@
                 chatInterface.appendChild(resizeHandle);
 
 
-                // // Initialize the page
-                // document.addEventListener('DOMContentLoaded', () => {
-                //     const toggleInput = document.getElementById('videoToggle');
+                // Initialize the page
+                document.addEventListener('DOMContentLoaded', () => {
+                    const toggleInput = document.getElementById('videoToggle');
                     
-                //     // Set initial state and add iframe if video is on
-                //     updateIframeVisibility();
+                    // Set initial state and add iframe if video is on
+                    updateIframeVisibility();
                     
-                //     // Add event listener for toggle changes
-                //     toggleInput.addEventListener('change', () => {
-                //         video = toggleInput.checked ? 'on' : 'off';
+                    // Add event listener for toggle changes
+                    toggleInput.addEventListener('change', () => {
+                        video = toggleInput.checked ? 'on' : 'off';
                         
-                //         // console.log('Video state:', video);
-                //         updateIframeVisibility();
-                //     });
-                // });
+                        // console.log('Video state:', video);
+                        updateIframeVisibility();
+                    });
+                });
 
 
 
@@ -2917,6 +2983,8 @@
               
 
                 function formatBotMessage(message) {
+                    console.log('Formatting bot message:', message);
+                    
                     const codeBlockRegex = /\`\`\`(\\w+)?\\n([\\s\\S]*?)\`\`\`/g;
                     let lastIndex = 0;
                     let result = '';
@@ -2925,10 +2993,8 @@
 
                     while ((match = codeBlockRegex.exec(message)) !== null) {
                         const before = message.slice(lastIndex, match.index);
-                        result += before
-                            .split('\\n')
-                            .map(line => line.trim() ? '<div>' + escapeHtml(line) + '</div>' : '')
-                            .join('');
+                        result += formatTextWithBold(before);
+                        
                         const lang = match[1] ? match[1] : '';
                         const code = escapeHtml(match[2]);
                         const thisId = 'code-block-' + Date.now() + '-' + (codeBlockId++);
@@ -2938,14 +3004,27 @@
                             '</div>';
                         lastIndex = codeBlockRegex.lastIndex;
                     }
+                    
                     const after = message.slice(lastIndex);
-                    result += after
-                        .split('\\n')
-                        .map(line => line.trim() ? '<div>' + escapeHtml(line) + '</div>' : '')
-                        .join('');
+                    result += formatTextWithBold(after);
+                    
                     return result;
                 }
 
+                function formatTextWithBold(text) {
+                    return text
+                        .split('\\n')
+                        .map(line => {
+                            if (!line.trim()) return '';
+                            
+                            // First escape HTML, then replace **text** with <strong>text</strong>
+                            let formattedLine = escapeHtml(line);
+                            formattedLine = formattedLine.replace(/\\*\\*(.+?)\\*\\*/g, '<strong>$1</strong>');
+                            
+                            return '<div>' + formattedLine + '</div>';
+                        })
+                        .join('');
+                }
                 
                 
                 
@@ -3877,209 +3956,209 @@
                         connectWebSocket(messageData);
                         
                         
-function handleOrderedResponse(responseMsgId, rawMessage, table_content, dropdown_content, isLastResponse = false) {
-    const sequence = messageSequences.get(responseMsgId);
-    
-    if (!sequence) {
-        console.warn('No sequence found for:', responseMsgId);
-        return handleUnorderedResponse(rawMessage, table_content, dropdown_content);
-    }
+                    function handleOrderedResponse(responseMsgId, rawMessage, table_content, dropdown_content, isLastResponse = false) {
+                        const sequence = messageSequences.get(responseMsgId);
+                        
+                        if (!sequence) {
+                            console.warn('No sequence found for:', responseMsgId);
+                            return handleUnorderedResponse(rawMessage, table_content, dropdown_content);
+                        }
 
-    // Remove loading indicator for the first response or if this is the final response
-    if (sequence.responseCount === 0 || isLastResponse) {
-        if (sequence.loadingDiv) {
-            sequence.loadingDiv.remove();
-            sequence.loadingDiv = null;
-        }
-    }
+                        // Remove loading indicator for the first response or if this is the final response
+                        if (sequence.responseCount === 0 || isLastResponse) {
+                            if (sequence.loadingDiv) {
+                                sequence.loadingDiv.remove();
+                                sequence.loadingDiv = null;
+                            }
+                        }
 
-    // Create bot response message
-    const botMessageDiv = document.createElement('div');
-    botMessageDiv.className = 'n8n-chat-message bot';
-    botMessageDiv.setAttribute('data-msg-id', responseMsgId);
-    botMessageDiv.setAttribute('data-response-index', sequence.responseCount);
+                        // Create bot response message
+                        const botMessageDiv = document.createElement('div');
+                        botMessageDiv.className = 'n8n-chat-message bot';
+                        botMessageDiv.setAttribute('data-msg-id', responseMsgId);
+                        botMessageDiv.setAttribute('data-response-index', sequence.responseCount);
 
-    // Apply your existing message formatting
-    if_video_is_off(botMessageDiv, rawMessage, table_content, dropdown_content);
+                        // Apply your existing message formatting
+                        if_video_is_off(botMessageDiv, rawMessage, table_content, dropdown_content);
 
-    // Find insertion point for this response
-    const insertionPoint = findInsertionPointForBotResponse(responseMsgId);
-    
-    if (insertionPoint && insertionPoint.parentNode === messagesContainer) {
-        // Insert at the correct position
-        messagesContainer.insertBefore(botMessageDiv, insertionPoint);
-    } else {
-        // Find the last response in this sequence and insert after it
-        const lastResponse = sequence.responses[sequence.responses.length - 1];
-        if (lastResponse && lastResponse.parentNode === messagesContainer) {
-            if (lastResponse.nextSibling) {
-                messagesContainer.insertBefore(botMessageDiv, lastResponse.nextSibling);
-            } else {
-                messagesContainer.appendChild(botMessageDiv);
-            }
-        } else {
-            // Insert right after user message
-            if (sequence.userMessage.nextSibling) {
-                messagesContainer.insertBefore(botMessageDiv, sequence.userMessage.nextSibling);
-            } else {
-                messagesContainer.appendChild(botMessageDiv);
-            }
-        }
-    }
+                        // Find insertion point for this response
+                        const insertionPoint = findInsertionPointForBotResponse(responseMsgId);
+                        
+                        if (insertionPoint && insertionPoint.parentNode === messagesContainer) {
+                            // Insert at the correct position
+                            messagesContainer.insertBefore(botMessageDiv, insertionPoint);
+                        } else {
+                            // Find the last response in this sequence and insert after it
+                            const lastResponse = sequence.responses[sequence.responses.length - 1];
+                            if (lastResponse && lastResponse.parentNode === messagesContainer) {
+                                if (lastResponse.nextSibling) {
+                                    messagesContainer.insertBefore(botMessageDiv, lastResponse.nextSibling);
+                                } else {
+                                    messagesContainer.appendChild(botMessageDiv);
+                                }
+                            } else {
+                                // Insert right after user message
+                                if (sequence.userMessage.nextSibling) {
+                                    messagesContainer.insertBefore(botMessageDiv, sequence.userMessage.nextSibling);
+                                } else {
+                                    messagesContainer.appendChild(botMessageDiv);
+                                }
+                            }
+                        }
 
-    // Update tracking
-    const responseKey = \`\${responseMsgId}-response-\${sequence.responseCount}\`;
-    messageTracker.set(responseKey, {
-        botMessage: botMessageDiv,
-        sequenceKey: responseMsgId,
-        responseIndex: sequence.responseCount
-    });
+                        // Update tracking
+                        const responseKey = \`\${responseMsgId}-response-\${sequence.responseCount}\`;
+                        messageTracker.set(responseKey, {
+                            botMessage: botMessageDiv,
+                            sequenceKey: responseMsgId,
+                            responseIndex: sequence.responseCount
+                        });
 
-    // Add to sequence responses
-    sequence.responses.push(botMessageDiv);
-    sequence.responseCount++;
+                        // Add to sequence responses
+                        sequence.responses.push(botMessageDiv);
+                        sequence.responseCount++;
 
-    // Show new loading indicator if more responses are expected and this isn't marked as final
-    const expectMoreResponses = data.has_more || data.streaming || false; // Adjust based on your server response
-    
-    if (expectMoreResponses && !isLastResponse && !sequence.loadingDiv) {
-        const newLoadingDiv = createLoadingIndicator(responseMsgId);
-        
-        // Insert loading after the current response
-        if (botMessageDiv.nextSibling) {
-            messagesContainer.insertBefore(newLoadingDiv, botMessageDiv.nextSibling);
-        } else {
-            messagesContainer.appendChild(newLoadingDiv);
-        }
-        
-        sequence.loadingDiv = newLoadingDiv;
-    }
+                        // Show new loading indicator if more responses are expected and this isn't marked as final
+                        const expectMoreResponses = data.has_more || data.streaming || false; // Adjust based on your server response
+                        
+                        if (expectMoreResponses && !isLastResponse && !sequence.loadingDiv) {
+                            const newLoadingDiv = createLoadingIndicator(responseMsgId);
+                            
+                            // Insert loading after the current response
+                            if (botMessageDiv.nextSibling) {
+                                messagesContainer.insertBefore(newLoadingDiv, botMessageDiv.nextSibling);
+                            } else {
+                                messagesContainer.appendChild(newLoadingDiv);
+                            }
+                            
+                            sequence.loadingDiv = newLoadingDiv;
+                        }
 
-    // Scroll to bottom for latest messages
-    const shouldScrollToBottom = checkIfShouldScroll(responseMsgId);
-    if (shouldScrollToBottom) {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-}
+                        // Scroll to bottom for latest messages
+                        const shouldScrollToBottom = checkIfShouldScroll(responseMsgId);
+                        if (shouldScrollToBottom) {
+                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                        }
+                    }
 
-function checkIfShouldScroll(msgId) {
-    // Only scroll to bottom if this is one of the latest message conversations
-    const allMsgIds = Array.from(messageSequences.keys())
-        .map(key => extractMsgIdNumber(key))
-        .filter(id => id !== null)
-        .sort((a, b) => b - a); // Sort descending
-    
-    const currentMsgIdNumber = extractMsgIdNumber(msgId);
-    
-    // Scroll if this is one of the 3 most recent conversations
-    const recentMessageIds = allMsgIds.slice(0, 3);
-    return recentMessageIds.includes(currentMsgIdNumber);
-}
+                    function checkIfShouldScroll(msgId) {
+                        // Only scroll to bottom if this is one of the latest message conversations
+                        const allMsgIds = Array.from(messageSequences.keys())
+                            .map(key => extractMsgIdNumber(key))
+                            .filter(id => id !== null)
+                            .sort((a, b) => b - a); // Sort descending
+                        
+                        const currentMsgIdNumber = extractMsgIdNumber(msgId);
+                        
+                        // Scroll if this is one of the 3 most recent conversations
+                        const recentMessageIds = allMsgIds.slice(0, 3);
+                        return recentMessageIds.includes(currentMsgIdNumber);
+                    }
 
-// Utility function to clean up old message tracking data
-function cleanupMessageTracker() {
-    // Keep only the last 20 message sequences to prevent memory leaks
-    const maxSequences = 20;
-    const allSequenceKeys = Array.from(messageSequences.keys())
-        .map(key => extractMsgIdNumber(key))
-        .filter(id => id !== null)
-        .sort((a, b) => b - a); // Sort descending (newest first)
-    
-    if (allSequenceKeys.length > maxSequences) {
-        const idsToRemove = allSequenceKeys.slice(maxSequences);
-        
-        idsToRemove.forEach(id => {
-            const msgIdKey = \`msg_id-\${id}\`;
-            const sequence = messageSequences.get(msgIdKey);
-            
-            if (sequence) {
-                // Clean up all related message tracker entries
-                messageTracker.delete(msgIdKey);
-                
-                // Clean up response entries
-                for (let i = 0; i < sequence.responseCount; i++) {
-                    const responseKey = \`\${msgIdKey}-response-\${i}\`;
-                    messageTracker.delete(responseKey);
-                }
-            }
-            
-            messageSequences.delete(msgIdKey);
-        });
-    }
-}
+                    // Utility function to clean up old message tracking data
+                    function cleanupMessageTracker() {
+                        // Keep only the last 20 message sequences to prevent memory leaks
+                        const maxSequences = 20;
+                        const allSequenceKeys = Array.from(messageSequences.keys())
+                            .map(key => extractMsgIdNumber(key))
+                            .filter(id => id !== null)
+                            .sort((a, b) => b - a); // Sort descending (newest first)
+                        
+                        if (allSequenceKeys.length > maxSequences) {
+                            const idsToRemove = allSequenceKeys.slice(maxSequences);
+                            
+                            idsToRemove.forEach(id => {
+                                const msgIdKey = \`msg_id-\${id}\`;
+                                const sequence = messageSequences.get(msgIdKey);
+                                
+                                if (sequence) {
+                                    // Clean up all related message tracker entries
+                                    messageTracker.delete(msgIdKey);
+                                    
+                                    // Clean up response entries
+                                    for (let i = 0; i < sequence.responseCount; i++) {
+                                        const responseKey = \`\${msgIdKey}-response-\${i}\`;
+                                        messageTracker.delete(responseKey);
+                                    }
+                                }
+                                
+                                messageSequences.delete(msgIdKey);
+                            });
+                        }
+                    }
 
-// Optional: Function to manually mark a sequence as complete
-function markSequenceComplete(msgId) {
-    const sequence = messageSequences.get(msgId);
-    if (sequence && sequence.loadingDiv) {
-        sequence.loadingDiv.remove();
-        sequence.loadingDiv = null;
-    }
-}
-
-
-
-
-// Optional: Add a timeout to auto-remove loading indicators
-function autoRemoveLoadingIndicators() {
-    const loadingIndicators = messagesContainer.querySelectorAll('.n8n-loading-indicator[data-loading-for]');
-    loadingIndicators.forEach(indicator => {
-        const msgId = indicator.getAttribute('data-loading-for');
-        const sequence = messageSequences.get(msgId);
-        
-        // Remove loading indicators that have been showing for more than 10 seconds
-        const createdTime = indicator.dataset.created || Date.now();
-        if (Date.now() - parseInt(createdTime) > 10000) {
-            indicator.remove();
-            if (sequence) {
-                sequence.loadingDiv = null;
-            }
-        }
-    });
-}
-
-// Set timestamps on loading indicators for the auto-remove feature
-function createLoadingIndicator(msgId) {
-    const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'n8n-loading-indicator';
-    loadingDiv.setAttribute('data-loading-for', msgId);
-    loadingDiv.dataset.created = Date.now().toString();
-    loadingDiv.innerHTML =\`
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-    \`;
-    return loadingDiv;
-}
-
-// Call cleanup periodically
-setInterval(cleanupMessageTracker, 60000); // Every minute
-setInterval(autoRemoveLoadingIndicators, 500000); // Every 5 seconds
-
-// Utility functions for external use
-window.chatMessageUtils = {
-    markSequenceComplete,
-    cleanupMessageTracker,
-    getSequenceInfo: (msgId) => messageSequences.get(msgId),
-    getAllSequences: () => Array.from(messageSequences.entries())
-};
+                    // Optional: Function to manually mark a sequence as complete
+                    function markSequenceComplete(msgId) {
+                        const sequence = messageSequences.get(msgId);
+                        if (sequence && sequence.loadingDiv) {
+                            sequence.loadingDiv.remove();
+                            sequence.loadingDiv = null;
+                        }
+                    }
 
 
 
 
-function handleUnorderedResponse(rawMessage, table_content, dropdown_content) {
-    // Remove any loading indicators without sequence keys
-    const loadingIndicators = messagesContainer.querySelectorAll('.n8n-loading-indicator:not([data-loading-for])');
-    loadingIndicators.forEach(indicator => indicator.remove());
+                    // Optional: Add a timeout to auto-remove loading indicators
+                    function autoRemoveLoadingIndicators() {
+                        const loadingIndicators = messagesContainer.querySelectorAll('.n8n-loading-indicator[data-loading-for]');
+                        loadingIndicators.forEach(indicator => {
+                            const msgId = indicator.getAttribute('data-loading-for');
+                            const sequence = messageSequences.get(msgId);
+                            
+                            // Remove loading indicators that have been showing for more than 10 seconds
+                            const createdTime = indicator.dataset.created || Date.now();
+                            if (Date.now() - parseInt(createdTime) > 10000) {
+                                indicator.remove();
+                                if (sequence) {
+                                    sequence.loadingDiv = null;
+                                }
+                            }
+                        });
+                    }
 
-    // Create bot message div
-    const botMessageDiv = document.createElement('div');
-    botMessageDiv.className = 'n8n-chat-message bot';
-    
-    if_video_is_off(botMessageDiv, rawMessage, table_content, dropdown_content);
-    messagesContainer.appendChild(botMessageDiv);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
+                    // Set timestamps on loading indicators for the auto-remove feature
+                    function createLoadingIndicator(msgId) {
+                        const loadingDiv = document.createElement('div');
+                        loadingDiv.className = 'n8n-loading-indicator';
+                        loadingDiv.setAttribute('data-loading-for', msgId);
+                        loadingDiv.dataset.created = Date.now().toString();
+                        loadingDiv.innerHTML =\`
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        \`;
+                        return loadingDiv;
+                    }
+
+                    // Call cleanup periodically
+                    setInterval(cleanupMessageTracker, 60000); // Every minute
+                    setInterval(autoRemoveLoadingIndicators, 500000); // Every 5 seconds
+
+                    // Utility functions for external use
+                    window.chatMessageUtils = {
+                        markSequenceComplete,
+                        cleanupMessageTracker,
+                        getSequenceInfo: (msgId) => messageSequences.get(msgId),
+                        getAllSequences: () => Array.from(messageSequences.entries())
+                    };
+
+
+
+
+                    function handleUnorderedResponse(rawMessage, table_content, dropdown_content) {
+                        // Remove any loading indicators without sequence keys
+                        const loadingIndicators = messagesContainer.querySelectorAll('.n8n-loading-indicator:not([data-loading-for])');
+                        loadingIndicators.forEach(indicator => indicator.remove());
+
+                        // Create bot message div
+                        const botMessageDiv = document.createElement('div');
+                        botMessageDiv.className = 'n8n-chat-message bot';
+                        
+                        if_video_is_off(botMessageDiv, rawMessage, table_content, dropdown_content);
+                        messagesContainer.appendChild(botMessageDiv);
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
 
 
 
@@ -5503,146 +5582,146 @@ function handleUnorderedResponse(rawMessage, table_content, dropdown_content) {
 
 
                 const messagesContainer = document.querySelector('.n8n-chat-widget .n8n-chat-messages');
-                let isRecording = false; // Track if currently recording
+                let isRecording = false;
                 let mediaRecorder = null;
                 let audioChunks = [];
                 let stream = null;
-                let finalTranscript = ''; // Store the final transcript to prevent clearing
+                let finalTranscript = '';
+                let autoSendTimeout = null;
+                let isProcessing = false;
+                let silenceTimer = null;
 
             
 
                 // Add input event listener to resize textarea on manual typing
                 textarea.addEventListener('input', () => {
                     autoResizeTextarea(textarea);
+                    if (autoSendTimeout && isProcessing) {
+                        updateButtonVisibility();
+                    }
                 });
 
                 // Initial resize in case there's pre-filled content
                 autoResizeTextarea(textarea);
 
-                    // Single event listener for the mic button
+                // Single event listener for the mic button
                 micButton.addEventListener('click', async () => {
-                    if (!isRecording) {
-                        try {
-                        // console.log('Speech Recognition API is available');
-                        // console.log('micButton:', micButton);
-                        // console.log('textarea:', textarea);
-                
-                            // Request microphone access once
-                            if (!stream) {
-                                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    if (isProcessing || isRecording) {
+                        return; // Prevent clicking while processing or recording
+                    }
+                    
+                    try {
+                        // Request microphone access once
+                        if (!stream) {
+                            stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        }
+
+                        // Set up MediaRecorder for audio recording
+                        mediaRecorder = new MediaRecorder(stream);
+                        audioChunks = [];
+
+                        mediaRecorder.ondataavailable = (e) => {
+                            if (e.data.size > 0) {
+                                audioChunks.push(e.data);
+                            }
+                        };
+
+                        mediaRecorder.onstop = () => {
+                            isRecording = false;
+                            isProcessing = true;
+
+                            if (audioChunks.length === 0) {
+                                resetMicButton();
+                                return;
                             }
 
-                            // Set up MediaRecorder for audio recording
-                            mediaRecorder = new MediaRecorder(stream);
-                            audioChunks = [];
+                            // Add to current files
+                            currentFiles = [];
+                            renderFilePreviews();
+                            
+                            // Put the transcript in the textarea
+                            textarea.value = finalTranscript.trim();
+                            autoResizeTextarea(textarea);
+                            // updateButtonVisibility();
 
-                            mediaRecorder.ondataavailable = (e) => {
-                                if (e.data.size > 0) {
-                                    audioChunks.push(e.data);
-                                    // console.log('Audio chunk received, size:', e.data.size);
-                                } else {
-                                    // console.log('Empty audio chunk received');
-                                }
-                            };
-
-                            mediaRecorder.onstop = () => {
-                                // console.log('MediaRecorder stopped');
-                                isRecording = false;
-                                micButton.innerHTML = \`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 512.000000 512.000000" fill="#0099ff">
-                                                <path d="M0 0 C1.51671886 1.26424817 3.0593383 2.49722026 4.60253906 3.72900391 C19.28864031 15.68237492 33.1902857 29.28168978 44.33349609 44.62451172 C45.62066708 46.38127784 46.9453607 48.10442915 48.27832031 49.82666016 C72.45591287 81.38831197 88.32687017 120.12752123 94.56347656 159.30322266 C94.72428711 160.30675781 94.88509766 161.31029297 95.05078125 162.34423828 C99.15307909 189.19102865 98.85784384 216.50430539 94.56347656 243.30322266 C94.40782227 244.28097656 94.25216797 245.25873047 94.09179688 246.26611328 C83.83070262 307.66882901 48.55341729 366.91574741 -1.70214844 404.01318359 C-3.45613547 405.31781021 -5.18141301 406.65442649 -6.90527344 407.99853516 C-58.49573872 447.71022316 -126.64664264 463.36497081 -190.72607422 455.71557617 C-232.1290536 450.25493496 -271.20213463 435.19680584 -305.43652344 411.30322266 C-306.15565918 410.80177734 -306.87479492 410.30033203 -307.61572266 409.78369141 C-318.02591578 402.43816999 -327.32460976 394.18751632 -336.43652344 385.30322266 C-337.07509277 384.69043457 -337.71366211 384.07764648 -338.37158203 383.44628906 C-346.67181637 375.47831329 -354.27219981 367.3099454 -361.12597656 358.0625 C-362.45449434 356.27909852 -363.81012381 354.5191275 -365.17089844 352.76025391 C-404.6647793 301.10368044 -421.02435224 232.73318877 -412.84033203 168.60058594 C-412.40469949 165.49544331 -411.93264328 162.39924907 -411.43652344 159.30322266 C-411.28086914 158.32546875 -411.12521484 157.34771484 -410.96484375 156.34033203 C-402.66879853 106.69653249 -378.42754956 60.28925426 -343.43652344 24.30322266 C-342.82550781 23.66642578 -342.21449219 23.02962891 -341.58496094 22.37353516 C-333.27930111 13.73697254 -324.82481479 5.71874882 -315.1796875 -1.40234375 C-313.40167473 -2.7226552 -311.64898673 -4.07204745 -309.89746094 -5.42724609 C-231.90738178 -65.10203185 -121.53510399 -69.85830349 0 0 Z " fill="#2F6FDD" transform="translate(414.4365234375,54.69677734375)"/>
-                                                <path d="M0 0 C12.42224174 10.39773082 19.76584284 22.52302065 23.8125 38.1875 C23.98958874 38.80172569 24.16667747 39.41595139 24.34913254 40.04878998 C24.87862699 42.49271446 24.94449123 44.71825806 24.95294189 47.21936035 C24.95865204 48.23404388 24.96436218 49.24872742 24.97024536 50.29415894 C24.97192215 51.95549362 24.97192215 51.95549362 24.97363281 53.65039062 C24.97859772 54.82163483 24.98356262 55.99287903 24.98867798 57.19961548 C25.00077656 60.41083164 25.0082431 63.62201141 25.01268864 66.83324623 C25.01562559 68.84415082 25.01973173 70.85504979 25.02419281 72.86595154 C25.03786635 79.17067833 25.04753158 85.47539218 25.0513947 91.78013277 C25.05586392 99.03259997 25.07335924 106.28487762 25.1023953 113.53728724 C25.12410805 119.15789494 25.1341042 124.77844973 25.13543582 130.39909887 C25.13647778 133.74854452 25.1437283 137.09767117 25.16025543 140.44709778 C25.1774211 144.1946929 25.17540931 147.94183402 25.16894531 151.68945312 C25.1781601 152.78081573 25.18737488 153.87217834 25.1968689 154.99661255 C25.14152213 165.30482332 23.00793096 174.98339502 18.3125 184.1875 C17.97210693 184.859021 17.63171387 185.53054199 17.28100586 186.22241211 C8.18571212 203.25357726 -8.13754902 214.27458502 -26.1875 220.1875 C-40.96035048 223.42695866 -57.47272057 222.52258239 -71.1875 216.1875 C-72.15429688 215.7646875 -73.12109375 215.341875 -74.1171875 214.90625 C-89.98826543 207.17303356 -102.02001346 192.36911802 -108.50275135 176.19633675 C-111.19925232 168.28565266 -111.48105258 160.32587591 -111.4621582 152.04345703 C-111.46726913 150.87133667 -111.47238007 149.69921631 -111.47764587 148.49157715 C-111.49146955 144.64276935 -111.49059054 140.79414207 -111.48828125 136.9453125 C-111.49059497 134.9344191 -111.49409906 132.92353004 -111.497688 130.91263855 C-111.50874341 124.59782809 -111.50924309 118.28307714 -111.50317383 111.96826172 C-111.49713751 105.48463012 -111.50944538 99.00121572 -111.5307439 92.51762116 C-111.54843871 86.9223599 -111.55434891 81.32716728 -111.55110615 75.73187912 C-111.54930558 72.40266223 -111.55314744 69.07372314 -111.56582069 65.74451065 C-111.57823904 62.02628374 -111.57136063 58.30855178 -111.55981445 54.59033203 C-111.56745819 53.50839569 -111.57510193 52.42645935 -111.58297729 51.31173706 C-111.45647745 32.76193832 -103.84802264 17.3438609 -91.171875 4.078125 C-65.69586911 -20.26561396 -27.45332059 -20.96435391 0 0 Z " fill="#FEFEFE" transform="translate(299.1875,103.8125)"/>
-                                                <path d="M0 0 C2.87029869 1.79393668 4.49131638 2.98263276 6 6 C6.19375772 8.12291066 6.38273173 10.24640357 6.54345703 12.37207031 C8.67955691 39.55053259 18.92903508 63.9102293 40 82 C60.17214379 97.7804004 84.37234267 105.60533967 110 103 C136.11046367 99.09316278 159.09631304 86.76179985 175.1953125 65.5859375 C184.9892939 51.55213731 190.84389608 36.36245029 192.484375 19.2890625 C192.56212158 18.48428467 192.63986816 17.67950684 192.7199707 16.8503418 C192.86174081 15.2778233 192.98614651 13.7036127 193.09057617 12.12817383 C193.50778592 7.22582299 194.4871831 4.47282278 198 1 C201.47263273 -0.73631636 205.21193013 -0.60190402 209 0 C211.75569447 2.18159145 213.43588747 3.87177494 215 7 C217.33691368 35.85816665 204.52083635 63.88912672 186.75390625 85.765625 C167.41565338 108.24074242 140.16137552 121.08386245 111 124 C111 134.23 111 144.46 111 155 C114.26261719 154.96519531 117.52523437 154.93039062 120.88671875 154.89453125 C124.05069097 154.87112719 127.2146535 154.8529154 130.37866211 154.83520508 C132.57564621 154.82012948 134.77260026 154.79966574 136.96948242 154.77368164 C140.12947 154.73724498 143.28905924 154.72026116 146.44921875 154.70703125 C147.91979988 154.68380547 147.91979988 154.68380547 149.42008972 154.66011047 C155.66306293 154.65857381 159.0765136 155.46631179 163.875 159.625 C165.67939414 163.43427651 165.09501562 167.00209061 164 171 C161.75410675 173.99452434 160.55130633 174.81623122 157 176 C155.44024881 176.09947413 153.87665187 176.14350139 152.31376648 176.15390015 C150.86914536 176.16680084 150.86914536 176.16680084 149.39533997 176.17996216 C148.34021713 176.18422211 147.2850943 176.18848206 146.19799805 176.19287109 C145.08553711 176.20104858 143.97307617 176.20922607 142.8269043 176.21765137 C139.13851461 176.2425029 135.45016337 176.2590196 131.76171875 176.2734375 C130.50321421 176.27876118 129.24470966 176.28408485 127.94806862 176.28956985 C122.65940906 176.31079697 117.37075527 176.32992729 112.08206463 176.34119225 C104.5099254 176.35742891 96.93829944 176.3906072 89.36635369 176.44759309 C83.39537731 176.49099426 77.42451524 176.50694035 71.45337868 176.51332474 C68.91562048 176.52004887 66.3778701 176.53530082 63.84021568 176.55921555 C60.28980701 176.59076918 56.74069714 176.59091792 53.19018555 176.58349609 C52.14113541 176.59990143 51.09208527 176.61630676 50.01124573 176.63320923 C45.40157823 176.59374052 42.05074243 176.56127426 38.3618927 173.60391235 C35.37556546 170.31158058 34.91720764 168.52249614 34.6875 164.22265625 C35.23528501 160.32653534 37.16101017 158.64092077 40 156 C42.39582346 154.80208827 43.86777538 154.8793256 46.54150391 154.88647461 C47.48232819 154.88655014 48.42315247 154.88662567 49.39248657 154.88670349 C50.41023163 154.89186478 51.42797668 154.89702606 52.4765625 154.90234375 C54.03713882 154.90446617 54.03713882 154.90446617 55.62924194 154.90663147 C58.96119021 154.91224134 62.29307195 154.92479553 65.625 154.9375 C67.88020736 154.94251373 70.13541578 154.94707686 72.390625 154.95117188 C77.92712975 154.96136426 83.46349017 154.9809378 89 155 C89 144.77 89 134.54 89 124 C83.555 123.505 83.555 123.505 78 123 C50.2450228 118.50606785 24.57550623 101.40169471 8 79 C-6.17032116 59.1639511 -18.46131918 31.97360396 -15 7 C-11.61041298 0.09160417 -7.24944534 -1.06833931 0 0 Z " fill="#FCFDFE" transform="translate(156,247)"/>
-                                            </svg>\`;
-                                micButton.classList.remove('n8n-recording');
-
-                                if (audioChunks.length === 0) {
-                                    // console.log('No audio recorded');
-                                    return;
-                                }
-
-                                // const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                                // const audioFile = new File([audioBlob], \`recording-${Date.now()}.webm\`, {
-                                //     type: 'audio/webm'
-                                // });
-
-                                // console.log('Audio file created:', audioFile);
-
-                                // Add to current files and show preview (but do not send yet)
-                                // currentFiles = [audioFile];
-                                currentFiles = [];
-                                renderFilePreviews();
-                                updateButtonVisibility();
-
-                                // Stop the audio stream
-                                stream.getTracks().forEach(track => track.stop());
-                                stream = null;
-                            };
-
-                            // Start audio recording
-                            mediaRecorder.start();
-                            // console.log('MediaRecorder started');
-
-                            // Start speech recognition immediately after
-                            try {
-                                finalTranscript = ''; // Reset transcript only when starting a new session
-                                recognition.start();
-                                // console.log('Speech recognition started');
-                            } catch (error) {
-                                console.error('Speech recognition start error:', error);
-                                textarea.value += \`\\n[Error starting speech recognition: \${error.message}]\`;
-                                autoResizeTextarea(textarea); // Resize after error message
+                            // Clear any existing timeout
+                            if (autoSendTimeout) {
+                                clearTimeout(autoSendTimeout);
                             }
 
-                            // Update mic button UI
-                            micButton.innerHTML = \`
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
-                                    <path fill="currentColor" d="M6 6h12v12H6z"/>
-                                </svg>
-                            \`;
-                            micButton.title = 'Stop recording';
-                            micButton.classList.add('n8n-recording');
-                            isRecording = true;
+                            // Auto-send after 12 seconds
+                            autoSendTimeout = setTimeout(() => {
+                                if (textarea.value.trim()) {
+                                    sendMessage(textarea.value.trim(), currentFiles, 'audio');
+                                    textarea.value = '';
+                                    autoResizeTextarea(textarea);
+                                    updateButtonVisibility();
+                                }
+                                resetMicButton();
+                            }, 120);
 
-                        } catch (error) {
-                            console.error('Error accessing microphone:', error);
-                            const errorMessageDiv = document.createElement('div');
-                            errorMessageDiv.className = 'n8n-chat-message bot';
-                            errorMessageDiv.innerHTML = \`
-                                <div class="n8n-avatar n8n-bot-avatar"></div>
-                                <div class="n8n-message-bubble">Sorry, I couldn't access your microphone. Please check permissions and try again.</div>
-                            \`;
-                            messagesContainer.appendChild(errorMessageDiv);
-                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                            // Stop the audio stream
+                            stream.getTracks().forEach(track => track.stop());
                             stream = null;
-                        }
-                    } else {
-                        // Stop both recording and speech recognition
+                        };
+
+                        // Start audio recording
+                        mediaRecorder.start();
+
+                        // Start speech recognition immediately after
                         try {
-                            if (mediaRecorder && mediaRecorder.state === 'recording') {
-                                mediaRecorder.stop();
-                            }
-                            recognition.stop();
-                            isRecording = false; // Ensure isRecording is set to false to prevent restarts
+                            finalTranscript = '';
+                            recognition.start();
                         } catch (error) {
-                            console.error('Error stopping recording or recognition:', error);
+                            console.error('Speech recognition start error:', error);
+                            textarea.value += \`\\n[Error starting speech recognition: \${error.message}]\`;
+                            autoResizeTextarea(textarea);
                         }
 
-                        micButton.innerHTML = \`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 512.000000 512.000000" fill="#0099ff">
-                                                <path d="M0 0 C1.51671886 1.26424817 3.0593383 2.49722026 4.60253906 3.72900391 C19.28864031 15.68237492 33.1902857 29.28168978 44.33349609 44.62451172 C45.62066708 46.38127784 46.9453607 48.10442915 48.27832031 49.82666016 C72.45591287 81.38831197 88.32687017 120.12752123 94.56347656 159.30322266 C94.72428711 160.30675781 94.88509766 161.31029297 95.05078125 162.34423828 C99.15307909 189.19102865 98.85784384 216.50430539 94.56347656 243.30322266 C94.40782227 244.28097656 94.25216797 245.25873047 94.09179688 246.26611328 C83.83070262 307.66882901 48.55341729 366.91574741 -1.70214844 404.01318359 C-3.45613547 405.31781021 -5.18141301 406.65442649 -6.90527344 407.99853516 C-58.49573872 447.71022316 -126.64664264 463.36497081 -190.72607422 455.71557617 C-232.1290536 450.25493496 -271.20213463 435.19680584 -305.43652344 411.30322266 C-306.15565918 410.80177734 -306.87479492 410.30033203 -307.61572266 409.78369141 C-318.02591578 402.43816999 -327.32460976 394.18751632 -336.43652344 385.30322266 C-337.07509277 384.69043457 -337.71366211 384.07764648 -338.37158203 383.44628906 C-346.67181637 375.47831329 -354.27219981 367.3099454 -361.12597656 358.0625 C-362.45449434 356.27909852 -363.81012381 354.5191275 -365.17089844 352.76025391 C-404.6647793 301.10368044 -421.02435224 232.73318877 -412.84033203 168.60058594 C-412.40469949 165.49544331 -411.93264328 162.39924907 -411.43652344 159.30322266 C-411.28086914 158.32546875 -411.12521484 157.34771484 -410.96484375 156.34033203 C-402.66879853 106.69653249 -378.42754956 60.28925426 -343.43652344 24.30322266 C-342.82550781 23.66642578 -342.21449219 23.02962891 -341.58496094 22.37353516 C-333.27930111 13.73697254 -324.82481479 5.71874882 -315.1796875 -1.40234375 C-313.40167473 -2.7226552 -311.64898673 -4.07204745 -309.89746094 -5.42724609 C-231.90738178 -65.10203185 -121.53510399 -69.85830349 0 0 Z " fill="#2F6FDD" transform="translate(414.4365234375,54.69677734375)"/>
-                                                <path d="M0 0 C12.42224174 10.39773082 19.76584284 22.52302065 23.8125 38.1875 C23.98958874 38.80172569 24.16667747 39.41595139 24.34913254 40.04878998 C24.87862699 42.49271446 24.94449123 44.71825806 24.95294189 47.21936035 C24.95865204 48.23404388 24.96436218 49.24872742 24.97024536 50.29415894 C24.97192215 51.95549362 24.97192215 51.95549362 24.97363281 53.65039062 C24.97859772 54.82163483 24.98356262 55.99287903 24.98867798 57.19961548 C25.00077656 60.41083164 25.0082431 63.62201141 25.01268864 66.83324623 C25.01562559 68.84415082 25.01973173 70.85504979 25.02419281 72.86595154 C25.03786635 79.17067833 25.04753158 85.47539218 25.0513947 91.78013277 C25.05586392 99.03259997 25.07335924 106.28487762 25.1023953 113.53728724 C25.12410805 119.15789494 25.1341042 124.77844973 25.13543582 130.39909887 C25.13647778 133.74854452 25.1437283 137.09767117 25.16025543 140.44709778 C25.1774211 144.1946929 25.17540931 147.94183402 25.16894531 151.68945312 C25.1781601 152.78081573 25.18737488 153.87217834 25.1968689 154.99661255 C25.14152213 165.30482332 23.00793096 174.98339502 18.3125 184.1875 C17.97210693 184.859021 17.63171387 185.53054199 17.28100586 186.22241211 C8.18571212 203.25357726 -8.13754902 214.27458502 -26.1875 220.1875 C-40.96035048 223.42695866 -57.47272057 222.52258239 -71.1875 216.1875 C-72.15429688 215.7646875 -73.12109375 215.341875 -74.1171875 214.90625 C-89.98826543 207.17303356 -102.02001346 192.36911802 -108.50275135 176.19633675 C-111.19925232 168.28565266 -111.48105258 160.32587591 -111.4621582 152.04345703 C-111.46726913 150.87133667 -111.47238007 149.69921631 -111.47764587 148.49157715 C-111.49146955 144.64276935 -111.49059054 140.79414207 -111.48828125 136.9453125 C-111.49059497 134.9344191 -111.49409906 132.92353004 -111.497688 130.91263855 C-111.50874341 124.59782809 -111.50924309 118.28307714 -111.50317383 111.96826172 C-111.49713751 105.48463012 -111.50944538 99.00121572 -111.5307439 92.51762116 C-111.54843871 86.9223599 -111.55434891 81.32716728 -111.55110615 75.73187912 C-111.54930558 72.40266223 -111.55314744 69.07372314 -111.56582069 65.74451065 C-111.57823904 62.02628374 -111.57136063 58.30855178 -111.55981445 54.59033203 C-111.56745819 53.50839569 -111.57510193 52.42645935 -111.58297729 51.31173706 C-111.45647745 32.76193832 -103.84802264 17.3438609 -91.171875 4.078125 C-65.69586911 -20.26561396 -27.45332059 -20.96435391 0 0 Z " fill="#FEFEFE" transform="translate(299.1875,103.8125)"/>
-                                                <path d="M0 0 C2.87029869 1.79393668 4.49131638 2.98263276 6 6 C6.19375772 8.12291066 6.38273173 10.24640357 6.54345703 12.37207031 C8.67955691 39.55053259 18.92903508 63.9102293 40 82 C60.17214379 97.7804004 84.37234267 105.60533967 110 103 C136.11046367 99.09316278 159.09631304 86.76179985 175.1953125 65.5859375 C184.9892939 51.55213731 190.84389608 36.36245029 192.484375 19.2890625 C192.56212158 18.48428467 192.63986816 17.67950684 192.7199707 16.8503418 C192.86174081 15.2778233 192.98614651 13.7036127 193.09057617 12.12817383 C193.50778592 7.22582299 194.4871831 4.47282278 198 1 C201.47263273 -0.73631636 205.21193013 -0.60190402 209 0 C211.75569447 2.18159145 213.43588747 3.87177494 215 7 C217.33691368 35.85816665 204.52083635 63.88912672 186.75390625 85.765625 C167.41565338 108.24074242 140.16137552 121.08386245 111 124 C111 134.23 111 144.46 111 155 C114.26261719 154.96519531 117.52523437 154.93039062 120.88671875 154.89453125 C124.05069097 154.87112719 127.2146535 154.8529154 130.37866211 154.83520508 C132.57564621 154.82012948 134.77260026 154.79966574 136.96948242 154.77368164 C140.12947 154.73724498 143.28905924 154.72026116 146.44921875 154.70703125 C147.91979988 154.68380547 147.91979988 154.68380547 149.42008972 154.66011047 C155.66306293 154.65857381 159.0765136 155.46631179 163.875 159.625 C165.67939414 163.43427651 165.09501562 167.00209061 164 171 C161.75410675 173.99452434 160.55130633 174.81623122 157 176 C155.44024881 176.09947413 153.87665187 176.14350139 152.31376648 176.15390015 C150.86914536 176.16680084 150.86914536 176.16680084 149.39533997 176.17996216 C148.34021713 176.18422211 147.2850943 176.18848206 146.19799805 176.19287109 C145.08553711 176.20104858 143.97307617 176.20922607 142.8269043 176.21765137 C139.13851461 176.2425029 135.45016337 176.2590196 131.76171875 176.2734375 C130.50321421 176.27876118 129.24470966 176.28408485 127.94806862 176.28956985 C122.65940906 176.31079697 117.37075527 176.32992729 112.08206463 176.34119225 C104.5099254 176.35742891 96.93829944 176.3906072 89.36635369 176.44759309 C83.39537731 176.49099426 77.42451524 176.50694035 71.45337868 176.51332474 C68.91562048 176.52004887 66.3778701 176.53530082 63.84021568 176.55921555 C60.28980701 176.59076918 56.74069714 176.59091792 53.19018555 176.58349609 C52.14113541 176.59990143 51.09208527 176.61630676 50.01124573 176.63320923 C45.40157823 176.59374052 42.05074243 176.56127426 38.3618927 173.60391235 C35.37556546 170.31158058 34.91720764 168.52249614 34.6875 164.22265625 C35.23528501 160.32653534 37.16101017 158.64092077 40 156 C42.39582346 154.80208827 43.86777538 154.8793256 46.54150391 154.88647461 C47.48232819 154.88655014 48.42315247 154.88662567 49.39248657 154.88670349 C50.41023163 154.89186478 51.42797668 154.89702606 52.4765625 154.90234375 C54.03713882 154.90446617 54.03713882 154.90446617 55.62924194 154.90663147 C58.96119021 154.91224134 62.29307195 154.92479553 65.625 154.9375 C67.88020736 154.94251373 70.13541578 154.94707686 72.390625 154.95117188 C77.92712975 154.96136426 83.46349017 154.9809378 89 155 C89 144.77 89 134.54 89 124 C83.555 123.505 83.555 123.505 78 123 C50.2450228 118.50606785 24.57550623 101.40169471 8 79 C-6.17032116 59.1639511 -18.46131918 31.97360396 -15 7 C-11.61041298 0.09160417 -7.24944534 -1.06833931 0 0 Z " fill="#FCFDFE" transform="translate(156,247)"/>
-                                            </svg>\`;
-                        micButton.title = 'Record voice';
-                        micButton.classList.remove('n8n-recording');
+                        // Show loading animation immediately
+                        micButton.innerHTML = \`
+                            <span class="loader"></span>
+                        \`;
+                        micButton.title = 'Listening... Speak now';
+                        micButton.classList.add('n8n-recording');
+                        isRecording = true;
+
+                    } catch (error) {
+                        console.error('Error accessing microphone:', error);
+                        const errorMessageDiv = document.createElement('div');
+                        errorMessageDiv.className = 'n8n-chat-message bot';
+                        errorMessageDiv.innerHTML = \`
+                            <div class="n8n-avatar n8n-bot-avatar"></div>
+                            <div class="n8n-message-bubble">Sorry, I couldn't access your microphone. Please check permissions and try again.</div>
+                        \`;
+                        messagesContainer.appendChild(errorMessageDiv);
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                        stream = null;
                     }
                 });
 
+                // Helper function to reset mic button
+                function resetMicButton() {
+                    isProcessing = false;
+                    micButton.innerHTML = \`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 512.000000 512.000000" fill="#0099ff">
+                        <path d="M0 0 C1.51671886 1.26424817 3.0593383 2.49722026 4.60253906 3.72900391 C19.28864031 15.68237492 33.1902857 29.28168978 44.33349609 44.62451172 C45.62066708 46.38127784 46.9453607 48.10442915 48.27832031 49.82666016 C72.45591287 81.38831197 88.32687017 120.12752123 94.56347656 159.30322266 C94.72428711 160.30675781 94.88509766 161.31029297 95.05078125 162.34423828 C99.15307909 189.19102865 98.85784384 216.50430539 94.56347656 243.30322266 C94.40782227 244.28097656 94.25216797 245.25873047 94.09179688 246.26611328 C83.83070262 307.66882901 48.55341729 366.91574741 -1.70214844 404.01318359 C-3.45613547 405.31781021 -5.18141301 406.65442649 -6.90527344 407.99853516 C-58.49573872 447.71022316 -126.64664264 463.36497081 -190.72607422 455.71557617 C-232.1290536 450.25493496 -271.20213463 435.19680584 -305.43652344 411.30322266 C-306.15565918 410.80177734 -306.87479492 410.30033203 -307.61572266 409.78369141 C-318.02591578 402.43816999 -327.32460976 394.18751632 -336.43652344 385.30322266 C-337.07509277 384.69043457 -337.71366211 384.07764648 -338.37158203 383.44628906 C-346.67181637 375.47831329 -354.27219981 367.3099454 -361.12597656 358.0625 C-362.45449434 356.27909852 -363.81012381 354.5191275 -365.17089844 352.76025391 C-404.6647793 301.10368044 -421.02435224 232.73318877 -412.84033203 168.60058594 C-412.40469949 165.49544331 -411.93264328 162.39924907 -411.43652344 159.30322266 C-411.28086914 158.32546875 -411.12521484 157.34771484 -410.96484375 156.34033203 C-402.66879853 106.69653249 -378.42754956 60.28925426 -343.43652344 24.30322266 C-342.82550781 23.66642578 -342.21449219 23.02962891 -341.58496094 22.37353516 C-333.27930111 13.73697254 -324.82481479 5.71874882 -315.1796875 -1.40234375 C-313.40167473 -2.7226552 -311.64898673 -4.07204745 -309.89746094 -5.42724609 C-231.90738178 -65.10203185 -121.53510399 -69.85830349 0 0 Z " fill="#2F6FDD" transform="translate(414.4365234375,54.69677734375)"/>
+                        <path d="M0 0 C12.42224174 10.39773082 19.76584284 22.52302065 23.8125 38.1875 C23.98958874 38.80172569 24.16667747 39.41595139 24.34913254 40.04878998 C24.87862699 42.49271446 24.94449123 44.71825806 24.95294189 47.21936035 C24.95865204 48.23404388 24.96436218 49.24872742 24.97024536 50.29415894 C24.97192215 51.95549362 24.97192215 51.95549362 24.97363281 53.65039062 C24.97859772 54.82163483 24.98356262 55.99287903 24.98867798 57.19961548 C25.00077656 60.41083164 25.0082431 63.62201141 25.01268864 66.83324623 C25.01562559 68.84415082 25.01973173 70.85504979 25.02419281 72.86595154 C25.03786635 79.17067833 25.04753158 85.47539218 25.0513947 91.78013277 C25.05586392 99.03259997 25.07335924 106.28487762 25.1023953 113.53728724 C25.12410805 119.15789494 25.1341042 124.77844973 25.13543582 130.39909887 C25.13647778 133.74854452 25.1437283 137.09767117 25.16025543 140.44709778 C25.1774211 144.1946929 25.17540931 147.94183402 25.16894531 151.68945312 C25.1781601 152.78081573 25.18737488 153.87217834 25.1968689 154.99661255 C25.14152213 165.30482332 23.00793096 174.98339502 18.3125 184.1875 C17.97210693 184.859021 17.63171387 185.53054199 17.28100586 186.22241211 C8.18571212 203.25357726 -8.13754902 214.27458502 -26.1875 220.1875 C-40.96035048 223.42695866 -57.47272057 222.52258239 -71.1875 216.1875 C-72.15429688 215.7646875 -73.12109375 215.341875 -74.1171875 214.90625 C-89.98826543 207.17303356 -102.02001346 192.36911802 -108.50275135 176.19633675 C-111.19925232 168.28565266 -111.48105258 160.32587591 -111.4621582 152.04345703 C-111.46726913 150.87133667 -111.47238007 149.69921631 -111.47764587 148.49157715 C-111.49146955 144.64276935 -111.49059054 140.79414207 -111.48828125 136.9453125 C-111.49059497 134.9344191 -111.49409906 132.92353004 -111.497688 130.91263855 C-111.50874341 124.59782809 -111.50924309 118.28307714 -111.50317383 111.96826172 C-111.49713751 105.48463012 -111.50944538 99.00121572 -111.5307439 92.51762116 C-111.54843871 86.9223599 -111.55434891 81.32716728 -111.55110615 75.73187912 C-111.54930558 72.40266223 -111.55314744 69.07372314 -111.56582069 65.74451065 C-111.57823904 62.02628374 -111.57136063 58.30855178 -111.55981445 54.59033203 C-111.56745819 53.50839569 -111.57510193 52.42645935 -111.58297729 51.31173706 C-111.45647745 32.76193832 -103.84802264 17.3438609 -91.171875 4.078125 C-65.69586911 -20.26561396 -27.45332059 -20.96435391 0 0 Z " fill="#FEFEFE" transform="translate(299.1875,103.8125)"/>
+                        <path d="M0 0 C2.87029869 1.79393668 4.49131638 2.98263276 6 6 C6.19375772 8.12291066 6.38273173 10.24640357 6.54345703 12.37207031 C8.67955691 39.55053259 18.92903508 63.9102293 40 82 C60.17214379 97.7804004 84.37234267 105.60533967 110 103 C136.11046367 99.09316278 159.09631304 86.76179985 175.1953125 65.5859375 C184.9892939 51.55213731 190.84389608 36.36245029 192.484375 19.2890625 C192.56212158 18.48428467 192.63986816 17.67950684 192.7199707 16.8503418 C192.86174081 15.2778233 192.98614651 13.7036127 193.09057617 12.12817383 C193.50778592 7.22582299 194.4871831 4.47282278 198 1 C201.47263273 -0.73631636 205.21193013 -0.60190402 209 0 C211.75569447 2.18159145 213.43588747 3.87177494 215 7 C217.33691368 35.85816665 204.52083635 63.88912672 186.75390625 85.765625 C167.41565338 108.24074242 140.16137552 121.08386245 111 124 C111 134.23 111 144.46 111 155 C114.26261719 154.96519531 117.52523437 154.93039062 120.88671875 154.89453125 C124.05069097 154.87112719 127.2146535 154.8529154 130.37866211 154.83520508 C132.57564621 154.82012948 134.77260026 154.79966574 136.96948242 154.77368164 C140.12947 154.73724498 143.28905924 154.72026116 146.44921875 154.70703125 C147.91979988 154.68380547 147.91979988 154.68380547 149.42008972 154.66011047 C155.66306293 154.65857381 159.0765136 155.46631179 163.875 159.625 C165.67939414 163.43427651 165.09501562 167.00209061 164 171 C161.75410675 173.99452434 160.55130633 174.81623122 157 176 C155.44024881 176.09947413 153.87665187 176.14350139 152.31376648 176.15390015 C150.86914536 176.16680084 150.86914536 176.16680084 149.39533997 176.17996216 C148.34021713 176.18422211 147.2850943 176.18848206 146.19799805 176.19287109 C145.08553711 176.20104858 143.97307617 176.20922607 142.8269043 176.21765137 C139.13851461 176.2425029 135.45016337 176.2590196 131.76171875 176.2734375 C130.50321421 176.27876118 129.24470966 176.28408485 127.94806862 176.28956985 C122.65940906 176.31079697 117.37075527 176.32992729 112.08206463 176.34119225 C104.5099254 176.35742891 96.93829944 176.3906072 89.36635369 176.44759309 C83.39537731 176.49099426 77.42451524 176.50694035 71.45337868 176.51332474 C68.91562048 176.52004887 66.3778701 176.53530082 63.84021568 176.55921555 C60.28980701 176.59076918 56.74069714 176.59091792 53.19018555 176.58349609 C52.14113541 176.59990143 51.09208527 176.61630676 50.01124573 176.63320923 C45.40157823 176.59374052 42.05074243 176.56127426 38.3618927 173.60391235 C35.37556546 170.31158058 34.91720764 168.52249614 34.6875 164.22265625 C35.23528501 160.32653534 37.16101017 158.64092077 40 156 C42.39582346 154.80208827 43.86777538 154.8793256 46.54150391 154.88647461 C47.48232819 154.88655014 48.42315247 154.88662567 49.39248657 154.88670349 C50.41023163 154.89186478 51.42797668 154.89702606 52.4765625 154.90234375 C54.03713882 154.90446617 54.03713882 154.90446617 55.62924194 154.90663147 C58.96119021 154.91224134 62.29307195 154.92479553 65.625 154.9375 C67.88020736 154.94251373 70.13541578 154.94707686 72.390625 154.95117188 C77.92712975 154.96136426 83.46349017 154.9809378 89 155 C89 144.77 89 134.54 89 124 C83.555 123.505 83.555 123.505 78 123 C50.2450228 118.50606785 24.57550623 101.40169471 8 79 C-6.17032116 59.1639511 -18.46131918 31.97360396 -15 7 C-11.61041298 0.09160417 -7.24944534 -1.06833931 0 0 Z " fill="#FCFDFE" transform="translate(156,247)"/>
+                    </svg>\`;
+                    micButton.title = 'Start voice recording';
+                    micButton.classList.remove('n8n-recording', 'n8n-processing');
+                }
+
                 // Handle speech recognition results
                 recognition.onresult = (event) => {
+                    // Clear silence timer when user speaks
+                    if (silenceTimer) {
+                        clearTimeout(silenceTimer);
+                    }
+
                     let interimTranscript = '';
                     let newFinalTranscript = '';
 
-                    // Loop through results to separate interim and final transcripts
                     for (let i = event.resultIndex; i < event.results.length; i++) {
                         const transcript = event.results[i][0].transcript;
                         if (event.results[i].isFinal) {
@@ -5652,32 +5731,37 @@ function handleUnorderedResponse(rawMessage, table_content, dropdown_content) {
                         }
                     }
 
-                    // Append new final transcript to the existing one
                     finalTranscript += newFinalTranscript;
-
-                    // Update textarea with the accumulated final transcript and interim transcript
                     textarea.value = finalTranscript + interimTranscript;
-                    textarea.scrollTop = textarea.scrollHeight; // Auto-scroll to the bottom
-                    autoResizeTextarea(textarea); // Resize textarea after updating content
+                    textarea.scrollTop = textarea.scrollHeight;
+                    autoResizeTextarea(textarea);
+
+                    // Set timer to auto-stop after 3 seconds of silence
+                    silenceTimer = setTimeout(() => {
+                        if (isRecording) {
+                            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                                mediaRecorder.stop();
+                            }
+                            if (recognition) {
+                                recognition.stop();
+                            }
+                        }
+                    }, 3000); // 3 seconds of silence
                 };
 
-                // Handle speech recognition errors
                 recognition.onerror = (event) => {
                     console.error('Speech recognition error:', event.error);
                     micButton.classList.remove('n8n-recording');
                     isRecording = false;
                     textarea.value += \`\\n[Error: \${event.error}]\`;
-                    autoResizeTextarea(textarea); // Resize after error message
+                    autoResizeTextarea(textarea);
                     if (mediaRecorder && mediaRecorder.state === 'recording') {
                         mediaRecorder.stop();
                     }
                 };
 
-                // Restart recognition on end to extend pause duration
                 recognition.onend = () => {
-                    // console.log('Speech recognition ended');
                     if (isRecording) {
-                        // console.log('Restarting speech recognition to continue listening...');
                         try {
                             recognition.start();
                         } catch (error) {
@@ -5686,28 +5770,28 @@ function handleUnorderedResponse(rawMessage, table_content, dropdown_content) {
                             micButton.classList.remove('n8n-recording');
                         }
                     } else {
-                        // Reset state when recognition is fully stopped
                         micButton.classList.remove('n8n-recording');
                         isRecording = false;
                     }
                 };
 
-                // Log when speech starts and ends for debugging
                 recognition.onspeechstart = () => {
-                    // console.log('Speech detected.');
+                    // Clear silence timer when speech starts
+                    if (silenceTimer) {
+                        clearTimeout(silenceTimer);
+                    }
                 };
 
                 recognition.onspeechend = () => {
-                    // console.log('Speech paused (short pause detected).');
+                    // Speech paused
                 };
 
-                } else {
-                    // Fallback for unsupported browsers
-                    const micButton = document.querySelector('.n8n-chat-widget .n8n-mic-button');
-                    micButton.disabled = true;
-                    micButton.title = 'Speech recognition not supported in this browser';
-                    console.warn('Speech recognition is not supported in this browser.');
-                }
+            } else {
+                const micButton = document.querySelector('.n8n-chat-widget .n8n-mic-button');
+                micButton.disabled = true;
+                micButton.title = 'Speech recognition not supported in this browser';
+                console.warn('Speech recognition is not supported in this browser.');
+            }
                     
 
                 if (closeButton) {
