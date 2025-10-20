@@ -1,4 +1,4 @@
-// Version: 1.0.7
+// Version: 1.0.8
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-10-06
@@ -2376,12 +2376,19 @@
                 
 
 
-                var TrulienceAvatarID= "3717332205976043879"; 
-                var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.ex4hzHlK9H7FlzJrQueS1KvMgTX9tBBTy8ptkdw4Vp93W4z3NEwdOSGBg8jZxhdKLYtZW2qJOdCqmMdRjoahBw";  
+                // var TrulienceAvatarID= "3717332205976043879"; 
+                // var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.ex4hzHlK9H7FlzJrQueS1KvMgTX9tBBTy8ptkdw4Vp93W4z3NEwdOSGBg8jZxhdKLYtZW2qJOdCqmMdRjoahBw";  
+                
+                // const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
+                // const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
+
+
+
+                var TrulienceAvatarID= "9157726394911311097"; 
+                var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.dgxWkX1WXbL7a880_yGksZNVTcvKNsozn3np5CGsjOmwKga_UO6lJqdXGUviuyzclvrVZAHYcnycfUF9AsypuQ";  
                 
                 const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
                 const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
-
 
 
 
@@ -2489,7 +2496,7 @@
                             </svg>
                         </span>
                         <div class="n8n-chatbot-version">
-                            v1.0.7
+                            v1.0.8
                         </div>
                         
                         <label class="n8n-toggle-switch" style="margin-left: auto;">
