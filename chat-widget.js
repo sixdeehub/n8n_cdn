@@ -1,4 +1,4 @@
-// Version: 1.0.10
+// Version: 1.0.11
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-10-06
@@ -12,7 +12,7 @@
     // Load Geist font
     const fontLink = document.createElement('link');
     fontLink.rel = 'stylesheet';
-    fontLink.href = 'https://cdn.jsdelivr.net/npm/geist-font@latest/style.css';
+    // fontLink.href = 'https://cdn.jsdelivr.net/npm/geist-font@latest/style.css';
     document.head.appendChild(fontLink);
 
     // Create and inject styles for the widget container and toggle button
@@ -2189,6 +2189,7 @@
             background: #fff;
             border-top: 1px solid #ddd;
             z-index: 10;
+            top: -20px;
         }
 
         textarea,
@@ -2300,7 +2301,6 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist-font@latest/style.css">
             <style>${iframeStyles}</style>
         </head>
         <body>
