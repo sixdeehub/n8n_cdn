@@ -1,18 +1,18 @@
-// Version: 1.0.9
+// Version: 1.0.10
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-10-06
 // Description: 1. created chat-widget with iframe.
 //              2. Added msg_id to append response sequence in ui.
 //              3. Arrow up will append users previous messages in textarea.      
-//              4. Added auto remove loading indicator if bot not responding.    
+//              4. updated css jsdeliver file link   
 
 
 (function() {
     // Load Geist font
     const fontLink = document.createElement('link');
     fontLink.rel = 'stylesheet';
-    fontLink.href = 'https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css';
+    fontLink.href = 'https://cdn.jsdelivr.net/npm/geist-font@latest/style.css';
     document.head.appendChild(fontLink);
 
     // Create and inject styles for the widget container and toggle button
@@ -2300,7 +2300,7 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist-font@latest/style.css">
             <style>${iframeStyles}</style>
         </head>
         <body>
