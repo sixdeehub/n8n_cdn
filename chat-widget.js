@@ -1,4 +1,4 @@
-// Version: 1.0.11
+// Version: 1.0.12
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-10-06
@@ -2509,7 +2509,7 @@
                             </svg>
                         </span>
                         <div class="n8n-chatbot-version">
-                            v1.0.9
+                            v1.0.12
                         </div>
                         
                         <label class="n8n-toggle-switch" style="margin-left: auto;">
@@ -3915,7 +3915,7 @@
                                     updateLastActivity(); // Update activity when receiving any message
                                     
                                     const receivedData = JSON.parse(event.data);
-                                    // console.log("recvied------",receivedData);
+                                    console.log("recvied------",receivedData);
                                     if (receivedData.error) {
                                         console.error('Server error:', receivedData.error);
                                         if (receivedData.receivedMessage) {
