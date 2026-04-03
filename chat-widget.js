@@ -1,11 +1,10 @@
-// Version: 1.0.12
+// Version: 1.0.13
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-10-06
-// Description: 1. created chat-widget with iframe.
-//              2. Added msg_id to append response sequence in ui.
-//              3. Arrow up will append users previous messages in textarea.      
-//              4. updated css jsdeliver file link   
+// Description: 1. Removed video Interaction.
+//              2. Resolved microphone issue.
+
 
 
 (function() {
@@ -2393,11 +2392,11 @@
                 
                 
                 
-                var TrulienceAvatarID= "270410148393995534"; 
-                var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.c9SCf6imtIHoJw9JyoepZyaHtVa1cvlWk0RvWGjyu5_OHycopF2M1A3upyQXznGgECpyO4SZmzm_vhkrlox_mg";  
+                // var TrulienceAvatarID= "270410148393995534"; 
+                // var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.c9SCf6imtIHoJw9JyoepZyaHtVa1cvlWk0RvWGjyu5_OHycopF2M1A3upyQXznGgECpyO4SZmzm_vhkrlox_mg";  
                 
-                const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
-                const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
+                // const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
+                // const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
 
 
                 
@@ -2425,62 +2424,68 @@
                     \`;
                 }
 
-                function updateIframeVisibility() {
-                    const containerId = 'trulience-container';
-                    const container = document.getElementById(containerId);
-                    const headerDiv = document.querySelector('.n8n-brand-header');
-                    const chatMessages = chatInterface.querySelector('.n8n-chat-messages');
 
-                    if (!headerDiv || !chatMessages) {
-                        console.error('Required elements (.n8n-brand-header or .n8n-chat-messages) not found.');
-                        return;
-                    }
+                // need to uncomment we need video toggle
 
-                    if (video === 'on') {
-                        // Update chat messages border-radius
-                        chatMessages.style.setProperty('border-radius', '0 0 0 0', 'important');
+                // function updateIframeVisibility() {
+                //     const containerId = 'trulience-container';
+                //     const container = document.getElementById(containerId);
+                //     const headerDiv = document.querySelector('.n8n-brand-header');
+                //     const chatMessages = chatInterface.querySelector('.n8n-chat-messages');
 
-                    // Add iframe if it doesn't exist
-                    if (!container) {
-                        const iframeHTML = createIframeDiv();
-                        headerDiv.insertAdjacentHTML('afterend', iframeHTML);
-                    }
-                    // Show the container
-                    const newContainer = document.getElementById(containerId);
-                    if (newContainer) {
-                        newContainer.style.display = 'block';
-                    }
-                    } else {
-                        // Update chat messages border-radius
-                        chatMessages.style.setProperty('border-radius', '20px 20px 0 0', 'important');
+                //     if (!headerDiv || !chatMessages) {
+                //         console.error('Required elements (.n8n-brand-header or .n8n-chat-messages) not found.');
+                //         return;
+                //     }
 
-                        // Hide the container if it exists
-                        if (container) {
-                            container.style.display = 'none';
-                        }
-                    }
-                }
+                //     if (video === 'on') {
+                //         // Update chat messages border-radius
+                //         chatMessages.style.setProperty('border-radius', '0 0 0 0', 'important');
 
-                // Set up toggle event listener
-                function setupToggleListener() {
-                    const toggleInput = document.getElementById('videoToggle');
-                    if (toggleInput) {
-                    // Set initial state
-                    updateIframeVisibility();
+                //     // Add iframe if it doesn't exist
+                //     if (!container) {
+                //         const iframeHTML = createIframeDiv();
+                //         headerDiv.insertAdjacentHTML('afterend', iframeHTML);
+                //     }
+                //     // Show the container
+                //     const newContainer = document.getElementById(containerId);
+                //     if (newContainer) {
+                //         newContainer.style.display = 'block';
+                //     }
+                //     } else {
+                //         // Update chat messages border-radius
+                //         chatMessages.style.setProperty('border-radius', '20px 20px 0 0', 'important');
 
-                    // Add event listener
-                    toggleInput.addEventListener('change', () => {
-                        video = toggleInput.checked ? 'on' : 'off';
-                        // console.log('Video state:', video); // Debug
-                        updateIframeVisibility();
-                    });
-                    } else {
-                    console.warn('Video toggle input not found, retrying...');
-                    setTimeout(setupToggleListener, 100); // Retry after 100ms
-                    }
-                }
+                //         // Hide the container if it exists
+                //         if (container) {
+                //             container.style.display = 'none';
+                //         }
+                //     }
+                // }
 
-                setupToggleListener()
+                // // Set up toggle event listener
+                // function setupToggleListener() {
+                //     const toggleInput = document.getElementById('videoToggle');
+                //     if (toggleInput) {
+                //     // Set initial state
+                //     updateIframeVisibility();
+
+                //     // Add event listener
+                //     toggleInput.addEventListener('change', () => {
+                //         video = toggleInput.checked ? 'on' : 'off';
+                //         // console.log('Video state:', video); // Debug
+                //         updateIframeVisibility();
+                //     });
+                //     } else {
+                //     console.warn('Video toggle input not found, retrying...');
+                //     setTimeout(setupToggleListener, 100); // Retry after 100ms
+                //     }
+                // }
+
+                // setupToggleListener()
+
+
+
 
                 const defaultChatInterfaceHTML = \`
                     <div class="n8n-brand-header">
@@ -2509,14 +2514,9 @@
                             </svg>
                         </span>
                         <div class="n8n-chatbot-version">
-                            v1.0.12
+                            v1.0.13
                         </div>
-                        
-                        <label class="n8n-toggle-switch" style="margin-left: auto;">
-                            <span class="n8n-toggle-label">Video</span>
-                            <input type="checkbox" id="videoToggle" class="n8n-toggle-input" >
-                            <span class="n8n-toggle-slider"></span>
-                        </label>
+                    
                         
                         <button class="n8n-fullscreen-button" title="Toggle Fullscreen">
                             <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
@@ -2624,20 +2624,23 @@
 
 
                 // Initialize the page
-                document.addEventListener('DOMContentLoaded', () => {
-                    const toggleInput = document.getElementById('videoToggle');
+                // need to uncomment we need video toggle
+
+
+                // document.addEventListener('DOMContentLoaded', () => {
+                //     const toggleInput = document.getElementById('videoToggle');
                     
-                    // Set initial state and add iframe if video is on
-                    updateIframeVisibility();
+                //     // Set initial state and add iframe if video is on
+                //     updateIframeVisibility();
                     
-                    // Add event listener for toggle changes
-                    toggleInput.addEventListener('change', () => {
-                        video = toggleInput.checked ? 'on' : 'off';
+                //     // Add event listener for toggle changes
+                //     toggleInput.addEventListener('change', () => {
+                //         video = toggleInput.checked ? 'on' : 'off';
                         
-                        // console.log('Video state:', video);
-                        updateIframeVisibility();
-                    });
-                });
+                //         // console.log('Video state:', video);
+                //         updateIframeVisibility();
+                //     });
+                // });
 
 
 
