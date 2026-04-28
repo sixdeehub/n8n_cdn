@@ -1,13 +1,14 @@
-// Version: 1.0.13
+// Version: 1.0.14
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-10-06
-// Description: 1. Removed video Interaction.
+// Description: 1. added video Interaction.
 //              2. Resolved microphone issue.
 
 
 
-(function() {
+
+(function () {
     // Load Geist font
     const fontLink = document.createElement('link');
     fontLink.rel = 'stylesheet';
@@ -271,13 +272,13 @@
     };
 
     // Merge user config with defaults
-    const config = window.ChatWidgetConfig ? 
+    const config = window.ChatWidgetConfig ?
         {
             webhook: { ...defaultConfig.webhook, ...window.ChatWidgetConfig.webhook },
             branding: { ...defaultConfig.branding, ...window.ChatWidgetConfig.branding },
             style: { ...defaultConfig.style, ...window.ChatWidgetConfig.style },
             options: { ...defaultConfig.options, ...window.ChatWidgetConfig.options },
-            wss: {...defaultConfig.wss, ...window.ChatWidgetConfig.wss },
+            wss: { ...defaultConfig.wss, ...window.ChatWidgetConfig.wss },
             header: { ...defaultConfig.header, ...window.ChatWidgetConfig.header },
             params: { ...defaultConfig.params, ...window.ChatWidgetConfig.params }
         } : defaultConfig;
@@ -299,7 +300,7 @@
     // Create widget container
     const widgetContainer = document.createElement('div');
     widgetContainer.className = 'n8n-chat-widget';
-    
+
     // Set CSS variables for colors
     widgetContainer.style.setProperty('--n8n-chat-primary-color', config.style.primaryColor);
     widgetContainer.style.setProperty('--n8n-chat-secondary-color', config.style.secondaryColor);
@@ -310,7 +311,7 @@
     const chatIframe = document.createElement('iframe');
     chatIframe.className = `chat-iframe${config.style.position === 'left' ? ' position-left' : ''}`;
     chatIframe.style.border = 'none';
-    
+
     // Iframe styles for the content
     const iframeStyles = `
         * {
@@ -2291,7 +2292,7 @@
     }
 
     `;
-    
+
 
     // Create iframe content
     const iframeContent = `
@@ -2392,11 +2393,11 @@
                 
                 
                 
-                // var TrulienceAvatarID= "270410148393995534"; 
-                // var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.c9SCf6imtIHoJw9JyoepZyaHtVa1cvlWk0RvWGjyu5_OHycopF2M1A3upyQXznGgECpyO4SZmzm_vhkrlox_mg";  
+                var TrulienceAvatarID= "270410148393995534"; 
+                var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.c9SCf6imtIHoJw9JyoepZyaHtVa1cvlWk0RvWGjyu5_OHycopF2M1A3upyQXznGgECpyO4SZmzm_vhkrlox_mg";  
                 
-                // const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
-                // const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
+                const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
+                const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
 
 
                 
@@ -2427,62 +2428,62 @@
 
                 // need to uncomment we need video toggle
 
-                // function updateIframeVisibility() {
-                //     const containerId = 'trulience-container';
-                //     const container = document.getElementById(containerId);
-                //     const headerDiv = document.querySelector('.n8n-brand-header');
-                //     const chatMessages = chatInterface.querySelector('.n8n-chat-messages');
+                function updateIframeVisibility() {
+                    const containerId = 'trulience-container';
+                    const container = document.getElementById(containerId);
+                    const headerDiv = document.querySelector('.n8n-brand-header');
+                    const chatMessages = chatInterface.querySelector('.n8n-chat-messages');
 
-                //     if (!headerDiv || !chatMessages) {
-                //         console.error('Required elements (.n8n-brand-header or .n8n-chat-messages) not found.');
-                //         return;
-                //     }
+                    if (!headerDiv || !chatMessages) {
+                        console.error('Required elements (.n8n-brand-header or .n8n-chat-messages) not found.');
+                        return;
+                    }
 
-                //     if (video === 'on') {
-                //         // Update chat messages border-radius
-                //         chatMessages.style.setProperty('border-radius', '0 0 0 0', 'important');
+                    if (video === 'on') {
+                        // Update chat messages border-radius
+                        chatMessages.style.setProperty('border-radius', '0 0 0 0', 'important');
 
-                //     // Add iframe if it doesn't exist
-                //     if (!container) {
-                //         const iframeHTML = createIframeDiv();
-                //         headerDiv.insertAdjacentHTML('afterend', iframeHTML);
-                //     }
-                //     // Show the container
-                //     const newContainer = document.getElementById(containerId);
-                //     if (newContainer) {
-                //         newContainer.style.display = 'block';
-                //     }
-                //     } else {
-                //         // Update chat messages border-radius
-                //         chatMessages.style.setProperty('border-radius', '20px 20px 0 0', 'important');
+                    // Add iframe if it doesn't exist
+                    if (!container) {
+                        const iframeHTML = createIframeDiv();
+                        headerDiv.insertAdjacentHTML('afterend', iframeHTML);
+                    }
+                    // Show the container
+                    const newContainer = document.getElementById(containerId);
+                    if (newContainer) {
+                        newContainer.style.display = 'block';
+                    }
+                    } else {
+                        // Update chat messages border-radius
+                        chatMessages.style.setProperty('border-radius', '20px 20px 0 0', 'important');
 
-                //         // Hide the container if it exists
-                //         if (container) {
-                //             container.style.display = 'none';
-                //         }
-                //     }
-                // }
+                        // Hide the container if it exists
+                        if (container) {
+                            container.style.display = 'none';
+                        }
+                    }
+                }
 
-                // // Set up toggle event listener
-                // function setupToggleListener() {
-                //     const toggleInput = document.getElementById('videoToggle');
-                //     if (toggleInput) {
-                //     // Set initial state
-                //     updateIframeVisibility();
+                // Set up toggle event listener
+                function setupToggleListener() {
+                    const toggleInput = document.getElementById('videoToggle');
+                    if (toggleInput) {
+                    // Set initial state
+                    updateIframeVisibility();
 
-                //     // Add event listener
-                //     toggleInput.addEventListener('change', () => {
-                //         video = toggleInput.checked ? 'on' : 'off';
-                //         // console.log('Video state:', video); // Debug
-                //         updateIframeVisibility();
-                //     });
-                //     } else {
-                //     console.warn('Video toggle input not found, retrying...');
-                //     setTimeout(setupToggleListener, 100); // Retry after 100ms
-                //     }
-                // }
+                    // Add event listener
+                    toggleInput.addEventListener('change', () => {
+                        video = toggleInput.checked ? 'on' : 'off';
+                        // console.log('Video state:', video); // Debug
+                        updateIframeVisibility();
+                    });
+                    } else {
+                    console.warn('Video toggle input not found, retrying...');
+                    setTimeout(setupToggleListener, 100); // Retry after 100ms
+                    }
+                }
 
-                // setupToggleListener()
+                setupToggleListener()
 
 
 
@@ -2514,8 +2515,13 @@
                             </svg>
                         </span>
                         <div class="n8n-chatbot-version">
-                            v1.0.13
+                            v1.0.14
                         </div>
+                        <label class="n8n-toggle-switch" style="margin-left: auto;">
+                            <span class="n8n-toggle-label">Video</span>
+                            <input type="checkbox" id="videoToggle" class="n8n-toggle-input" >
+                            <span class="n8n-toggle-slider"></span>
+                        </label>
                     
                         
                         <button class="n8n-fullscreen-button" title="Toggle Fullscreen">
@@ -2627,20 +2633,20 @@
                 // need to uncomment we need video toggle
 
 
-                // document.addEventListener('DOMContentLoaded', () => {
-                //     const toggleInput = document.getElementById('videoToggle');
+                document.addEventListener('DOMContentLoaded', () => {
+                    const toggleInput = document.getElementById('videoToggle');
                     
-                //     // Set initial state and add iframe if video is on
-                //     updateIframeVisibility();
+                    // Set initial state and add iframe if video is on
+                    updateIframeVisibility();
                     
-                //     // Add event listener for toggle changes
-                //     toggleInput.addEventListener('change', () => {
-                //         video = toggleInput.checked ? 'on' : 'off';
+                    // Add event listener for toggle changes
+                    toggleInput.addEventListener('change', () => {
+                        video = toggleInput.checked ? 'on' : 'off';
                         
-                //         // console.log('Video state:', video);
-                //         updateIframeVisibility();
-                //     });
-                // });
+                        // console.log('Video state:', video);
+                        updateIframeVisibility();
+                    });
+                });
 
 
 
@@ -5931,11 +5937,11 @@
 
 
 
-// Create toggle button
-const toggleButton = document.createElement('button');
-toggleButton.className = `chat-toggle${config.style.position === 'left' ? ' position-left' : ''}`;
-toggleButton.innerHTML =
-    `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 70 70" preserveAspectRatio="xMidYMid meet">
+    // Create toggle button
+    const toggleButton = document.createElement('button');
+    toggleButton.className = `chat-toggle${config.style.position === 'left' ? ' position-left' : ''}`;
+    toggleButton.innerHTML =
+        `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 70 70" preserveAspectRatio="xMidYMid meet">
         <path d="M0 0 C9.88869366 5.81586346 16.18371269 13.07946401 19.23828125 24.31640625 C20.38735482 37.08982869 18.61354015 47.16824221 10.296875 57.2734375 C3.21022892 64.30629499 -5.61611128 67.71862775 -15.51171875 67.69140625 C-26.47606606 67.63253223 -34.98655606 64.15103481 -42.76171875 56.31640625 C-50.24991451 46.1985229 -51.71146652 36.5669503 -50.76171875 24.31640625 C-48.94192176 16.08918036 -44.07411436 8.50798906 -37.296875 3.4921875 C-26.19180869 -3.40464315 -12.20554198 -5.88737907 0 0 Z " fill="#FEFEFE" transform="translate(50.76171875,2.68359375)"/>
         <path d="M0 0 C1.32 0 2.64 0 4 0 C4 2.31 4 4.62 4 7 C4.65226562 7.07476563 5.30453125 7.14953125 5.9765625 7.2265625 C12.62973359 8.22748204 15.80055993 9.69544413 20 15 C20 15.66 20 16.32 20 17 C21.32 17.66 22.64 18.32 24 19 C24 21.97 24 24.94 24 28 C23.195625 28.2475 22.39125 28.495 21.5625 28.75 C20.716875 29.1625 19.87125 29.575 19 30 C18.855625 30.61875 18.71125 31.2375 18.5625 31.875 C17.82539045 34.65963607 16.34991101 35.51720785 13.95703125 36.984375 C4.29230769 42 4.29230769 42 0 42 C0 40.35 0 38.7 0 37 C-0.515625 37.185625 -1.03125 37.37125 -1.5625 37.5625 C-5.06715697 38.19154099 -7.54853876 37.90827927 -11 37 C-13.625 34.1875 -13.625 34.1875 -16 31 C-16.928125 30.38125 -17.85625 29.7625 -18.8125 29.125 C-21.30086974 26.70772653 -21.35405417 26.18899169 -21.4375 22.875 C-21 19 -21 19 -19 17 C-18.01 17 -17.02 17 -16 17 C-15.773125 16.236875 -15.54625 15.47375 -15.3125 14.6875 C-13.66784972 11.31988277 -12.40460849 10.51315933 -9 9 C-6.67724823 8.59952556 -4.34260643 8.2602896 -2 8 C-1.01 7.67 -0.02 7.34 1 7 C0.34 5.02 -0.32 3.04 -1 1 C-0.67 0.67 -0.34 0.34 0 0 Z " fill="#CFD1D3" transform="translate(34,13)"/>
         <path d="M0 0 C1.58748047 -0.0299707 1.58748047 -0.0299707 3.20703125 -0.06054688 C4.72876953 -0.05958008 4.72876953 -0.05958008 6.28125 -0.05859375 C7.6744043 -0.06137329 7.6744043 -0.06137329 9.09570312 -0.06420898 C11.5 0.4375 11.5 0.4375 13.3034668 2.30029297 C14.82430072 5.01675494 14.86729985 6.90170081 14.8125 10 C14.80863281 10.95003906 14.80476563 11.90007813 14.80078125 12.87890625 C14.5 15.4375 14.5 15.4375 12.5 18.4375 C8.4951979 19.880311 4.26936741 19.62140746 0.0625 19.625 C-0.68837891 19.63724609 -1.43925781 19.64949219 -2.21289062 19.66210938 C-6.39120456 19.67313395 -9.74381715 19.50014376 -13.5 17.4375 C-14.85281371 14.73187257 -14.70609362 12.51856345 -14.75 9.5 C-14.77578125 8.43910156 -14.8015625 7.37820312 -14.828125 6.28515625 C-14.5 3.4375 -14.5 3.4375 -13.30566406 1.78662109 C-9.60321762 -0.97970111 -4.44163789 -0.02975519 0 0 Z " fill="#071942" transform="translate(35.5,26.5625)"/>
@@ -5956,327 +5962,327 @@ toggleButton.innerHTML =
     
     <div class="n8n-chatbot-tail"></div>`;
 
-// Dragging state variables
-let isDragging = false;
-let startX, startY, initialX, initialY;
-let currentSide = 'right'; // Track current side
+    // Dragging state variables
+    let isDragging = false;
+    let startX, startY, initialX, initialY;
+    let currentSide = 'right'; // Track current side
 
-// Make toggle button draggable
-function makeDraggable(element) {
-    let startTime;
-    
-    // Mouse events
-    element.addEventListener('mousedown', startDrag);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', endDrag);
-    
-    // Touch events for mobile
-    element.addEventListener('touchstart', startDrag, { passive: false });
-    document.addEventListener('touchmove', drag, { passive: false });
-    document.addEventListener('touchend', endDrag);
-    
-    function startDrag(e) {
-        e.preventDefault();
-        isDragging = true;
-        startTime = Date.now();
-        
-        const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-        const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-        
-        startX = clientX;
-        startY = clientY;
-        
-        const rect = element.getBoundingClientRect();
-        initialX = rect.left;
-        initialY = rect.top;
-        
-        element.style.transition = 'none';
-        element.style.cursor = 'grabbing';
-        
-        // Add dragging class for visual feedback
-        element.classList.add('dragging');
-    }
-    
-    function drag(e) {
-        if (!isDragging) return;
-        e.preventDefault();
-        
-        const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-        const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-        
-        const deltaX = clientX - startX;
-        const deltaY = clientY - startY;
-        
-        let newX = initialX + deltaX;
-        let newY = initialY + deltaY;
-        
-        // Constrain to viewport bounds
-        const maxX = window.innerWidth - element.offsetWidth;
-        const maxY = window.innerHeight - element.offsetHeight;
-        
-        newX = Math.max(0, Math.min(newX, maxX));
-        newY = Math.max(0, Math.min(newY, maxY));
-        
-        element.style.left = newX + 'px';
-        element.style.top = newY + 'px';
-        element.style.right = 'auto';
-        element.style.bottom = 'auto';
-    }
-    
-    function endDrag(e) {
-        if (!isDragging) return;
-        
-        isDragging = false;
-        element.style.cursor = 'pointer';
-        element.classList.remove('dragging');
-        
-        const dragTime = Date.now() - startTime;
-        const dragDistance = Math.sqrt(
-            Math.pow(e.type.includes('touch') ? 
-                (e.changedTouches[0].clientX - startX) : 
-                (e.clientX - startX), 2) +
-            Math.pow(e.type.includes('touch') ? 
-                (e.changedTouches[0].clientY - startY) : 
-                (e.clientY - startY), 2)
-        );
-        
-        // If it was a quick click/tap with minimal movement, treat as toggle
-        if (dragTime < 200 && dragDistance < 10) {
-            handleToggleClick();
-            return;
+    // Make toggle button draggable
+    function makeDraggable(element) {
+        let startTime;
+
+        // Mouse events
+        element.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', endDrag);
+
+        // Touch events for mobile
+        element.addEventListener('touchstart', startDrag, { passive: false });
+        document.addEventListener('touchmove', drag, { passive: false });
+        document.addEventListener('touchend', endDrag);
+
+        function startDrag(e) {
+            e.preventDefault();
+            isDragging = true;
+            startTime = Date.now();
+
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+            startX = clientX;
+            startY = clientY;
+
+            const rect = element.getBoundingClientRect();
+            initialX = rect.left;
+            initialY = rect.top;
+
+            element.style.transition = 'none';
+            element.style.cursor = 'grabbing';
+
+            // Add dragging class for visual feedback
+            element.classList.add('dragging');
         }
-        
-        // Snap to side logic
-        snapToSide();
-    }
-}
 
-function snapToSide() {
-    const rect = toggleButton.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const screenCenterX = window.innerWidth / 2;
-    
-    toggleButton.style.transition = 'all 0.3s ease-out';
-    
-    if (centerX < screenCenterX) {
-        // Snap to left bottom position
-        toggleButton.style.left = '20px';
-        toggleButton.style.right = 'auto';
-        toggleButton.style.bottom = '30px';
-        toggleButton.style.top = 'auto';
-        toggleButton.classList.add('position-left');
-        currentSide = 'left';
-    } else {
-        // Snap to right bottom position
-        toggleButton.style.right = '20px';
-        toggleButton.style.left = 'auto';
-        toggleButton.style.bottom = '30px';
-        toggleButton.style.top = 'auto';
-        toggleButton.classList.remove('position-left');
-        currentSide = 'right';
-    }
-    
-    // Reset transition after animation
-    setTimeout(() => {
-        toggleButton.style.transition = 'transform 0.3s';
-    }, 300);
-}
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
 
-function handleToggleClick() {
-    const wasOpen = chatIframe.classList.contains('open');
-    chatIframe.classList.toggle('open');
-    
-    // Only start conversation if opening and not already initialized
-    if (!wasOpen && chatIframe.classList.contains('open')) {
-        toggleButton.style.display = 'none'; // Hide toggle button when chat is open
-        // Ensure iframe is initialized before sending message
-        if (!iframeInitialized) {
-            setTimeout(() => {
-                initializeIframe();
-                setTimeout(() => {
-                    sendMessageToIframe({type: 'startConversation'});
-                    if (!chatInitialized) {
-                        chatInitialized = true;
-                    }
-                }, 300);
-            }, 50);
-        } else {
-            setTimeout(() => {
-                sendMessageToIframe({type: 'startConversation'});
-                if (!chatInitialized) {
-                    chatInitialized = true;
-                }
-            }, 100);
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+            const deltaX = clientX - startX;
+            const deltaY = clientY - startY;
+
+            let newX = initialX + deltaX;
+            let newY = initialY + deltaY;
+
+            // Constrain to viewport bounds
+            const maxX = window.innerWidth - element.offsetWidth;
+            const maxY = window.innerHeight - element.offsetHeight;
+
+            newX = Math.max(0, Math.min(newX, maxX));
+            newY = Math.max(0, Math.min(newY, maxY));
+
+            element.style.left = newX + 'px';
+            element.style.top = newY + 'px';
+            element.style.right = 'auto';
+            element.style.bottom = 'auto';
+        }
+
+        function endDrag(e) {
+            if (!isDragging) return;
+
+            isDragging = false;
+            element.style.cursor = 'pointer';
+            element.classList.remove('dragging');
+
+            const dragTime = Date.now() - startTime;
+            const dragDistance = Math.sqrt(
+                Math.pow(e.type.includes('touch') ?
+                    (e.changedTouches[0].clientX - startX) :
+                    (e.clientX - startX), 2) +
+                Math.pow(e.type.includes('touch') ?
+                    (e.changedTouches[0].clientY - startY) :
+                    (e.clientY - startY), 2)
+            );
+
+            // If it was a quick click/tap with minimal movement, treat as toggle
+            if (dragTime < 200 && dragDistance < 10) {
+                handleToggleClick();
+                return;
+            }
+
+            // Snap to side logic
+            snapToSide();
         }
     }
-}
 
-// Initialize draggable functionality
-makeDraggable(toggleButton);
+    function snapToSide() {
+        const rect = toggleButton.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const screenCenterX = window.innerWidth / 2;
 
-// Handle window resize to reposition button if needed
-window.addEventListener('resize', () => {
-    // Reposition button on resize to maintain side preference at bottom
-    setTimeout(() => {
-        if (currentSide === 'left') {
+        toggleButton.style.transition = 'all 0.3s ease-out';
+
+        if (centerX < screenCenterX) {
+            // Snap to left bottom position
             toggleButton.style.left = '20px';
             toggleButton.style.right = 'auto';
             toggleButton.style.bottom = '30px';
             toggleButton.style.top = 'auto';
+            toggleButton.classList.add('position-left');
+            currentSide = 'left';
+        } else {
+            // Snap to right bottom position
+            toggleButton.style.right = '20px';
+            toggleButton.style.left = 'auto';
+            toggleButton.style.bottom = '30px';
+            toggleButton.style.top = 'auto';
+            toggleButton.classList.remove('position-left');
+            currentSide = 'right';
+        }
+
+        // Reset transition after animation
+        setTimeout(() => {
+            toggleButton.style.transition = 'transform 0.3s';
+        }, 300);
+    }
+
+    function handleToggleClick() {
+        const wasOpen = chatIframe.classList.contains('open');
+        chatIframe.classList.toggle('open');
+
+        // Only start conversation if opening and not already initialized
+        if (!wasOpen && chatIframe.classList.contains('open')) {
+            toggleButton.style.display = 'none'; // Hide toggle button when chat is open
+            // Ensure iframe is initialized before sending message
+            if (!iframeInitialized) {
+                setTimeout(() => {
+                    initializeIframe();
+                    setTimeout(() => {
+                        sendMessageToIframe({ type: 'startConversation' });
+                        if (!chatInitialized) {
+                            chatInitialized = true;
+                        }
+                    }, 300);
+                }, 50);
+            } else {
+                setTimeout(() => {
+                    sendMessageToIframe({ type: 'startConversation' });
+                    if (!chatInitialized) {
+                        chatInitialized = true;
+                    }
+                }, 100);
+            }
+        }
+    }
+
+    // Initialize draggable functionality
+    makeDraggable(toggleButton);
+
+    // Handle window resize to reposition button if needed
+    window.addEventListener('resize', () => {
+        // Reposition button on resize to maintain side preference at bottom
+        setTimeout(() => {
+            if (currentSide === 'left') {
+                toggleButton.style.left = '20px';
+                toggleButton.style.right = 'auto';
+                toggleButton.style.bottom = '30px';
+                toggleButton.style.top = 'auto';
+            } else {
+                toggleButton.style.right = '20px';
+                toggleButton.style.left = 'auto';
+                toggleButton.style.bottom = '30px';
+                toggleButton.style.top = 'auto';
+            }
+        }, 100);
+    });
+
+    // Set initial position to bottom-right (or bottom-left based on config)
+    function setInitialPosition() {
+        if (config.style.position === 'left') {
+            toggleButton.style.left = '20px';
+            toggleButton.style.right = 'auto';
+            toggleButton.style.bottom = '30px';
+            toggleButton.style.top = 'auto';
+            currentSide = 'left';
         } else {
             toggleButton.style.right = '20px';
             toggleButton.style.left = 'auto';
             toggleButton.style.bottom = '30px';
             toggleButton.style.top = 'auto';
+            currentSide = 'right';
         }
-    }, 100);
-});
-
-// Set initial position to bottom-right (or bottom-left based on config)
-function setInitialPosition() {
-    if (config.style.position === 'left') {
-        toggleButton.style.left = '20px';
-        toggleButton.style.right = 'auto';
-        toggleButton.style.bottom = '30px';
-        toggleButton.style.top = 'auto';
-        currentSide = 'left';
-    } else {
-        toggleButton.style.right = '20px';
-        toggleButton.style.left = 'auto';
-        toggleButton.style.bottom = '30px';
-        toggleButton.style.top = 'auto';
-        currentSide = 'right';
     }
-}
 
-// Call initial positioning
-setInitialPosition();
+    // Call initial positioning
+    setInitialPosition();
 
-widgetContainer.appendChild(chatIframe);
-widgetContainer.appendChild(toggleButton);
-document.body.appendChild(widgetContainer);
+    widgetContainer.appendChild(chatIframe);
+    widgetContainer.appendChild(toggleButton);
+    document.body.appendChild(widgetContainer);
 
-// Initialize iframe content only once
-function initializeIframe() {
-    if (!iframeInitialized) {
-        const iframeDoc = chatIframe.contentDocument || chatIframe.contentWindow.document;
-        iframeDoc.open();
-        iframeDoc.write(iframeContent);
-        iframeDoc.close();
-        iframeInitialized = true;
-        
-        // Wait for iframe to be fully loaded before marking as ready
-        chatIframe.onload = () => {
-            toggleButton.style.display = ''; // Show toggle button when iframe is ready
-        };
-    }
-}
+    // Initialize iframe content only once
+    function initializeIframe() {
+        if (!iframeInitialized) {
+            const iframeDoc = chatIframe.contentDocument || chatIframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(iframeContent);
+            iframeDoc.close();
+            iframeInitialized = true;
 
-// Function to safely send message to iframe
-function sendMessageToIframe(message, retries = 3) {
-    if (chatIframe.contentWindow && iframeInitialized) {
-        try {
-            chatIframe.contentWindow.postMessage(message, '*');
-        } catch (error) {
-            console.error('Error sending message to iframe:', error);
-            if (retries > 0) {
-                setTimeout(() => {
-                    sendMessageToIframe(message, retries - 1);
-                }, 200);
-            }
-        }
-    } else if (retries > 0) {
-        setTimeout(() => {
-            sendMessageToIframe(message, retries - 1);
-        }, 200);
-    }
-}
-
-// Listen for messages from iframe (including close button clicks)
-window.addEventListener('message', (event) => {
-    if (event.data.type === 'closeChat') {
-        chatIframe.classList.remove('open');
-        toggleButton.style.display = ''; // Show toggle button again
-    }
-});
-
-
-
-
-
-// Global state variables
-let isFullscreen = false;
-let originalStyles = {};
-let overlay = null;
-let fullscreenButton = null; 
-
-
-
-// Listen for messages from iframe (including close button clicks)
-window.addEventListener('message', (event) => {
-    if (event.data.type === 'fullscreenButton') {
-        // console.log('Received fullscreenButton message from iframe');
-        // console.log('Current fullscreen state:', isFullscreen);
-        
-        // Try multiple ways to find the iframe
-        let iframe = window.chatIframeRef || 
-                    document.getElementById('chat-iframe') || 
-                    document.querySelector('.chat-iframe') ||
-                    document.querySelector('iframe[src*="data:text/html"]') ||
-                    document.querySelector('iframe');
-
-
-        
-
-        // Make sure we have the fullscreen button reference
-        if (!fullscreenButton) {
-            fullscreenButton = document.getElementById('fullscreen-btn') || 
-                              document.querySelector('.n8n-fullscreen-button') ||
-                              document.querySelector('[title="Toggle Fullscreen"]');
-        }
-
-        
-
-        // console.log('Toggling fullscreen mode. Will be:', !isFullscreen);
-        // console.log('iframe element:', iframe);
-
-        if (!isFullscreen) {
-            // ENTER FULLSCREEN MODE
-            // console.log('Entering fullscreen mode');
-            
-            // Save original styles before changing them
-            originalStyles = {
-                width: iframe.style.width || '350px',
-                height: iframe.style.height || '500px',
-                left: iframe.style.left || '',
-                top: iframe.style.top || '',
-                right: iframe.style.right || '20px',
-                bottom: iframe.style.bottom || '20px',
-                position: iframe.style.position || 'fixed',
-                borderRadius: iframe.style.borderRadius || '20px',
-                boxShadow: iframe.style.boxShadow || '0 8px 32px rgba(133, 79, 255, 0.15)',
-                zIndex: iframe.style.zIndex || 'auto'
+            // Wait for iframe to be fully loaded before marking as ready
+            chatIframe.onload = () => {
+                toggleButton.style.display = ''; // Show toggle button when iframe is ready
             };
+        }
+    }
 
-            // Apply full-screen styles to the iframe element
-            iframe.style.width = '100vw';
-            iframe.style.height = '100vh';
-            iframe.style.left = '0';
-            iframe.style.top = '0';
-            iframe.style.right = 'auto';
-            iframe.style.bottom = 'auto';
-            iframe.style.position = 'fixed';
-            iframe.style.borderRadius = '20px'; // Keep border radius in fullscreen
-            iframe.style.boxShadow = 'none';
-            iframe.style.zIndex = '9999';
+    // Function to safely send message to iframe
+    function sendMessageToIframe(message, retries = 3) {
+        if (chatIframe.contentWindow && iframeInitialized) {
+            try {
+                chatIframe.contentWindow.postMessage(message, '*');
+            } catch (error) {
+                console.error('Error sending message to iframe:', error);
+                if (retries > 0) {
+                    setTimeout(() => {
+                        sendMessageToIframe(message, retries - 1);
+                    }, 200);
+                }
+            }
+        } else if (retries > 0) {
+            setTimeout(() => {
+                sendMessageToIframe(message, retries - 1);
+            }, 200);
+        }
+    }
 
-            // Add fullscreen class
-            iframe.classList.add('chat-iframe-fullscreen');
-            
-            // Create and add overlay (optional background)
-            overlay = document.createElement('div');
-            overlay.className = 'fullscreen-overlay';
-            overlay.style.cssText = `
+    // Listen for messages from iframe (including close button clicks)
+    window.addEventListener('message', (event) => {
+        if (event.data.type === 'closeChat') {
+            chatIframe.classList.remove('open');
+            toggleButton.style.display = ''; // Show toggle button again
+        }
+    });
+
+
+
+
+
+    // Global state variables
+    let isFullscreen = false;
+    let originalStyles = {};
+    let overlay = null;
+    let fullscreenButton = null;
+
+
+
+    // Listen for messages from iframe (including close button clicks)
+    window.addEventListener('message', (event) => {
+        if (event.data.type === 'fullscreenButton') {
+            // console.log('Received fullscreenButton message from iframe');
+            // console.log('Current fullscreen state:', isFullscreen);
+
+            // Try multiple ways to find the iframe
+            let iframe = window.chatIframeRef ||
+                document.getElementById('chat-iframe') ||
+                document.querySelector('.chat-iframe') ||
+                document.querySelector('iframe[src*="data:text/html"]') ||
+                document.querySelector('iframe');
+
+
+
+
+            // Make sure we have the fullscreen button reference
+            if (!fullscreenButton) {
+                fullscreenButton = document.getElementById('fullscreen-btn') ||
+                    document.querySelector('.n8n-fullscreen-button') ||
+                    document.querySelector('[title="Toggle Fullscreen"]');
+            }
+
+
+
+            // console.log('Toggling fullscreen mode. Will be:', !isFullscreen);
+            // console.log('iframe element:', iframe);
+
+            if (!isFullscreen) {
+                // ENTER FULLSCREEN MODE
+                // console.log('Entering fullscreen mode');
+
+                // Save original styles before changing them
+                originalStyles = {
+                    width: iframe.style.width || '350px',
+                    height: iframe.style.height || '500px',
+                    left: iframe.style.left || '',
+                    top: iframe.style.top || '',
+                    right: iframe.style.right || '20px',
+                    bottom: iframe.style.bottom || '20px',
+                    position: iframe.style.position || 'fixed',
+                    borderRadius: iframe.style.borderRadius || '20px',
+                    boxShadow: iframe.style.boxShadow || '0 8px 32px rgba(133, 79, 255, 0.15)',
+                    zIndex: iframe.style.zIndex || 'auto'
+                };
+
+                // Apply full-screen styles to the iframe element
+                iframe.style.width = '100vw';
+                iframe.style.height = '100vh';
+                iframe.style.left = '0';
+                iframe.style.top = '0';
+                iframe.style.right = 'auto';
+                iframe.style.bottom = 'auto';
+                iframe.style.position = 'fixed';
+                iframe.style.borderRadius = '20px'; // Keep border radius in fullscreen
+                iframe.style.boxShadow = 'none';
+                iframe.style.zIndex = '9999';
+
+                // Add fullscreen class
+                iframe.classList.add('chat-iframe-fullscreen');
+
+                // Create and add overlay (optional background)
+                overlay = document.createElement('div');
+                overlay.className = 'fullscreen-overlay';
+                overlay.style.cssText = `
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -6286,179 +6292,179 @@ window.addEventListener('message', (event) => {
                 z-index: 9998;
                 pointer-events: none;
             `;
-            document.body.appendChild(overlay);
-            
-            // Prevent body scroll
-            document.body.style.overflow = 'hidden';
+                document.body.appendChild(overlay);
 
-            // console.log('Fullscreen overlay added');
-            // console.log('Original iframe styles saved:', fullscreenButton);
-            
-            // Update button icon to "minimize" if button exists
-            if (fullscreenButton) {
-                fullscreenButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>`;
-                fullscreenButton.title = 'Exit Fullscreen';
-                fullscreenButton.style.right = '47%';
+                // Prevent body scroll
+                document.body.style.overflow = 'hidden';
+
+                // console.log('Fullscreen overlay added');
+                // console.log('Original iframe styles saved:', fullscreenButton);
+
+                // Update button icon to "minimize" if button exists
+                if (fullscreenButton) {
+                    fullscreenButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>`;
+                    fullscreenButton.title = 'Exit Fullscreen';
+                    fullscreenButton.style.right = '47%';
+                }
+
+                // Update state
+                isFullscreen = true;
             }
-            
-            // Update state
-            isFullscreen = true;
+            else {
+                // EXIT FULLSCREEN MODE
+                // console.log('Exiting fullscreen mode');
+                // console.log('Original iframe styles to restore:', originalStyles);
+                // Restore original styles
+                iframe.style.width = originalStyles.width;
+                iframe.style.height = originalStyles.height;
+                iframe.style.left = originalStyles.left;
+                iframe.style.top = originalStyles.top;
+                iframe.style.right = originalStyles.right;
+                iframe.style.bottom = originalStyles.bottom;
+                iframe.style.position = originalStyles.position;
+                iframe.style.borderRadius = originalStyles.borderRadius;
+                iframe.style.boxShadow = originalStyles.boxShadow;
+                iframe.style.zIndex = '9999'; // Ensure it's above overlay during transition
+
+                // Remove fullscreen class
+                iframe.classList.remove('chat-iframe-fullscreen');
+
+                // Remove overlay if it exists
+                if (overlay && overlay.parentNode) {
+                    overlay.parentNode.removeChild(overlay);
+                    overlay = null;
+                }
+
+                // Restore body scroll
+                document.body.style.overflow = '';
+
+                // Restore fullscreen button icon if button exists
+                if (fullscreenButton) {
+                    fullscreenButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>`;
+                    fullscreenButton.title = 'Enter Fullscreen';
+                    fullscreenButton.style.right = '42%';
+                }
+
+                // Update state
+                isFullscreen = false;
+            }
+
+            // console.log('Fullscreen state after toggle:', isFullscreen);
         }
-        else {
-            // EXIT FULLSCREEN MODE
-            // console.log('Exiting fullscreen mode');
-            // console.log('Original iframe styles to restore:', originalStyles);
-            // Restore original styles
-            iframe.style.width = originalStyles.width;
-            iframe.style.height = originalStyles.height;
-            iframe.style.left = originalStyles.left;
-            iframe.style.top = originalStyles.top;
-            iframe.style.right = originalStyles.right;
-            iframe.style.bottom = originalStyles.bottom;
-            iframe.style.position = originalStyles.position;
-            iframe.style.borderRadius = originalStyles.borderRadius;
-            iframe.style.boxShadow = originalStyles.boxShadow;
-            iframe.style.zIndex = '9999'; // Ensure it's above overlay during transition
+    });
 
-            // Remove fullscreen class
-            iframe.classList.remove('chat-iframe-fullscreen');
-            
-            // Remove overlay if it exists
-            if (overlay && overlay.parentNode) {
-                overlay.parentNode.removeChild(overlay);
-                overlay = null;
-            }
-            
-            // Restore body scroll
-            document.body.style.overflow = '';
 
-            // Restore fullscreen button icon if button exists
-            if (fullscreenButton) {
-                fullscreenButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>`;
-                fullscreenButton.title = 'Enter Fullscreen';
-                fullscreenButton.style.right = '42%';
-            }
-            
-            // Update state
-            isFullscreen = false;
+
+
+    // toggleButton.addEventListener('click', () => {
+    //     chatContainer.classList.toggle('n8n-open');
+
+    //     if (chatContainer.classList.contains('n8n-open') && !currentSessionId) {
+    //         startNewConversation();
+    //     }
+    // });
+
+
+
+
+
+
+
+
+    // PARENT SCRIPT - Simplified and optimized for smoothness
+
+    let isResizing = false;
+    let startWidth, startHeight, startLeft, startTop;
+    let currentClientX = 0, currentClientY = 0;
+
+    const MIN_WIDTH = 300;
+    const MIN_HEIGHT = 350;
+    const WINDOW_PADDING = 20;
+
+    // Optimized resize function without RAF wrapping
+    function performResize(clientX, clientY) {
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+
+        let newWidth = Math.max(MIN_WIDTH, startWidth - dx);
+        let newHeight = Math.max(MIN_HEIGHT, startHeight - dy);
+
+        let newLeft = startLeft + (startWidth - newWidth);
+        let newTop = startTop + (startHeight - newHeight);
+
+        // Boundary calculations
+        const maxWidth = window.innerWidth - WINDOW_PADDING;
+        const maxHeight = window.innerHeight - WINDOW_PADDING;
+
+        newLeft = Math.max(WINDOW_PADDING, newLeft);
+        newTop = Math.max(WINDOW_PADDING, newTop);
+
+        if (newLeft + newWidth > maxWidth) {
+            newWidth = maxWidth - newLeft;
+            newWidth = Math.max(MIN_WIDTH, newWidth);
         }
-        
-        // console.log('Fullscreen state after toggle:', isFullscreen);
+
+        if (newTop + newHeight > maxHeight) {
+            newHeight = maxHeight - newTop;
+            newHeight = Math.max(MIN_HEIGHT, newHeight);
+        }
+
+        // Apply styles immediately - no RAF wrapping
+        chatIframe.style.width = `${newWidth}px`;
+        chatIframe.style.height = `${newHeight}px`;
+        chatIframe.style.left = `${newLeft}px`;
+        chatIframe.style.top = `${newTop}px`;
+        chatIframe.style.right = 'auto';
+        chatIframe.style.bottom = 'auto';
+        chatIframe.style.position = 'fixed';
     }
-});
 
+    window.addEventListener('message', (event) => {
+        if (event.data.type === 'closeChat') {
+            chatIframe.classList.remove('open');
 
+        } else if (event.data.type === 'startResize') {
+            isResizing = true;
+            startX = event.data.startX;
+            startY = event.data.startY;
 
+            // Get initial dimensions
+            const rect = chatIframe.getBoundingClientRect();
+            startWidth = rect.width;
+            startHeight = rect.height;
+            startLeft = rect.left;
+            startTop = rect.top;
 
-// toggleButton.addEventListener('click', () => {
-//     chatContainer.classList.toggle('n8n-open');
-    
-//     if (chatContainer.classList.contains('n8n-open') && !currentSessionId) {
-//         startNewConversation();
-//     }
-// });
+            document.body.style.userSelect = 'none';
 
+        } else if (event.data.type === 'resize' && isResizing) {
+            // Perform resize immediately when message is received
+            currentClientX = event.data.clientX;
+            currentClientY = event.data.clientY;
+            performResize(currentClientX, currentClientY);
 
-        
+        } else if (event.data.type === 'endResize') {
+            isResizing = false;
+            document.body.style.userSelect = '';
+        }
+    });
 
+    // Handle cases where mouse goes outside iframe during resize
+    // Use direct event handling for parent window
+    document.addEventListener('mousemove', function (e) {
+        if (isResizing) {
+            currentClientX = e.clientX;
+            currentClientY = e.clientY;
+            performResize(currentClientX, currentClientY);
+        }
+    });
 
-
-
-
-// PARENT SCRIPT - Simplified and optimized for smoothness
-
-let isResizing = false;
-let  startWidth, startHeight, startLeft, startTop;
-let currentClientX = 0, currentClientY = 0;
-
-const MIN_WIDTH = 300;
-const MIN_HEIGHT = 350;
-const WINDOW_PADDING = 20;
-
-// Optimized resize function without RAF wrapping
-function performResize(clientX, clientY) {
-    const dx = clientX - startX;
-    const dy = clientY - startY;
-   
-    let newWidth = Math.max(MIN_WIDTH, startWidth - dx);
-    let newHeight = Math.max(MIN_HEIGHT, startHeight - dy);
-   
-    let newLeft = startLeft + (startWidth - newWidth);
-    let newTop = startTop + (startHeight - newHeight);
-   
-    // Boundary calculations
-    const maxWidth = window.innerWidth - WINDOW_PADDING;
-    const maxHeight = window.innerHeight - WINDOW_PADDING;
-   
-    newLeft = Math.max(WINDOW_PADDING, newLeft);
-    newTop = Math.max(WINDOW_PADDING, newTop);
-   
-    if (newLeft + newWidth > maxWidth) {
-        newWidth = maxWidth - newLeft;
-        newWidth = Math.max(MIN_WIDTH, newWidth);
-    }
-   
-    if (newTop + newHeight > maxHeight) {
-        newHeight = maxHeight - newTop;
-        newHeight = Math.max(MIN_HEIGHT, newHeight);
-    }
-   
-    // Apply styles immediately - no RAF wrapping
-    chatIframe.style.width = `${newWidth}px`;
-    chatIframe.style.height = `${newHeight}px`;
-    chatIframe.style.left = `${newLeft}px`;
-    chatIframe.style.top = `${newTop}px`;
-    chatIframe.style.right = 'auto';
-    chatIframe.style.bottom = 'auto';
-    chatIframe.style.position = 'fixed';
-}
-
-window.addEventListener('message', (event) => {
-    if (event.data.type === 'closeChat') {
-        chatIframe.classList.remove('open');
-        
-    } else if (event.data.type === 'startResize') {
-        isResizing = true;
-        startX = event.data.startX;
-        startY = event.data.startY;
-        
-        // Get initial dimensions
-        const rect = chatIframe.getBoundingClientRect();
-        startWidth = rect.width;
-        startHeight = rect.height;
-        startLeft = rect.left;
-        startTop = rect.top;
-        
-        document.body.style.userSelect = 'none';
-        
-    } else if (event.data.type === 'resize' && isResizing) {
-        // Perform resize immediately when message is received
-        currentClientX = event.data.clientX;
-        currentClientY = event.data.clientY;
-        performResize(currentClientX, currentClientY);
-        
-    } else if (event.data.type === 'endResize') {
-        isResizing = false;
-        document.body.style.userSelect = '';
-    }
-});
-
-// Handle cases where mouse goes outside iframe during resize
-// Use direct event handling for parent window
-document.addEventListener('mousemove', function(e) {
-    if (isResizing) {
-        currentClientX = e.clientX;
-        currentClientY = e.clientY;
-        performResize(currentClientX, currentClientY);
-    }
-});
-
-document.addEventListener('mouseup', function() {
-    if (isResizing) {
-        isResizing = false;
-        document.body.style.userSelect = '';
-    }
-});
+    document.addEventListener('mouseup', function () {
+        if (isResizing) {
+            isResizing = false;
+            document.body.style.userSelect = '';
+        }
+    });
 
 
 })();
