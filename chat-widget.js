@@ -1,9 +1,9 @@
-// Version: 1.0.14
+// Version: 1.0.15
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2025-10-06
 // Description: 1. added video Interaction.
-//              2. Resolved microphone issue.
+//              2. added paid avatar
 
 
 
@@ -2393,11 +2393,23 @@
                 
                 
                 
-                var TrulienceAvatarID= "270410148393995534"; 
-                var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.c9SCf6imtIHoJw9JyoepZyaHtVa1cvlWk0RvWGjyu5_OHycopF2M1A3upyQXznGgECpyO4SZmzm_vhkrlox_mg";  
+                // var TrulienceAvatarID= "270410148393995534"; 
+                // var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.c9SCf6imtIHoJw9JyoepZyaHtVa1cvlWk0RvWGjyu5_OHycopF2M1A3upyQXznGgECpyO4SZmzm_vhkrlox_mg";  
+                
+                // const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
+                // const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
+
+
+
+                // PAID
+
+                var TrulienceAvatarID= "8746984237175556707"; 
+                var TrulienceAvatarToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJUb2tlbiBmcm9tIGN1c3RvbSBzdHJpbmciLCJleHAiOjQ4NzU0MDAzNTV9.g9knMTj1_lwt_QjAuVuXMjvHLLRnV3LADTQqPdzoDwMxcMhrCPLxRFm_29hYg3mEO2E4AT4KrPV1r7DCGTYQmg";  
                 
                 const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
                 const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
+
+
 
 
                 
@@ -2515,7 +2527,7 @@
                             </svg>
                         </span>
                         <div class="n8n-chatbot-version">
-                            v1.0.14
+                            v1.0.15
                         </div>
                         <label class="n8n-toggle-switch" style="margin-left: auto;">
                             <span class="n8n-toggle-label">Video</span>
