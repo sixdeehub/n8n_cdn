@@ -1,14 +1,13 @@
-// Version: 1.0.15
+// Version: 1.0.16
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
-// modified Date: 2025-10-06
-// Description: 1. added video Interaction.
-//              2. added paid avatar
+// modified Date: 2026-06-22
+// Description: 1. Updated UI for accept images.
+//              2. can handle an links also
 
 
 
-
-(function () {
+(function() {
     // Load Geist font
     const fontLink = document.createElement('link');
     fontLink.rel = 'stylesheet';
@@ -272,13 +271,13 @@
     };
 
     // Merge user config with defaults
-    const config = window.ChatWidgetConfig ?
+    const config = window.ChatWidgetConfig ? 
         {
             webhook: { ...defaultConfig.webhook, ...window.ChatWidgetConfig.webhook },
             branding: { ...defaultConfig.branding, ...window.ChatWidgetConfig.branding },
             style: { ...defaultConfig.style, ...window.ChatWidgetConfig.style },
             options: { ...defaultConfig.options, ...window.ChatWidgetConfig.options },
-            wss: { ...defaultConfig.wss, ...window.ChatWidgetConfig.wss },
+            wss: {...defaultConfig.wss, ...window.ChatWidgetConfig.wss },
             header: { ...defaultConfig.header, ...window.ChatWidgetConfig.header },
             params: { ...defaultConfig.params, ...window.ChatWidgetConfig.params }
         } : defaultConfig;
@@ -286,6 +285,7 @@
     // Prevent multiple initializations
     if (window.N8NChatWidgetInitialized) return;
     window.N8NChatWidgetInitialized = true;
+    const isEmbedded = config?.wss?.embeded === true;
 
     let currentSessionId = '';
     let currentFiles = [];
@@ -301,6 +301,20 @@
     const widgetContainer = document.createElement('div');
     widgetContainer.className = 'n8n-chat-widget';
 
+    if (isEmbedded) {
+        widgetContainer.style.position = 'relative';
+        widgetContainer.style.width = '100%';
+        widgetContainer.style.height = '100%';
+
+        // 🔥 THESE ARE THE REAL FIXES
+        widgetContainer.style.padding = '0';
+        widgetContainer.style.margin = '0';
+        widgetContainer.style.border = 'none';
+        widgetContainer.style.borderRadius = '0';
+        widgetContainer.style.boxShadow = 'none';
+        widgetContainer.style.overflow = 'hidden'; // important
+    }
+    
     // Set CSS variables for colors
     widgetContainer.style.setProperty('--n8n-chat-primary-color', config.style.primaryColor);
     widgetContainer.style.setProperty('--n8n-chat-secondary-color', config.style.secondaryColor);
@@ -311,6 +325,53 @@
     const chatIframe = document.createElement('iframe');
     chatIframe.className = `chat-iframe${config.style.position === 'left' ? ' position-left' : ''}`;
     chatIframe.style.border = 'none';
+
+    if (isEmbedded) {
+        chatIframe.classList.add('open');
+        chatIframe.classList.add('embedded-mode');
+
+        chatIframe.style.display = 'block';
+        chatIframe.style.position = 'absolute';
+        chatIframe.style.top = '0';
+        chatIframe.style.left = '0';
+        chatIframe.style.width = '100%';
+        chatIframe.style.height = '100%';
+        chatIframe.style.margin = '0';
+        chatIframe.style.padding = '0';
+        chatIframe.style.border = 'none';
+        chatIframe.style.borderRadius = '0';
+        chatIframe.style.boxShadow = 'none';
+    }
+
+    if (isEmbedded) {
+        const container = document.querySelector('.aarya-container');
+        container?.appendChild(widgetContainer);
+    } else {
+        document.body.appendChild(widgetContainer);
+    }
+    
+
+
+    if (isEmbedded) {
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .n8n-chat-widget .chat-iframe {
+                bottom: 0 !important;
+                right: 0 !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    if (isEmbedded) {
+        const style = document.createElement('style');
+        style.innerHTML += `
+            .n8n-chat-widget .chat-iframe.open {
+                padding: 0 !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
 
     // Iframe styles for the content
     const iframeStyles = `
@@ -2291,8 +2352,15 @@
     }
     }
 
-    `;
+    .n8n-message-content img {
+        max-width: 100%;
+        border-radius: 10px;
+        display: block;
+        margin-top: 4px;
+    }
 
+    `;
+    
 
     // Create iframe content
     const iframeContent = `
@@ -2400,7 +2468,7 @@
                 // const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
 
 
-
+                
                 // PAID
 
                 var TrulienceAvatarID= "8746984237175556707"; 
@@ -2409,11 +2477,6 @@
                 const trulienceparams ="dialPageBackground=transparent&connect=true&hideFS=true&hideChatInput=true&hideLetsChatBtn=true&hideMicButton=true&hideHangUpButton=true&hideToast=true&hideSpeakerButton=true";
                 const trulienceURL = \`https://trulience.com/avatar/\${TrulienceAvatarID}?token=\${TrulienceAvatarToken}&\${trulienceparams}\`;
 
-
-
-
-                
-                
                 
                 
                 
@@ -2436,9 +2499,6 @@
                         </div>
                     \`;
                 }
-
-
-                // need to uncomment we need video toggle
 
                 function updateIframeVisibility() {
                     const containerId = 'trulience-container';
@@ -2497,9 +2557,6 @@
 
                 setupToggleListener()
 
-
-
-
                 const defaultChatInterfaceHTML = \`
                     <div class="n8n-brand-header">
                         <span>
@@ -2527,14 +2584,14 @@
                             </svg>
                         </span>
                         <div class="n8n-chatbot-version">
-                            v1.0.15
+                            v1.0.16
                         </div>
+                        
                         <label class="n8n-toggle-switch" style="margin-left: auto;">
                             <span class="n8n-toggle-label">Video</span>
                             <input type="checkbox" id="videoToggle" class="n8n-toggle-input" >
                             <span class="n8n-toggle-slider"></span>
                         </label>
-                    
                         
                         <button class="n8n-fullscreen-button" title="Toggle Fullscreen">
                             <svg xmlns="http://www.w3.org/2000/svg" width="38" height="9" viewBox="0 0 38 9">
@@ -2642,9 +2699,6 @@
 
 
                 // Initialize the page
-                // need to uncomment we need video toggle
-
-
                 document.addEventListener('DOMContentLoaded', () => {
                     const toggleInput = document.getElementById('videoToggle');
                     
@@ -3022,6 +3076,22 @@
 
 
               
+                function formatTextWithBold(text) {
+                    return text
+                        .split('\\n')
+                        .map(line => {
+                            if (!line.trim()) return '';
+                            
+                            let formattedLine = escapeHtml(line);
+                            formattedLine = formattedLine.replace(/\\*\\*(.+?)\\*\\*/g, '<strong>$1</strong>');
+                            
+                            var urlRegex = new RegExp('(https?:\\/\\/[^\\s<>"]+)', 'g');
+                            formattedLine = formattedLine.replace(urlRegex, '<a href="$1" target="_blank" style="color:#1a73e8;text-decoration:underline;word-break:break-all;">$1</a>');
+                            
+                            return '<div>' + formattedLine + '</div>';
+                        })
+                        .join('');
+                }
 
                 function formatBotMessage(message) {
                     console.log('Formatting bot message:', message);
@@ -3052,20 +3122,10 @@
                     return result;
                 }
 
-                function formatTextWithBold(text) {
-                    return text
-                        .split('\\n')
-                        .map(line => {
-                            if (!line.trim()) return '';
-                            
-                            // First escape HTML, then replace **text** with <strong>text</strong>
-                            let formattedLine = escapeHtml(line);
-                            formattedLine = formattedLine.replace(/\\*\\*(.+?)\\*\\*/g, '<strong>$1</strong>');
-                            
-                            return '<div>' + formattedLine + '</div>';
-                        })
-                        .join('');
-                }
+
+
+
+
                 
                 
                 
@@ -4627,12 +4687,54 @@
                                         </div>\`;
 
 
+
+                                console.log('rawMessage:', rawMessage);
+
+                                if (rawMessage && rawMessage.trimStart().indexOf('<img') === 0) {
+                                    const tempDiv = document.createElement('div');
+                                    tempDiv.innerHTML = rawMessage;
+                                    const imgEl = tempDiv.querySelector('img');
+                                    const imgSrc = imgEl ? imgEl.src : '';
+
+                                    console.log('Image detected, src:', imgSrc);
+
+                                    // ✅ Create image element directly instead of HTML string
+                                    formatedBotMessage = '<div style="padding:4px 0; cursor:zoom-in;" id="n8n-clickable-image"><img id="n8n-bot-img" style="max-width:100%;border-radius:10px;display:block;" /></div>';
+
+                                    // Set src AFTER innerHTML is set via setTimeout
+                                    setTimeout(() => {
+                                        const imgElement = botMessageDiv.querySelector('#n8n-bot-img');
+                                        if (imgElement) {
+                                            imgElement.src = imgSrc; // ✅ set src directly on DOM element
+                                            imgElement.onerror = () => {
+                                                console.error('Image failed to load:', imgSrc);
+                                                imgElement.alt = 'Image could not be loaded';
+                                            };
+                                            imgElement.onload = () => {
+                                                console.log('Image loaded successfully!');
+                                                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                                            };
+                                        }
+
+                                        const clickableImg = botMessageDiv.querySelector('#n8n-clickable-image');
+                                        if (clickableImg && imgSrc) {
+                                            clickableImg.addEventListener('click', () => {
+                                                showImagePopup(imgSrc);
+                                            });
+                                        }
+                                    }, 0);
+
+                                } else {
+                                    formatedBotMessage = formatBotMessage(rawMessage);
+                                }
+
+
                                 botMessageDiv.innerHTML = \`
                                     <div class="n8n-bot-message-container">
                                     
                                         <div class="n8n-message-bubble">
                                             <div class="n8n-avatar n8n-bot-avatar"></div>                     
-                                            <div class="n8n-message-content">\${formatBotMessage(rawMessage)}</div>
+                                            <div class="n8n-message-content">\${formatedBotMessage}</div>
                                             <div class="n8n-message-content1" style="position: absolute; top: -20px; right: 10px; font-size: 10px; color: #666; order: 1;display: flex;align-items: center;left: 0;"                             >
                                             <div class='n8n-message-bot-who'>Aarya</div> \${timeWithDate}
                                             </div>
@@ -4897,7 +4999,7 @@
                                 };
 
                                 // Get formatted text
-                                const formated_text = formatBotMessage(rawMessage);
+                                // const formated_text = formatBotMessage(rawMessage);
 
 
                                 // Extract msg_id from response (same as the original message)
@@ -4944,7 +5046,100 @@
                         
                         
                         
-                        
+                        function showImagePopup(imgSrc) {
+                            if (window.top !== window.self) {
+                                try {
+                                    createImagePopupInWindow(window.top, imgSrc);
+                                    return;
+                                } catch (e) {
+                                    console.warn("Parent window access blocked, falling back to iframe");
+                                }
+                            }
+                            createImagePopupInWindow(window, imgSrc);
+                        }
+
+                        function createImagePopupInWindow(targetWindow, imgSrc) {
+                            // Remove existing popup if any
+                            const existingPopup = targetWindow.document.querySelector('.n8n-image-full-popup');
+                            if (existingPopup) existingPopup.remove();
+
+                            const popup = targetWindow.document.createElement('div');
+                            popup.className = 'n8n-image-full-popup';
+                            popup.innerHTML = 
+                                '<div class="n8n-image-popup-content">' +
+                                    '<button class="n8n-image-popup-close">&times;</button>' +
+                                    '<img src="' + imgSrc + '" style="max-width:100%;max-height:85vh;border-radius:10px;display:block;margin:auto;" />' +
+                                '</div>';
+
+                            targetWindow.document.body.appendChild(popup);
+                            targetWindow.document.body.style.overflow = 'hidden';
+
+                            // Add styles
+                            const styleId = 'n8n-image-popup-styles';
+                            if (!targetWindow.document.getElementById(styleId)) {
+                                const style = targetWindow.document.createElement('style');
+                                style.id = styleId;
+                                style.textContent = 
+                                    '.n8n-image-full-popup {' +
+                                        'position: fixed;' +
+                                        'top: 0; left: 0;' +
+                                        'width: 100%; height: 100%;' +
+                                        'background: rgba(0,0,0,0.85);' +
+                                        'display: flex;' +
+                                        'justify-content: center;' +
+                                        'align-items: center;' +
+                                        'z-index: 9999;' +
+                                        'cursor: zoom-out;' +
+                                    '}' +
+                                    '.n8n-image-popup-content {' +
+                                        'position: relative;' +
+                                        'padding: 20px;' +
+                                        'display: flex;' +
+                                        'align-items: center;' +
+                                        'justify-content: center;' +
+                                    '}' +
+                                    '.n8n-image-popup-close {' +
+                                        'position: fixed;' +
+                                        'top: 16px; right: 20px;' +
+                                        'background: rgba(255,255,255,0.15);' +
+                                        'border: none;' +
+                                        'color: #fff;' +
+                                        'font-size: 28px;' +
+                                        'width: 40px; height: 40px;' +
+                                        'border-radius: 50%;' +
+                                        'cursor: pointer;' +
+                                        'display: flex;' +
+                                        'align-items: center;' +
+                                        'justify-content: center;' +
+                                        'line-height: 1;' +
+                                    '}' +
+                                    '.n8n-image-popup-close:hover { background: rgba(255,255,255,0.3); }';
+                                targetWindow.document.head.appendChild(style);
+                            }
+
+                            // Close on X button
+                            popup.querySelector('.n8n-image-popup-close').addEventListener('click', () => {
+                                popup.remove();
+                                targetWindow.document.body.style.overflow = '';
+                            });
+
+                            // Close on background click
+                            popup.addEventListener('click', (e) => {
+                                if (e.target === popup) {
+                                    popup.remove();
+                                    targetWindow.document.body.style.overflow = '';
+                                }
+                            });
+
+                            // Close on Escape key
+                            targetWindow.document.addEventListener('keydown', function handler(e) {
+                                if (e.key === 'Escape') {
+                                    popup.remove();
+                                    targetWindow.document.body.style.overflow = '';
+                                    targetWindow.document.removeEventListener('keydown', handler);
+                                }
+                            });
+                        }
                         
                         
                         function showTablePopup(tableData) {
@@ -5472,12 +5667,6 @@
 
 
 
-
-                
-
-
-
-
             function refreshChat() {
                 messagesContainer.innerHTML = '';
                 textarea.value = '';
@@ -5577,17 +5766,6 @@
                     renderFilePreviews();
                 }
             });
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -5948,194 +6126,202 @@
 
 
 
+let toggleButton = null;
 
+if (isEmbedded) {
+    chatIframe.classList.add('open');
+}
+
+if (!isEmbedded) {
     // Create toggle button
-    const toggleButton = document.createElement('button');
+    toggleButton = document.createElement('button');
     toggleButton.className = `chat-toggle${config.style.position === 'left' ? ' position-left' : ''}`;
     toggleButton.innerHTML =
         `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 70 70" preserveAspectRatio="xMidYMid meet">
-        <path d="M0 0 C9.88869366 5.81586346 16.18371269 13.07946401 19.23828125 24.31640625 C20.38735482 37.08982869 18.61354015 47.16824221 10.296875 57.2734375 C3.21022892 64.30629499 -5.61611128 67.71862775 -15.51171875 67.69140625 C-26.47606606 67.63253223 -34.98655606 64.15103481 -42.76171875 56.31640625 C-50.24991451 46.1985229 -51.71146652 36.5669503 -50.76171875 24.31640625 C-48.94192176 16.08918036 -44.07411436 8.50798906 -37.296875 3.4921875 C-26.19180869 -3.40464315 -12.20554198 -5.88737907 0 0 Z " fill="#FEFEFE" transform="translate(50.76171875,2.68359375)"/>
-        <path d="M0 0 C1.32 0 2.64 0 4 0 C4 2.31 4 4.62 4 7 C4.65226562 7.07476563 5.30453125 7.14953125 5.9765625 7.2265625 C12.62973359 8.22748204 15.80055993 9.69544413 20 15 C20 15.66 20 16.32 20 17 C21.32 17.66 22.64 18.32 24 19 C24 21.97 24 24.94 24 28 C23.195625 28.2475 22.39125 28.495 21.5625 28.75 C20.716875 29.1625 19.87125 29.575 19 30 C18.855625 30.61875 18.71125 31.2375 18.5625 31.875 C17.82539045 34.65963607 16.34991101 35.51720785 13.95703125 36.984375 C4.29230769 42 4.29230769 42 0 42 C0 40.35 0 38.7 0 37 C-0.515625 37.185625 -1.03125 37.37125 -1.5625 37.5625 C-5.06715697 38.19154099 -7.54853876 37.90827927 -11 37 C-13.625 34.1875 -13.625 34.1875 -16 31 C-16.928125 30.38125 -17.85625 29.7625 -18.8125 29.125 C-21.30086974 26.70772653 -21.35405417 26.18899169 -21.4375 22.875 C-21 19 -21 19 -19 17 C-18.01 17 -17.02 17 -16 17 C-15.773125 16.236875 -15.54625 15.47375 -15.3125 14.6875 C-13.66784972 11.31988277 -12.40460849 10.51315933 -9 9 C-6.67724823 8.59952556 -4.34260643 8.2602896 -2 8 C-1.01 7.67 -0.02 7.34 1 7 C0.34 5.02 -0.32 3.04 -1 1 C-0.67 0.67 -0.34 0.34 0 0 Z " fill="#CFD1D3" transform="translate(34,13)"/>
-        <path d="M0 0 C1.58748047 -0.0299707 1.58748047 -0.0299707 3.20703125 -0.06054688 C4.72876953 -0.05958008 4.72876953 -0.05958008 6.28125 -0.05859375 C7.6744043 -0.06137329 7.6744043 -0.06137329 9.09570312 -0.06420898 C11.5 0.4375 11.5 0.4375 13.3034668 2.30029297 C14.82430072 5.01675494 14.86729985 6.90170081 14.8125 10 C14.80863281 10.95003906 14.80476563 11.90007813 14.80078125 12.87890625 C14.5 15.4375 14.5 15.4375 12.5 18.4375 C8.4951979 19.880311 4.26936741 19.62140746 0.0625 19.625 C-0.68837891 19.63724609 -1.43925781 19.64949219 -2.21289062 19.66210938 C-6.39120456 19.67313395 -9.74381715 19.50014376 -13.5 17.4375 C-14.85281371 14.73187257 -14.70609362 12.51856345 -14.75 9.5 C-14.77578125 8.43910156 -14.8015625 7.37820312 -14.828125 6.28515625 C-14.5 3.4375 -14.5 3.4375 -13.30566406 1.78662109 C-9.60321762 -0.97970111 -4.44163789 -0.02975519 0 0 Z " fill="#071942" transform="translate(35.5,26.5625)"/>
-        <path d="M0 0 C1.61648437 0.04060547 1.61648437 0.04060547 3.265625 0.08203125 C4.08546875 0.11683594 4.9053125 0.15164062 5.75 0.1875 C5.75 1.5075 5.75 2.8275 5.75 4.1875 C4.90695313 4.30867188 4.06390625 4.42984375 3.1953125 4.5546875 C2.09960938 4.72226562 1.00390625 4.88984375 -0.125 5.0625 C-1.76082031 5.30613281 -1.76082031 5.30613281 -3.4296875 5.5546875 C-6.36932714 5.95006513 -6.36932714 5.95006513 -8.25 8.1875 C-8.49377883 11.54494112 -8.49377883 11.54494112 -8.375 15.3125 C-8.33375 17.58125 -8.2925 19.85 -8.25 22.1875 C-3.63 22.8475 0.99 23.5075 5.75 24.1875 C5.75 25.5075 5.75 26.8275 5.75 28.1875 C1.1102235 29.20598752 -2.63837828 29.44521501 -7.25 28.1875 C-9.875 25.375 -9.875 25.375 -12.25 22.1875 C-13.178125 21.56875 -14.10625 20.95 -15.0625 20.3125 C-17.55086974 17.89522653 -17.60405417 17.37649169 -17.6875 14.0625 C-17.25 10.1875 -17.25 10.1875 -15.25 8.1875 C-14.26 8.1875 -13.27 8.1875 -12.25 8.1875 C-12.0025 7.424375 -11.755 6.66125 -11.5 5.875 C-8.97012756 0.43577426 -5.73182886 -0.18690746 0 0 Z " fill="#E6E8EA" transform="translate(30.25,21.8125)"/>
-        <path d="M0 0 C0 2.31 0 4.62 0 7 C0.66 7 1.32 7 2 7 C2 4.69 2 2.38 2 0 C2.99 0.33 3.98 0.66 5 1 C5.3125 3.6875 5.3125 3.6875 5 7 C2.6875 9.875 2.6875 9.875 0 12 C-0.99 12 -1.98 12 -3 12 C-4.52491998 8.95016004 -4.23562548 6.3576631 -4 3 C-1.77419355 0 -1.77419355 0 0 0 Z " fill="#122B5D" transform="translate(25,32)"/>
-        <path d="M0 0 C0.66 0 1.32 0 2 0 C2 3.96 2 7.92 2 12 C0.68 11.34 -0.64 10.68 -2 10 C-2.1953125 3.9453125 -2.1953125 3.9453125 -2 2 C-1.34 1.34 -0.68 0.68 0 0 Z " fill="#46C2FC" transform="translate(15,30)"/>
-        <path d="M0 0 C3.53571429 0.53571429 3.53571429 0.53571429 5 2 C5.04092937 4.33297433 5.04241723 6.66705225 5 9 C4.34 9 3.68 9 3 9 C2.67 7.02 2.34 5.04 2 3 C1.67 3 1.34 3 1 3 C0.67 4.98 0.34 6.96 0 9 C-0.66 9 -1.32 9 -2 9 C-2.125 5.625 -2.125 5.625 -2 2 C-1.34 1.34 -0.68 0.68 0 0 Z " fill="#35BAF7" transform="translate(42,30)"/>
-        <path d="M0 0 C1.32 0 2.64 0 4 0 C3.95875 1.11375 3.9175 2.2275 3.875 3.375 C3.58878141 7.04366025 3.58878141 7.04366025 6 9 C3.36 9 0.72 9 -2 9 C-1.67 8.34 -1.34 7.68 -1 7 C-0.34 7 0.32 7 1 7 C0.34 5.02 -0.32 3.04 -1 1 C-0.67 0.67 -0.34 0.34 0 0 Z " fill="#3090DA" transform="translate(34,13)"/>
-        <path d="M0 0 C2.475 0.99 2.475 0.99 5 2 C5 4.31 5 6.62 5 9 C4.34 9 3.68 9 3 9 C2.87625 8.030625 2.7525 7.06125 2.625 6.0625 C2.315625 4.5465625 2.315625 4.5465625 2 3 C1.34 2.67 0.68 2.34 0 2 C0 4.31 0 6.62 0 9 C-0.66 9 -1.32 9 -2 9 C-2.125 5.625 -2.125 5.625 -2 2 C-1.34 1.34 -0.68 0.68 0 0 Z " fill="#35BBF8" transform="translate(27,30)"/>
-        <path d="M0 0 C1.98 0.99 1.98 0.99 4 2 C4 4.97 4 7.94 4 11 C3.01 11.33 2.02 11.66 1 12 C0.67 8.04 0.34 4.08 0 0 Z " fill="#3683E7" transform="translate(54,30)"/>
-        <path d="M0 0 C-2.07143201 4.03384128 -3.96615872 5.92856799 -8 8 C-8.36075949 3.55063291 -8.36075949 3.55063291 -6.8125 1.1875 C-4.44017475 -0.36678206 -2.77958655 -0.22537188 0 0 Z " fill="#152E62" transform="translate(29,27)"/>
-        <path d="M0 0 C0 2.64 0 5.28 0 8 C-1.98 8.99 -1.98 8.99 -4 10 C-4.36814024 3.49618902 -4.36814024 3.49618902 -2.5625 1.0625 C-1 0 -1 0 0 0 Z " fill="#06163E" transform="translate(25,32)"/>
-        <path d="M0 0 C1.9453125 -0.29296875 1.9453125 -0.29296875 4.125 -0.1875 C5.40375 -0.125625 6.6825 -0.06375 8 0 C6.68 1.65 5.36 3.3 4 5 C2.02 4.34 0.04 3.68 -2 3 C-1.34 2.01 -0.68 1.02 0 0 Z " fill="#071B44" transform="translate(29,27)"/>
-        <path d="M0 0 C1.32 0.33 2.64 0.66 4 1 C1.36 3.64 -1.28 6.28 -4 9 C-4.33 7.68 -4.66 6.36 -5 5 C-2.8125 2.1875 -2.8125 2.1875 0 0 Z " fill="#152E63" transform="translate(37,27)"/>
-        <path d="M0 0 C-2.6860286 1.79068573 -4.6626589 2.66055791 -7.6875 3.625 C-8.49574219 3.88539062 -9.30398437 4.14578125 -10.13671875 4.4140625 C-10.75160156 4.60742188 -11.36648437 4.80078125 -12 5 C-12 3.68 -12 2.36 -12 1 C-7.9472484 0.01751476 -4.16138263 -0.08159574 0 0 Z " fill="#BEC5CB" transform="translate(46,50)"/>
-        <path d="M0 0 C1.98 0 3.96 0 6 0 C5.6875 1.9375 5.6875 1.9375 5 4 C4.01 4.33 3.02 4.66 2 5 C1.01 4.01 0.02 3.02 -1 2 C-0.67 1.34 -0.34 0.68 0 0 Z " fill="#30A9E4" transform="translate(33,38)"/>
-    </svg>
+            <path d="M0 0 C9.88869366 5.81586346 16.18371269 13.07946401 19.23828125 24.31640625 C20.38735482 37.08982869 18.61354015 47.16824221 10.296875 57.2734375 C3.21022892 64.30629499 -5.61611128 67.71862775 -15.51171875 67.69140625 C-26.47606606 67.63253223 -34.98655606 64.15103481 -42.76171875 56.31640625 C-50.24991451 46.1985229 -51.71146652 36.5669503 -50.76171875 24.31640625 C-48.94192176 16.08918036 -44.07411436 8.50798906 -37.296875 3.4921875 C-26.19180869 -3.40464315 -12.20554198 -5.88737907 0 0 Z " fill="#FEFEFE" transform="translate(50.76171875,2.68359375)"/>
+            <path d="M0 0 C1.32 0 2.64 0 4 0 C4 2.31 4 4.62 4 7 C4.65226562 7.07476563 5.30453125 7.14953125 5.9765625 7.2265625 C12.62973359 8.22748204 15.80055993 9.69544413 20 15 C20 15.66 20 16.32 20 17 C21.32 17.66 22.64 18.32 24 19 C24 21.97 24 24.94 24 28 C23.195625 28.2475 22.39125 28.495 21.5625 28.75 C20.716875 29.1625 19.87125 29.575 19 30 C18.855625 30.61875 18.71125 31.2375 18.5625 31.875 C17.82539045 34.65963607 16.34991101 35.51720785 13.95703125 36.984375 C4.29230769 42 4.29230769 42 0 42 C0 40.35 0 38.7 0 37 C-0.515625 37.185625 -1.03125 37.37125 -1.5625 37.5625 C-5.06715697 38.19154099 -7.54853876 37.90827927 -11 37 C-13.625 34.1875 -13.625 34.1875 -16 31 C-16.928125 30.38125 -17.85625 29.7625 -18.8125 29.125 C-21.30086974 26.70772653 -21.35405417 26.18899169 -21.4375 22.875 C-21 19 -21 19 -19 17 C-18.01 17 -17.02 17 -16 17 C-15.773125 16.236875 -15.54625 15.47375 -15.3125 14.6875 C-13.66784972 11.31988277 -12.40460849 10.51315933 -9 9 C-6.67724823 8.59952556 -4.34260643 8.2602896 -2 8 C-1.01 7.67 -0.02 7.34 1 7 C0.34 5.02 -0.32 3.04 -1 1 C-0.67 0.67 -0.34 0.34 0 0 Z " fill="#CFD1D3" transform="translate(34,13)"/>
+            <path d="M0 0 C1.58748047 -0.0299707 1.58748047 -0.0299707 3.20703125 -0.06054688 C4.72876953 -0.05958008 4.72876953 -0.05958008 6.28125 -0.05859375 C7.6744043 -0.06137329 7.6744043 -0.06137329 9.09570312 -0.06420898 C11.5 0.4375 11.5 0.4375 13.3034668 2.30029297 C14.82430072 5.01675494 14.86729985 6.90170081 14.8125 10 C14.80863281 10.95003906 14.80476563 11.90007813 14.80078125 12.87890625 C14.5 15.4375 14.5 15.4375 12.5 18.4375 C8.4951979 19.880311 4.26936741 19.62140746 0.0625 19.625 C-0.68837891 19.63724609 -1.43925781 19.64949219 -2.21289062 19.66210938 C-6.39120456 19.67313395 -9.74381715 19.50014376 -13.5 17.4375 C-14.85281371 14.73187257 -14.70609362 12.51856345 -14.75 9.5 C-14.77578125 8.43910156 -14.8015625 7.37820312 -14.828125 6.28515625 C-14.5 3.4375 -14.5 3.4375 -13.30566406 1.78662109 C-9.60321762 -0.97970111 -4.44163789 -0.02975519 0 0 Z " fill="#071942" transform="translate(35.5,26.5625)"/>
+            <path d="M0 0 C1.61648437 0.04060547 1.61648437 0.04060547 3.265625 0.08203125 C4.08546875 0.11683594 4.9053125 0.15164062 5.75 0.1875 C5.75 1.5075 5.75 2.8275 5.75 4.1875 C4.90695313 4.30867188 4.06390625 4.42984375 3.1953125 4.5546875 C2.09960938 4.72226562 1.00390625 4.88984375 -0.125 5.0625 C-1.76082031 5.30613281 -1.76082031 5.30613281 -3.4296875 5.5546875 C-6.36932714 5.95006513 -6.36932714 5.95006513 -8.25 8.1875 C-8.49377883 11.54494112 -8.49377883 11.54494112 -8.375 15.3125 C-8.33375 17.58125 -8.2925 19.85 -8.25 22.1875 C-3.63 22.8475 0.99 23.5075 5.75 24.1875 C5.75 25.5075 5.75 26.8275 5.75 28.1875 C1.1102235 29.20598752 -2.63837828 29.44521501 -7.25 28.1875 C-9.875 25.375 -9.875 25.375 -12.25 22.1875 C-13.178125 21.56875 -14.10625 20.95 -15.0625 20.3125 C-17.55086974 17.89522653 -17.60405417 17.37649169 -17.6875 14.0625 C-17.25 10.1875 -17.25 10.1875 -15.25 8.1875 C-14.26 8.1875 -13.27 8.1875 -12.25 8.1875 C-12.0025 7.424375 -11.755 6.66125 -11.5 5.875 C-8.97012756 0.43577426 -5.73182886 -0.18690746 0 0 Z " fill="#E6E8EA" transform="translate(30.25,21.8125)"/>
+            <path d="M0 0 C0 2.31 0 4.62 0 7 C0.66 7 1.32 7 2 7 C2 4.69 2 2.38 2 0 C2.99 0.33 3.98 0.66 5 1 C5.3125 3.6875 5.3125 3.6875 5 7 C2.6875 9.875 2.6875 9.875 0 12 C-0.99 12 -1.98 12 -3 12 C-4.52491998 8.95016004 -4.23562548 6.3576631 -4 3 C-1.77419355 0 -1.77419355 0 0 0 Z " fill="#122B5D" transform="translate(25,32)"/>
+            <path d="M0 0 C0.66 0 1.32 0 2 0 C2 3.96 2 7.92 2 12 C0.68 11.34 -0.64 10.68 -2 10 C-2.1953125 3.9453125 -2.1953125 3.9453125 -2 2 C-1.34 1.34 -0.68 0.68 0 0 Z " fill="#46C2FC" transform="translate(15,30)"/>
+            <path d="M0 0 C3.53571429 0.53571429 3.53571429 0.53571429 5 2 C5.04092937 4.33297433 5.04241723 6.66705225 5 9 C4.34 9 3.68 9 3 9 C2.67 7.02 2.34 5.04 2 3 C1.67 3 1.34 3 1 3 C0.67 4.98 0.34 6.96 0 9 C-0.66 9 -1.32 9 -2 9 C-2.125 5.625 -2.125 5.625 -2 2 C-1.34 1.34 -0.68 0.68 0 0 Z " fill="#35BAF7" transform="translate(42,30)"/>
+            <path d="M0 0 C1.32 0 2.64 0 4 0 C3.95875 1.11375 3.9175 2.2275 3.875 3.375 C3.58878141 7.04366025 3.58878141 7.04366025 6 9 C3.36 9 0.72 9 -2 9 C-1.67 8.34 -1.34 7.68 -1 7 C-0.34 7 0.32 7 1 7 C0.34 5.02 -0.32 3.04 -1 1 C-0.67 0.67 -0.34 0.34 0 0 Z " fill="#3090DA" transform="translate(34,13)"/>
+            <path d="M0 0 C2.475 0.99 2.475 0.99 5 2 C5 4.31 5 6.62 5 9 C4.34 9 3.68 9 3 9 C2.87625 8.030625 2.7525 7.06125 2.625 6.0625 C2.315625 4.5465625 2.315625 4.5465625 2 3 C1.34 2.67 0.68 2.34 0 2 C0 4.31 0 6.62 0 9 C-0.66 9 -1.32 9 -2 9 C-2.125 5.625 -2.125 5.625 -2 2 C-1.34 1.34 -0.68 0.68 0 0 Z " fill="#35BBF8" transform="translate(27,30)"/>
+            <path d="M0 0 C1.98 0.99 1.98 0.99 4 2 C4 4.97 4 7.94 4 11 C3.01 11.33 2.02 11.66 1 12 C0.67 8.04 0.34 4.08 0 0 Z " fill="#3683E7" transform="translate(54,30)"/>
+            <path d="M0 0 C-2.07143201 4.03384128 -3.96615872 5.92856799 -8 8 C-8.36075949 3.55063291 -8.36075949 3.55063291 -6.8125 1.1875 C-4.44017475 -0.36678206 -2.77958655 -0.22537188 0 0 Z " fill="#152E62" transform="translate(29,27)"/>
+            <path d="M0 0 C0 2.64 0 5.28 0 8 C-1.98 8.99 -1.98 8.99 -4 10 C-4.36814024 3.49618902 -4.36814024 3.49618902 -2.5625 1.0625 C-1 0 -1 0 0 0 Z " fill="#06163E" transform="translate(25,32)"/>
+            <path d="M0 0 C1.9453125 -0.29296875 1.9453125 -0.29296875 4.125 -0.1875 C5.40375 -0.125625 6.6825 -0.06375 8 0 C6.68 1.65 5.36 3.3 4 5 C2.02 4.34 0.04 3.68 -2 3 C-1.34 2.01 -0.68 1.02 0 0 Z " fill="#071B44" transform="translate(29,27)"/>
+            <path d="M0 0 C1.32 0.33 2.64 0.66 4 1 C1.36 3.64 -1.28 6.28 -4 9 C-4.33 7.68 -4.66 6.36 -5 5 C-2.8125 2.1875 -2.8125 2.1875 0 0 Z " fill="#152E63" transform="translate(37,27)"/>
+            <path d="M0 0 C-2.6860286 1.79068573 -4.6626589 2.66055791 -7.6875 3.625 C-8.49574219 3.88539062 -9.30398437 4.14578125 -10.13671875 4.4140625 C-10.75160156 4.60742188 -11.36648437 4.80078125 -12 5 C-12 3.68 -12 2.36 -12 1 C-7.9472484 0.01751476 -4.16138263 -0.08159574 0 0 Z " fill="#BEC5CB" transform="translate(46,50)"/>
+            <path d="M0 0 C1.98 0 3.96 0 6 0 C5.6875 1.9375 5.6875 1.9375 5 4 C4.01 4.33 3.02 4.66 2 5 C1.01 4.01 0.02 3.02 -1 2 C-0.67 1.34 -0.34 0.68 0 0 Z " fill="#30A9E4" transform="translate(33,38)"/>
+        </svg>
+        
+        <div class="n8n-chatbot-tail"></div>`;
+}
+// Dragging state variables
+let isDragging = false;
+let startX, startY, initialX, initialY;
+let currentSide = 'right'; // Track current side
+
+// Make toggle button draggable
+function makeDraggable(element) {
+    let startTime;
     
-    <div class="n8n-chatbot-tail"></div>`;
-
-    // Dragging state variables
-    let isDragging = false;
-    let startX, startY, initialX, initialY;
-    let currentSide = 'right'; // Track current side
-
-    // Make toggle button draggable
-    function makeDraggable(element) {
-        let startTime;
-
-        // Mouse events
-        element.addEventListener('mousedown', startDrag);
-        document.addEventListener('mousemove', drag);
-        document.addEventListener('mouseup', endDrag);
-
-        // Touch events for mobile
-        element.addEventListener('touchstart', startDrag, { passive: false });
-        document.addEventListener('touchmove', drag, { passive: false });
-        document.addEventListener('touchend', endDrag);
-
-        function startDrag(e) {
-            e.preventDefault();
-            isDragging = true;
-            startTime = Date.now();
-
-            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-
-            startX = clientX;
-            startY = clientY;
-
-            const rect = element.getBoundingClientRect();
-            initialX = rect.left;
-            initialY = rect.top;
-
-            element.style.transition = 'none';
-            element.style.cursor = 'grabbing';
-
-            // Add dragging class for visual feedback
-            element.classList.add('dragging');
-        }
-
-        function drag(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-
-            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-
-            const deltaX = clientX - startX;
-            const deltaY = clientY - startY;
-
-            let newX = initialX + deltaX;
-            let newY = initialY + deltaY;
-
-            // Constrain to viewport bounds
-            const maxX = window.innerWidth - element.offsetWidth;
-            const maxY = window.innerHeight - element.offsetHeight;
-
-            newX = Math.max(0, Math.min(newX, maxX));
-            newY = Math.max(0, Math.min(newY, maxY));
-
-            element.style.left = newX + 'px';
-            element.style.top = newY + 'px';
-            element.style.right = 'auto';
-            element.style.bottom = 'auto';
-        }
-
-        function endDrag(e) {
-            if (!isDragging) return;
-
-            isDragging = false;
-            element.style.cursor = 'pointer';
-            element.classList.remove('dragging');
-
-            const dragTime = Date.now() - startTime;
-            const dragDistance = Math.sqrt(
-                Math.pow(e.type.includes('touch') ?
-                    (e.changedTouches[0].clientX - startX) :
-                    (e.clientX - startX), 2) +
-                Math.pow(e.type.includes('touch') ?
-                    (e.changedTouches[0].clientY - startY) :
-                    (e.clientY - startY), 2)
-            );
-
-            // If it was a quick click/tap with minimal movement, treat as toggle
-            if (dragTime < 200 && dragDistance < 10) {
-                handleToggleClick();
-                return;
-            }
-
-            // Snap to side logic
-            snapToSide();
-        }
+    // Mouse events
+    element.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', endDrag);
+    
+    // Touch events for mobile
+    element.addEventListener('touchstart', startDrag, { passive: false });
+    document.addEventListener('touchmove', drag, { passive: false });
+    document.addEventListener('touchend', endDrag);
+    
+    function startDrag(e) {
+        e.preventDefault();
+        isDragging = true;
+        startTime = Date.now();
+        
+        const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+        
+        startX = clientX;
+        startY = clientY;
+        
+        const rect = element.getBoundingClientRect();
+        initialX = rect.left;
+        initialY = rect.top;
+        
+        element.style.transition = 'none';
+        element.style.cursor = 'grabbing';
+        
+        // Add dragging class for visual feedback
+        element.classList.add('dragging');
     }
-
-    function snapToSide() {
-        const rect = toggleButton.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const screenCenterX = window.innerWidth / 2;
-
-        toggleButton.style.transition = 'all 0.3s ease-out';
-
-        if (centerX < screenCenterX) {
-            // Snap to left bottom position
-            toggleButton.style.left = '20px';
-            toggleButton.style.right = 'auto';
-            toggleButton.style.bottom = '30px';
-            toggleButton.style.top = 'auto';
-            toggleButton.classList.add('position-left');
-            currentSide = 'left';
-        } else {
-            // Snap to right bottom position
-            toggleButton.style.right = '20px';
-            toggleButton.style.left = 'auto';
-            toggleButton.style.bottom = '30px';
-            toggleButton.style.top = 'auto';
-            toggleButton.classList.remove('position-left');
-            currentSide = 'right';
-        }
-
-        // Reset transition after animation
-        setTimeout(() => {
-            toggleButton.style.transition = 'transform 0.3s';
-        }, 300);
+    
+    function drag(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+        
+        const deltaX = clientX - startX;
+        const deltaY = clientY - startY;
+        
+        let newX = initialX + deltaX;
+        let newY = initialY + deltaY;
+        
+        // Constrain to viewport bounds
+        const maxX = window.innerWidth - element.offsetWidth;
+        const maxY = window.innerHeight - element.offsetHeight;
+        
+        newX = Math.max(0, Math.min(newX, maxX));
+        newY = Math.max(0, Math.min(newY, maxY));
+        
+        element.style.left = newX + 'px';
+        element.style.top = newY + 'px';
+        element.style.right = 'auto';
+        element.style.bottom = 'auto';
     }
+    
+    function endDrag(e) {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        element.style.cursor = 'pointer';
+        element.classList.remove('dragging');
+        
+        const dragTime = Date.now() - startTime;
+        const dragDistance = Math.sqrt(
+            Math.pow(e.type.includes('touch') ? 
+                (e.changedTouches[0].clientX - startX) : 
+                (e.clientX - startX), 2) +
+            Math.pow(e.type.includes('touch') ? 
+                (e.changedTouches[0].clientY - startY) : 
+                (e.clientY - startY), 2)
+        );
+        
+        // If it was a quick click/tap with minimal movement, treat as toggle
+        if (dragTime < 200 && dragDistance < 10) {
+            handleToggleClick();
+            return;
+        }
+        
+        // Snap to side logic
+        snapToSide();
+    }
+}
 
-    function handleToggleClick() {
-        const wasOpen = chatIframe.classList.contains('open');
-        chatIframe.classList.toggle('open');
+function snapToSide() {
+    const rect = toggleButton.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const screenCenterX = window.innerWidth / 2;
+    
+    toggleButton.style.transition = 'all 0.3s ease-out';
+    
+    if (centerX < screenCenterX) {
+        // Snap to left bottom position
+        toggleButton.style.left = '20px';
+        toggleButton.style.right = 'auto';
+        toggleButton.style.bottom = '30px';
+        toggleButton.style.top = 'auto';
+        toggleButton.classList.add('position-left');
+        currentSide = 'left';
+    } else {
+        // Snap to right bottom position
+        toggleButton.style.right = '20px';
+        toggleButton.style.left = 'auto';
+        toggleButton.style.bottom = '30px';
+        toggleButton.style.top = 'auto';
+        toggleButton.classList.remove('position-left');
+        currentSide = 'right';
+    }
+    
+    // Reset transition after animation
+    setTimeout(() => {
+        toggleButton.style.transition = 'transform 0.3s';
+    }, 300);
+}
 
-        // Only start conversation if opening and not already initialized
-        if (!wasOpen && chatIframe.classList.contains('open')) {
-            toggleButton.style.display = 'none'; // Hide toggle button when chat is open
-            // Ensure iframe is initialized before sending message
-            if (!iframeInitialized) {
+function handleToggleClick() {
+    const wasOpen = chatIframe.classList.contains('open');
+    chatIframe.classList.toggle('open');
+    
+    // Only start conversation if opening and not already initialized
+    if (!wasOpen && chatIframe.classList.contains('open')) {
+        if (toggleButton) {
+            toggleButton.style.display = 'none';
+        } // Hide toggle button when chat is open
+        // Ensure iframe is initialized before sending message
+        if (!iframeInitialized) {
+            setTimeout(() => {
+                initializeIframe();
                 setTimeout(() => {
-                    initializeIframe();
-                    setTimeout(() => {
-                        sendMessageToIframe({ type: 'startConversation' });
-                        if (!chatInitialized) {
-                            chatInitialized = true;
-                        }
-                    }, 300);
-                }, 50);
-            } else {
-                setTimeout(() => {
-                    sendMessageToIframe({ type: 'startConversation' });
+                    sendMessageToIframe({type: 'startConversation'});
                     if (!chatInitialized) {
                         chatInitialized = true;
                     }
-                }, 100);
-            }
+                }, 300);
+            }, 50);
+        } else {
+            setTimeout(() => {
+                sendMessageToIframe({type: 'startConversation'});
+                if (!chatInitialized) {
+                    chatInitialized = true;
+                }
+            }, 100);
         }
     }
+}
 
-    // Initialize draggable functionality
-    makeDraggable(toggleButton);
 
-    // Handle window resize to reposition button if needed
+
+if (!isEmbedded && toggleButton) {
     window.addEventListener('resize', () => {
-        // Reposition button on resize to maintain side preference at bottom
         setTimeout(() => {
+            if (!toggleButton) return; // ✅ extra safety
+
             if (currentSide === 'left') {
                 toggleButton.style.left = '20px';
                 toggleButton.style.right = 'auto';
@@ -6149,152 +6335,316 @@
             }
         }, 100);
     });
+}
 
-    // Set initial position to bottom-right (or bottom-left based on config)
-    function setInitialPosition() {
-        if (config.style.position === 'left') {
-            toggleButton.style.left = '20px';
-            toggleButton.style.right = 'auto';
-            toggleButton.style.bottom = '30px';
-            toggleButton.style.top = 'auto';
-            currentSide = 'left';
-        } else {
-            toggleButton.style.right = '20px';
-            toggleButton.style.left = 'auto';
-            toggleButton.style.bottom = '30px';
-            toggleButton.style.top = 'auto';
-            currentSide = 'right';
-        }
+console.log("isEmbedded:", isEmbedded);
+console.log("toggleButton:", toggleButton);
+
+// Set initial position to bottom-right (or bottom-left based on config)
+function setInitialPosition() {
+    if (config.style.position === 'left') {
+        toggleButton.style.left = '20px';
+        toggleButton.style.right = 'auto';
+        toggleButton.style.bottom = '30px';
+        toggleButton.style.top = 'auto';
+        currentSide = 'left';
+    } else {
+        toggleButton.style.right = '20px';
+        toggleButton.style.left = 'auto';
+        toggleButton.style.bottom = '30px';
+        toggleButton.style.top = 'auto';
+        currentSide = 'right';
     }
+}
 
-    // Call initial positioning
+if (!isEmbedded && toggleButton) {
+    makeDraggable(toggleButton);
     setInitialPosition();
-
-    widgetContainer.appendChild(chatIframe);
     widgetContainer.appendChild(toggleButton);
+}
+
+widgetContainer.appendChild(chatIframe);
+
+if (isEmbedded) {
+    const container = document.querySelector('.aarya-container');
+    if (container) {
+        container.appendChild(widgetContainer);
+    } else {
+        document.body.appendChild(widgetContainer);
+    }
+} else {
     document.body.appendChild(widgetContainer);
+}
 
-    // Initialize iframe content only once
-    function initializeIframe() {
-        if (!iframeInitialized) {
-            const iframeDoc = chatIframe.contentDocument || chatIframe.contentWindow.document;
-            iframeDoc.open();
-            iframeDoc.write(iframeContent);
-            iframeDoc.close();
-            iframeInitialized = true;
 
-            // Wait for iframe to be fully loaded before marking as ready
-            chatIframe.onload = () => {
-                toggleButton.style.display = ''; // Show toggle button when iframe is ready
-            };
+if (isEmbedded) {
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .n8n-chat-widget .chat-iframe.embedded-mode,
+        .n8n-chat-widget .chat-iframe.embedded-mode.open {
+            position: absolute !important;
+            inset: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            bottom: auto !important;
+            right: auto !important;
+            display: block !important;
+            background: transparent !important;
         }
-    }
 
-    // Function to safely send message to iframe
-    function sendMessageToIframe(message, retries = 3) {
-        if (chatIframe.contentWindow && iframeInitialized) {
-            try {
-                chatIframe.contentWindow.postMessage(message, '*');
-            } catch (error) {
-                console.error('Error sending message to iframe:', error);
-                if (retries > 0) {
-                    setTimeout(() => {
-                        sendMessageToIframe(message, retries - 1);
-                    }, 200);
+        .n8n-chat-widget {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .aarya-container {
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+if (isEmbedded) {
+    widgetContainer.style.position = 'relative';
+    widgetContainer.style.width = '100%';
+    widgetContainer.style.height = '100%';
+    widgetContainer.style.margin = '0';
+    widgetContainer.style.padding = '0';
+}
+
+
+// Initialize iframe content only once
+function initializeIframe() {
+    if (!iframeInitialized) {
+        const iframeDoc = chatIframe.contentDocument || chatIframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(iframeContent);
+        iframeDoc.close();
+        iframeInitialized = true;
+        if (isEmbedded) {
+            const style = iframeDoc.createElement('style');
+            style.innerHTML = `
+                /* ❌ Remove unwanted buttons */
+                .n8n-fullscreen-button,
+                .n8n-toggle-label,
+                .n8n-toggle-slider,
+                .n8n-close-button {
+                    display: none !important;
                 }
+
+                /* 🔥 MOST IMPORTANT FIX */
+                .n8n-chat-container {
+                    width: 100% !important;
+                    height: 100% !important;
+                    border-radius: 0 !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    box-shadow: none !important;
+                }
+
+                /* Remove outer spacing */
+                body {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    overflow: hidden !important;
+                    background: #ffffff !important;
+                }
+
+                /* Ensure messages area fills properly */
+                .n8n-chat-messages {
+                    flex: 1 !important;
+                }
+
+                /* Fix bottom input spacing */
+                .n8n-chat-input-wrapper {
+                    padding: 10px !important;
+                    margin: 0 !important;
+                }
+                html, body {
+                    height: 100% !important;
+                }
+            `;
+            iframeDoc.head.appendChild(style);
+
+        }
+        // Wait for iframe to be fully loaded before marking as ready
+        chatIframe.onload = () => {
+            if (toggleButton) {
+                toggleButton.style.display = '';
+            } // Show toggle button when iframe is ready
+        };
+    }
+}
+
+if (isEmbedded) {
+    chatIframe.classList.add('open');
+
+    chatIframe.style.display = 'block'; // 🔥 use block (not flex)
+    chatIframe.style.position = 'absolute'; // 🔥 key fix
+    chatIframe.style.top = '0';
+    chatIframe.style.left = '0';
+    chatIframe.style.width = '100%';
+    chatIframe.style.height = '100%';
+
+    chatIframe.style.margin = '0';
+    chatIframe.style.padding = '0';
+
+    chatIframe.style.border = 'none';
+    chatIframe.style.borderRadius = '0';
+    chatIframe.style.boxShadow = 'none';
+
+    // 🚨 THIS WAS MISSING
+    setTimeout(() => {
+        initializeIframe();
+
+        setTimeout(() => {
+            sendMessageToIframe({ type: 'startConversation' });
+            chatInitialized = true;
+        }, 300);
+    }, 50);
+}
+
+if (isEmbedded) {
+    setTimeout(() => {
+        initializeIframe();
+
+        setTimeout(() => {
+            sendMessageToIframe({ type: 'startConversation' });
+            chatInitialized = true;
+        }, 300);
+    }, 50);
+}
+
+// Function to safely send message to iframe
+function sendMessageToIframe(message, retries = 3) {
+    if (chatIframe.contentWindow && iframeInitialized) {
+        try {
+            chatIframe.contentWindow.postMessage(message, '*');
+        } catch (error) {
+            console.error('Error sending message to iframe:', error);
+            if (retries > 0) {
+                setTimeout(() => {
+                    sendMessageToIframe(message, retries - 1);
+                }, 200);
             }
-        } else if (retries > 0) {
-            setTimeout(() => {
-                sendMessageToIframe(message, retries - 1);
-            }, 200);
+        }
+    } else if (retries > 0) {
+        setTimeout(() => {
+            sendMessageToIframe(message, retries - 1);
+        }, 200);
+    }
+}
+
+// Listen for messages from iframe (including close button clicks)
+window.addEventListener('message', (event) => {
+    if (event.data.type === 'closeChat') {
+        chatIframe.classList.remove('open');
+        if (toggleButton) {
+            toggleButton.style.display = '';
         }
     }
+});
 
-    // Listen for messages from iframe (including close button clicks)
-    window.addEventListener('message', (event) => {
-        if (event.data.type === 'closeChat') {
-            chatIframe.classList.remove('open');
-            toggleButton.style.display = ''; // Show toggle button again
+
+
+
+
+// Global state variables
+let isFullscreen = false;
+let originalStyles = {};
+let overlay = null;
+let fullscreenButton = null; 
+
+
+
+// Listen for messages from iframe (including close button clicks)
+window.addEventListener('message', (event) => {
+    if (event.data.type === 'fullscreenButton') {
+        // console.log('Received fullscreenButton message from iframe');
+        // console.log('Current fullscreen state:', isFullscreen);
+        
+        // Try multiple ways to find the iframe
+        let iframe = window.chatIframeRef || 
+                    document.getElementById('chat-iframe') || 
+                    document.querySelector('.chat-iframe') ||
+                    document.querySelector('iframe[src*="data:text/html"]') ||
+                    document.querySelector('iframe');
+
+
+        
+
+        // Make sure we have the fullscreen button reference
+        if (!fullscreenButton) {
+            fullscreenButton = document.getElementById('fullscreen-btn') || 
+                              document.querySelector('.n8n-fullscreen-button') ||
+                              document.querySelector('[title="Toggle Fullscreen"]');
         }
-    });
 
+        
 
+        // console.log('Toggling fullscreen mode. Will be:', !isFullscreen);
+        // console.log('iframe element:', iframe);
 
+        if (!isFullscreen) {
+            // ENTER FULLSCREEN MODE
+            // console.log('Entering fullscreen mode');
+            
+            // Save original styles before changing them
+            originalStyles = {
+                width: iframe.style.width || '350px',
+                height: iframe.style.height || '500px',
+                left: iframe.style.left || '',
+                top: iframe.style.top || '',
+                right: iframe.style.right || '20px',
+                bottom: iframe.style.bottom || '20px',
+                position: iframe.style.position || 'fixed',
+                borderRadius: iframe.style.borderRadius || '20px',
+                boxShadow: iframe.style.boxShadow || '0 8px 32px rgba(133, 79, 255, 0.15)',
+                zIndex: iframe.style.zIndex || 'auto'
+            };
 
+            // Apply full-screen styles to the iframe element
+            iframe.style.width = '100vw';
+            iframe.style.height = '100vh';
+            iframe.style.left = '0';
+            iframe.style.top = '0';
+            iframe.style.right = 'auto';
+            iframe.style.bottom = 'auto';
+            iframe.style.position = 'fixed';
+            iframe.style.borderRadius = '20px'; // Keep border radius in fullscreen
+            iframe.style.boxShadow = 'none';
+            iframe.style.zIndex = '9999';
 
-    // Global state variables
-    let isFullscreen = false;
-    let originalStyles = {};
-    let overlay = null;
-    let fullscreenButton = null;
-
-
-
-    // Listen for messages from iframe (including close button clicks)
-    window.addEventListener('message', (event) => {
-        if (event.data.type === 'fullscreenButton') {
-            // console.log('Received fullscreenButton message from iframe');
-            // console.log('Current fullscreen state:', isFullscreen);
-
-            // Try multiple ways to find the iframe
-            let iframe = window.chatIframeRef ||
-                document.getElementById('chat-iframe') ||
-                document.querySelector('.chat-iframe') ||
-                document.querySelector('iframe[src*="data:text/html"]') ||
-                document.querySelector('iframe');
-
-
-
-
-            // Make sure we have the fullscreen button reference
-            if (!fullscreenButton) {
-                fullscreenButton = document.getElementById('fullscreen-btn') ||
-                    document.querySelector('.n8n-fullscreen-button') ||
-                    document.querySelector('[title="Toggle Fullscreen"]');
-            }
-
-
-
-            // console.log('Toggling fullscreen mode. Will be:', !isFullscreen);
-            // console.log('iframe element:', iframe);
-
-            if (!isFullscreen) {
-                // ENTER FULLSCREEN MODE
-                // console.log('Entering fullscreen mode');
-
-                // Save original styles before changing them
-                originalStyles = {
-                    width: iframe.style.width || '350px',
-                    height: iframe.style.height || '500px',
-                    left: iframe.style.left || '',
-                    top: iframe.style.top || '',
-                    right: iframe.style.right || '20px',
-                    bottom: iframe.style.bottom || '20px',
-                    position: iframe.style.position || 'fixed',
-                    borderRadius: iframe.style.borderRadius || '20px',
-                    boxShadow: iframe.style.boxShadow || '0 8px 32px rgba(133, 79, 255, 0.15)',
-                    zIndex: iframe.style.zIndex || 'auto'
-                };
-
-                // Apply full-screen styles to the iframe element
-                iframe.style.width = '100vw';
-                iframe.style.height = '100vh';
-                iframe.style.left = '0';
-                iframe.style.top = '0';
-                iframe.style.right = 'auto';
-                iframe.style.bottom = 'auto';
-                iframe.style.position = 'fixed';
-                iframe.style.borderRadius = '20px'; // Keep border radius in fullscreen
-                iframe.style.boxShadow = 'none';
-                iframe.style.zIndex = '9999';
-
-                // Add fullscreen class
-                iframe.classList.add('chat-iframe-fullscreen');
-
-                // Create and add overlay (optional background)
-                overlay = document.createElement('div');
-                overlay.className = 'fullscreen-overlay';
-                overlay.style.cssText = `
+            // Add fullscreen class
+            iframe.classList.add('chat-iframe-fullscreen');
+            
+            // Create and add overlay (optional background)
+            overlay = document.createElement('div');
+            overlay.className = 'fullscreen-overlay';
+            overlay.style.cssText = `
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -6304,179 +6654,179 @@
                 z-index: 9998;
                 pointer-events: none;
             `;
-                document.body.appendChild(overlay);
+            document.body.appendChild(overlay);
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
 
-                // Prevent body scroll
-                document.body.style.overflow = 'hidden';
-
-                // console.log('Fullscreen overlay added');
-                // console.log('Original iframe styles saved:', fullscreenButton);
-
-                // Update button icon to "minimize" if button exists
-                if (fullscreenButton) {
-                    fullscreenButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>`;
-                    fullscreenButton.title = 'Exit Fullscreen';
-                    fullscreenButton.style.right = '47%';
-                }
-
-                // Update state
-                isFullscreen = true;
+            // console.log('Fullscreen overlay added');
+            // console.log('Original iframe styles saved:', fullscreenButton);
+            
+            // Update button icon to "minimize" if button exists
+            if (fullscreenButton) {
+                fullscreenButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>`;
+                fullscreenButton.title = 'Exit Fullscreen';
+                fullscreenButton.style.right = '47%';
             }
-            else {
-                // EXIT FULLSCREEN MODE
-                // console.log('Exiting fullscreen mode');
-                // console.log('Original iframe styles to restore:', originalStyles);
-                // Restore original styles
-                iframe.style.width = originalStyles.width;
-                iframe.style.height = originalStyles.height;
-                iframe.style.left = originalStyles.left;
-                iframe.style.top = originalStyles.top;
-                iframe.style.right = originalStyles.right;
-                iframe.style.bottom = originalStyles.bottom;
-                iframe.style.position = originalStyles.position;
-                iframe.style.borderRadius = originalStyles.borderRadius;
-                iframe.style.boxShadow = originalStyles.boxShadow;
-                iframe.style.zIndex = '9999'; // Ensure it's above overlay during transition
+            
+            // Update state
+            isFullscreen = true;
+        }
+        else {
+            // EXIT FULLSCREEN MODE
+            // console.log('Exiting fullscreen mode');
+            // console.log('Original iframe styles to restore:', originalStyles);
+            // Restore original styles
+            iframe.style.width = originalStyles.width;
+            iframe.style.height = originalStyles.height;
+            iframe.style.left = originalStyles.left;
+            iframe.style.top = originalStyles.top;
+            iframe.style.right = originalStyles.right;
+            iframe.style.bottom = originalStyles.bottom;
+            iframe.style.position = originalStyles.position;
+            iframe.style.borderRadius = originalStyles.borderRadius;
+            iframe.style.boxShadow = originalStyles.boxShadow;
+            iframe.style.zIndex = '9999'; // Ensure it's above overlay during transition
 
-                // Remove fullscreen class
-                iframe.classList.remove('chat-iframe-fullscreen');
-
-                // Remove overlay if it exists
-                if (overlay && overlay.parentNode) {
-                    overlay.parentNode.removeChild(overlay);
-                    overlay = null;
-                }
-
-                // Restore body scroll
-                document.body.style.overflow = '';
-
-                // Restore fullscreen button icon if button exists
-                if (fullscreenButton) {
-                    fullscreenButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>`;
-                    fullscreenButton.title = 'Enter Fullscreen';
-                    fullscreenButton.style.right = '42%';
-                }
-
-                // Update state
-                isFullscreen = false;
+            // Remove fullscreen class
+            iframe.classList.remove('chat-iframe-fullscreen');
+            
+            // Remove overlay if it exists
+            if (overlay && overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+                overlay = null;
             }
+            
+            // Restore body scroll
+            document.body.style.overflow = '';
 
-            // console.log('Fullscreen state after toggle:', isFullscreen);
+            // Restore fullscreen button icon if button exists
+            if (fullscreenButton) {
+                fullscreenButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>`;
+                fullscreenButton.title = 'Enter Fullscreen';
+                fullscreenButton.style.right = '42%';
+            }
+            
+            // Update state
+            isFullscreen = false;
         }
-    });
-
-
-
-
-    // toggleButton.addEventListener('click', () => {
-    //     chatContainer.classList.toggle('n8n-open');
-
-    //     if (chatContainer.classList.contains('n8n-open') && !currentSessionId) {
-    //         startNewConversation();
-    //     }
-    // });
-
-
-
-
-
-
-
-
-    // PARENT SCRIPT - Simplified and optimized for smoothness
-
-    let isResizing = false;
-    let startWidth, startHeight, startLeft, startTop;
-    let currentClientX = 0, currentClientY = 0;
-
-    const MIN_WIDTH = 300;
-    const MIN_HEIGHT = 350;
-    const WINDOW_PADDING = 20;
-
-    // Optimized resize function without RAF wrapping
-    function performResize(clientX, clientY) {
-        const dx = clientX - startX;
-        const dy = clientY - startY;
-
-        let newWidth = Math.max(MIN_WIDTH, startWidth - dx);
-        let newHeight = Math.max(MIN_HEIGHT, startHeight - dy);
-
-        let newLeft = startLeft + (startWidth - newWidth);
-        let newTop = startTop + (startHeight - newHeight);
-
-        // Boundary calculations
-        const maxWidth = window.innerWidth - WINDOW_PADDING;
-        const maxHeight = window.innerHeight - WINDOW_PADDING;
-
-        newLeft = Math.max(WINDOW_PADDING, newLeft);
-        newTop = Math.max(WINDOW_PADDING, newTop);
-
-        if (newLeft + newWidth > maxWidth) {
-            newWidth = maxWidth - newLeft;
-            newWidth = Math.max(MIN_WIDTH, newWidth);
-        }
-
-        if (newTop + newHeight > maxHeight) {
-            newHeight = maxHeight - newTop;
-            newHeight = Math.max(MIN_HEIGHT, newHeight);
-        }
-
-        // Apply styles immediately - no RAF wrapping
-        chatIframe.style.width = `${newWidth}px`;
-        chatIframe.style.height = `${newHeight}px`;
-        chatIframe.style.left = `${newLeft}px`;
-        chatIframe.style.top = `${newTop}px`;
-        chatIframe.style.right = 'auto';
-        chatIframe.style.bottom = 'auto';
-        chatIframe.style.position = 'fixed';
+        
+        // console.log('Fullscreen state after toggle:', isFullscreen);
     }
+});
 
-    window.addEventListener('message', (event) => {
-        if (event.data.type === 'closeChat') {
-            chatIframe.classList.remove('open');
 
-        } else if (event.data.type === 'startResize') {
-            isResizing = true;
-            startX = event.data.startX;
-            startY = event.data.startY;
 
-            // Get initial dimensions
-            const rect = chatIframe.getBoundingClientRect();
-            startWidth = rect.width;
-            startHeight = rect.height;
-            startLeft = rect.left;
-            startTop = rect.top;
 
-            document.body.style.userSelect = 'none';
+// toggleButton.addEventListener('click', () => {
+//     chatContainer.classList.toggle('n8n-open');
+    
+//     if (chatContainer.classList.contains('n8n-open') && !currentSessionId) {
+//         startNewConversation();
+//     }
+// });
 
-        } else if (event.data.type === 'resize' && isResizing) {
-            // Perform resize immediately when message is received
-            currentClientX = event.data.clientX;
-            currentClientY = event.data.clientY;
-            performResize(currentClientX, currentClientY);
 
-        } else if (event.data.type === 'endResize') {
-            isResizing = false;
-            document.body.style.userSelect = '';
-        }
-    });
+        
 
-    // Handle cases where mouse goes outside iframe during resize
-    // Use direct event handling for parent window
-    document.addEventListener('mousemove', function (e) {
-        if (isResizing) {
-            currentClientX = e.clientX;
-            currentClientY = e.clientY;
-            performResize(currentClientX, currentClientY);
-        }
-    });
 
-    document.addEventListener('mouseup', function () {
-        if (isResizing) {
-            isResizing = false;
-            document.body.style.userSelect = '';
-        }
-    });
+
+
+
+// PARENT SCRIPT - Simplified and optimized for smoothness
+
+let isResizing = false;
+let  startWidth, startHeight, startLeft, startTop;
+let currentClientX = 0, currentClientY = 0;
+
+const MIN_WIDTH = 300;
+const MIN_HEIGHT = 350;
+const WINDOW_PADDING = 20;
+
+// Optimized resize function without RAF wrapping
+function performResize(clientX, clientY) {
+    const dx = clientX - startX;
+    const dy = clientY - startY;
+   
+    let newWidth = Math.max(MIN_WIDTH, startWidth - dx);
+    let newHeight = Math.max(MIN_HEIGHT, startHeight - dy);
+   
+    let newLeft = startLeft + (startWidth - newWidth);
+    let newTop = startTop + (startHeight - newHeight);
+   
+    // Boundary calculations
+    const maxWidth = window.innerWidth - WINDOW_PADDING;
+    const maxHeight = window.innerHeight - WINDOW_PADDING;
+   
+    newLeft = Math.max(WINDOW_PADDING, newLeft);
+    newTop = Math.max(WINDOW_PADDING, newTop);
+   
+    if (newLeft + newWidth > maxWidth) {
+        newWidth = maxWidth - newLeft;
+        newWidth = Math.max(MIN_WIDTH, newWidth);
+    }
+   
+    if (newTop + newHeight > maxHeight) {
+        newHeight = maxHeight - newTop;
+        newHeight = Math.max(MIN_HEIGHT, newHeight);
+    }
+   
+    // Apply styles immediately - no RAF wrapping
+    chatIframe.style.width = `${newWidth}px`;
+    chatIframe.style.height = `${newHeight}px`;
+    chatIframe.style.left = `${newLeft}px`;
+    chatIframe.style.top = `${newTop}px`;
+    chatIframe.style.right = 'auto';
+    chatIframe.style.bottom = 'auto';
+    chatIframe.style.position = 'fixed';
+}
+
+window.addEventListener('message', (event) => {
+    if (event.data.type === 'closeChat') {
+        chatIframe.classList.remove('open');
+        
+    } else if (event.data.type === 'startResize') {
+        isResizing = true;
+        startX = event.data.startX;
+        startY = event.data.startY;
+        
+        // Get initial dimensions
+        const rect = chatIframe.getBoundingClientRect();
+        startWidth = rect.width;
+        startHeight = rect.height;
+        startLeft = rect.left;
+        startTop = rect.top;
+        
+        document.body.style.userSelect = 'none';
+        
+    } else if (event.data.type === 'resize' && isResizing) {
+        // Perform resize immediately when message is received
+        currentClientX = event.data.clientX;
+        currentClientY = event.data.clientY;
+        performResize(currentClientX, currentClientY);
+        
+    } else if (event.data.type === 'endResize') {
+        isResizing = false;
+        document.body.style.userSelect = '';
+    }
+});
+
+// Handle cases where mouse goes outside iframe during resize
+// Use direct event handling for parent window
+document.addEventListener('mousemove', function(e) {
+    if (isResizing) {
+        currentClientX = e.clientX;
+        currentClientY = e.clientY;
+        performResize(currentClientX, currentClientY);
+    }
+});
+
+document.addEventListener('mouseup', function() {
+    if (isResizing) {
+        isResizing = false;
+        document.body.style.userSelect = '';
+    }
+});
 
 
 })();
