@@ -1,9 +1,9 @@
-// Version: 1.0.17
+// Version: 1.0.18
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
-// modified Date: 2026-07-15
-// Description: 1. Updated table pop up css.
-//              2. updated OTP Secure view.
+// modified Date: 2026-06-22
+// Description: 1. Bug fix for dropdown
+//              2. can handle an links also
 
 
 
@@ -2621,7 +2621,7 @@
                         </svg>
                     </span>
                     <div class="n8n-chatbot-version">
-                        v1.0.16
+                        v1.0.18
                     </div>
                     
                     \${isVideoEnabled ? \`
@@ -5249,8 +5249,8 @@
                             }
 
                             const extra = Array.isArray(data) ? data[0].extra : data.extra;
-                            // const table_content = extra && extra[0] && extra[0].content;
-                            // const dropdown_content = extra && extra[1];
+                            const table_content = extra && extra[0] && extra[0].content;
+                            const dropdown_content = extra && extra[1];
 
                             const tableItem = extra?.find(item =>
                                 ["table", "grid", "data", "report", "list"].some(keyword =>
@@ -5258,19 +5258,21 @@
                                 )
                             );
 
-                            const dropdownItem = extra?.find(item =>
-                                ["dropdown", "choose", "select", "option"].some(keyword =>
-                                    item.type?.toLowerCase().trim().includes(keyword)
-                                )
-                            );
+                            // const dropdownItem = extra?.find(item =>
+                            //     ["dropdown", "choose", "select", "option"].some(keyword =>
+                            //         item.type?.toLowerCase().trim().includes(keyword)
+                            //     )
+                            // );
+
+                            // console.log('Extracted dropdown item:', dropdownItem);
 
 
                             const otpItem = extra?.find(item =>
                                 item.type?.toLowerCase().includes("otp")
                             );
 
-                            const table_content = tableItem?.content;
-                            const dropdown_content = dropdownItem ?? null;
+                            // const table_content = tableItem?.content;
+                            // const dropdown_content = dropdownItem ?? null;
                             
                             // console.log('Extracted table content:', table_content);
                             // console.log('Extracted dropdown content:', dropdown_content);
