@@ -1,8 +1,8 @@
-// Version: 1.0.18
+// Version: 1.0.19
 // Author:  Prathamesh Patil 
 // Date: 2025-08-18
 // modified Date: 2026-06-22
-// Description: 1. Bug fix for dropdown
+// Description: 1. Updated UI for accept images.
 //              2. can handle an links also
 
 
@@ -874,7 +874,9 @@
             display: flex;
             align-items: flex-start;
             gap: 10px;
-            background: #f1f1f1;
+            background: #ffffff;
+            border: 1px solid #E5E5E5;
+            border-top: 0;
         }
 
         .n8n-chat-message.bot .n8n-message-bubble-dropdown {
@@ -2621,7 +2623,7 @@
                         </svg>
                     </span>
                     <div class="n8n-chatbot-version">
-                        v1.0.18
+                        v1.0.16
                     </div>
                     
                     \${isVideoEnabled ? \`
@@ -5461,473 +5463,915 @@
                         
                         
                     function showTablePopup(tableData) {
-                    // Try parent window first (for iframes)
-                    if (window.top !== window.self) {
-                        try {
-                        createPopupInWindow(window.top, tableData);
-                        return;
-                        } catch (e) {
-                        console.warn("Parent window access blocked, falling back to iframe");
+                        if (window.top !== window.self) {
+                            try {
+                                createPopupInWindow(window.top, tableData);
+                                return;
+                            } catch (e) {
+                                console.warn("Parent window access blocked, falling back to iframe");
+                            }
                         }
-                    }
-                        
-                    // Fallback to current window
-                    createPopupInWindow(window, tableData);
+                        createPopupInWindow(window, tableData);
                     }
 
                     function createPopupInWindow(targetWindow, tableData) {
-                    // Remove existing popup if any
-                    const existingPopup = targetWindow.document.querySelector('.n8n-full-window-popup');
-                    if (existingPopup) existingPopup.remove();
-
-                    // Create popup container
-                    const popup = targetWindow.document.createElement('div');
-                    popup.className = 'n8n-full-window-popup';
+                        const doc = targetWindow.document;
                     
-                    // Generate table HTML from the data
-                    const tableHTML = createTableFromData(tableData);
-
-                    // Generate popup HTML
-                    popup.innerHTML = \`
+                        const existingPopup = doc.querySelector('.n8n-full-window-popup');
+                        if (existingPopup) existingPopup.remove();
+                    
+                        const hasStructuredData = !!(tableData.columns && tableData.rows);
+                        const columns = hasStructuredData ? tableData.columns : [];
+                        const rows = hasStructuredData ? tableData.rows : [];
+                    
+                        // Columns whose values render as a pill/badge instead of plain text.
+                        // Configure via tableData.pillColumns = ['Segment'] ; falls back to none.
+                        const pillColumns = new Set(tableData.pillColumns || []);
+                    
+                        const popup = doc.createElement('div');
+                        popup.className = 'n8n-full-window-popup';
+                    
+                        popup.innerHTML = \`
                         <div class="n8n-popup-content">
-                        <div class="n8n-popup-header">
-                            <h3>\${tableData.title || 'Table Data'}</h3>
-                            <button class="n8n-popup-close">&times;</button>
-                        </div>
-                        <div class="n8n-popup-body">
-                            \${tableHTML}
-                        </div>
-                        </div>
-                    \`;
-
-                    // Add to document
-                    targetWindow.document.body.appendChild(popup);
-                    targetWindow.document.body.style.overflow = 'hidden';
-
-                    // Add styles dynamically
-                    addPopupStyles(targetWindow);
-
-                    // Setup close handlers
-                    setupCloseHandlers(popup, targetWindow);
-                    }
-
-                    function createTableFromData(tableData) {
-                    // Check if we have raw data or HTML
-                    if (tableData.html) return tableData.html;
+                            <div class="n8n-popup-header">
+                            <div class="n8n-header-titles">
+                                <h3>\${tableData.title || 'Table Data'}</h3>
+                                \${tableData.subtitle ? \`<p>\${tableData.subtitle}</p>\` : ''}
+                            </div>
+                            \${hasStructuredData ? \`
+                            <div class="n8n-header-actions">
+                                <div class="n8n-search-wrap">
+                                <input type="text" id="globalSearchInput" class="n8n-search-input" placeholder="Search products..." />
+                                <span class="n8n-search-icon">&#128269;</span>
+                                </div>
+                                <button id="exportCsvBtn" class="n8n-toolbar-btn" type="button">&#11015; Export CSV</button>
+                                <div class="n8n-col-selector-wrap">
+                                <button id="colSelectorBtn" class="n8n-toolbar-btn" type="button">&#9638; Columns &#9662;</button>
+                                <div id="colSelectorPanel" class="n8n-col-panel" style="display:none;"></div>
+                                </div>
+                            </div>\` : ''}
+                            <button class="n8n-popup-close" type="button">&times;</button>
+                            </div>
                     
-                    // Create table from structured data
-                    if (tableData.columns && tableData.rows) {
-                        let html = '<table class="n8n-data-table"><thead><tr>';
-                        
-                        // Create headers
-                        tableData.columns.forEach(col => {
-                        html += \`<th>\${col}</th>\`;
+                            \${hasStructuredData ? \`
+                            <div class="n8n-sub-toolbar">
+                            <div class="n8n-sub-toolbar-left">
+                                <button id="toggleFilterBtn" class="n8n-ghost-btn" type="button">&#9660; Filter</button>
+                                <button id="refreshBtn" class="n8n-ghost-btn" type="button">&#8635; Refresh</button>
+                                <button id="resetFiltersBtn" class="n8n-ghost-btn" type="button">&#8855; Reset Filters</button>
+                            </div>
+                            <div class="n8n-results-count" id="resultsCountText"></div>
+                            </div>\` : ''}
+                    
+                            <div class="n8n-popup-body">
+                            <div class="n8n-table-scroll">
+                                <div id="popup-table-container"></div>
+                            </div>
+                            </div>
+                    
+                            \${hasStructuredData ? \`
+                            <div class="n8n-popup-footer">
+                            <div class="n8n-rows-per-page">
+                                Rows per page
+                                <select id="rowsPerPageSelect">
+                                <option value="5" selected>5</option>
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                </select>
+                            </div>
+                            <div class="n8n-page-info" id="pageInfoText"></div>
+                            <div class="n8n-page-controls">
+                                <button id="firstPageBtn" type="button" title="First page">&#171;</button>
+                                <button id="prevPageBtn" type="button" title="Previous page">&#8249;</button>
+                                <div id="pageNumbers" class="n8n-page-numbers"></div>
+                                <button id="nextPageBtn" type="button" title="Next page">&#8250;</button>
+                                <button id="lastPageBtn" type="button" title="Last page">&#187;</button>
+                            </div>
+                            </div>\` : ''}
+                        </div>
+                        \`;
+                    
+                        doc.body.appendChild(popup);
+                        doc.body.style.overflow = 'hidden';
+                        addPopupStyles(targetWindow);
+                    
+                        if (!hasStructuredData) {
+                            doc.querySelector('#popup-table-container').innerHTML = renderFallbackTable(tableData);
+                            setupCloseHandlers(popup, targetWindow);
+                            return;
+                        }
+                    
+                        // =====================================================================
+                        // STATE
+                        // =====================================================================
+                        const DEFAULT_VISIBLE_COUNT = 5;
+                        const state = {
+                            allColumns: columns,
+                            visibleColumns: columns.slice(0, DEFAULT_VISIBLE_COUNT),
+                            sortColumn: null,
+                            sortDirection: 'asc',
+                            filters: {},          // { colName: Set(allowedValues) }
+                            searchText: '',
+                            rowsPerPage: 5,
+                            currentPage: 1,
+                            selectedRows: new Set()
+                        };
+                    
+                        const container = popup.querySelector('#popup-table-container');
+                    
+                        function cellText(row, col) {
+                            return row[col] == null ? '' : String(row[col]);
+                        }
+                    
+                        function rowMatchesSearch(row) {
+                            if (!state.searchText) return true;
+                            const needle = state.searchText.toLowerCase();
+                            return state.allColumns.some(col => cellText(row, col).toLowerCase().includes(needle));
+                        }
+                    
+                        function getFilteredSortedRows() {
+                            let out = rows
+                                .map((row, idx) => ({ row, idx }))
+                                .filter(({ row }) => rowMatchesSearch(row))
+                                .filter(({ row }) =>
+                                    Object.keys(state.filters).every(col => {
+                                        const allowed = state.filters[col];
+                                        if (!allowed || allowed.size === 0) return true;
+                                        return allowed.has(cellText(row, col));
+                                    })
+                                );
+                    
+                            if (state.sortColumn) {
+                                const col = state.sortColumn;
+                                out = [...out].sort((a, b) => {
+                                    const va = a.row[col], vb = b.row[col];
+                                    const na = parseFloat(va), nb = parseFloat(vb);
+                                    const bothNumeric = va !== '' && vb !== '' && va != null && vb != null && !isNaN(na) && !isNaN(nb);
+                                    const cmp = bothNumeric ? (na - nb) : cellText(a.row, col).localeCompare(cellText(b.row, col));
+                                    return state.sortDirection === 'asc' ? cmp : -cmp;
+                                });
+                            }
+                            return out; // array of { row, idx }
+                        }
+                    
+                        function uniqueValues(col) {
+                            const set = new Set();
+                            rows.forEach(r => set.add(cellText(r, col)));
+                            return [...set].sort();
+                        }
+                    
+                        function escapeHtml(str) {
+                            return String(str)
+                                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                        }
+                    
+                        // ---------------- Toolbar wiring (search / export / refresh / reset) ----------------
+                        const searchInput = popup.querySelector('#globalSearchInput');
+                        if (searchInput) {
+                            searchInput.oninput = (e) => {
+                                state.searchText = e.target.value;
+                                state.currentPage = 1;
+                                renderTable();
+                            };
+                        }
+                    
+                        const exportBtn = popup.querySelector('#exportCsvBtn');
+                        if (exportBtn) {
+                            exportBtn.onclick = () => {
+                                const visible = state.visibleColumns.length ? state.visibleColumns : state.allColumns;
+                                const dataRows = getFilteredSortedRows().map(({ row }) => row);
+                                const csvLines = [visible.map(c => \`"\${c.replace(/"/g, '""')}"\`).join(',')];
+                                dataRows.forEach(row => {
+                                    csvLines.push(visible.map(c => \`"\${cellText(row, c).replace(/"/g, '""')}"\`).join(','));
+                                });
+                                const blob = new targetWindow.Blob([csvLines.join('\\n')], { type: 'text/csv;charset=utf-8;' });
+                                const url = targetWindow.URL.createObjectURL(blob);
+                                const a = doc.createElement('a');
+                                a.href = url;
+                                a.download = \`\${(tableData.title || 'table-data').replace(/\\s+/g, '-').toLowerCase()}.csv\`;
+                                doc.body.appendChild(a);
+                                a.click();
+                                a.remove();
+                                targetWindow.URL.revokeObjectURL(url);
+                            };
+                        }
+                    
+                        const refreshBtn = popup.querySelector('#refreshBtn');
+                        if (refreshBtn) {
+                            refreshBtn.onclick = () => {
+                                state.searchText = '';
+                                if (searchInput) searchInput.value = '';
+                                state.currentPage = 1;
+                                renderTable();
+                            };
+                        }
+                    
+                        const resetFiltersBtn = popup.querySelector('#resetFiltersBtn');
+                        if (resetFiltersBtn) {
+                            resetFiltersBtn.onclick = () => {
+                                state.filters = {};
+                                state.currentPage = 1;
+                                renderTable();
+                            };
+                        }
+                    
+                        const toggleFilterBtn = popup.querySelector('#toggleFilterBtn');
+                        const body = popup.querySelector('.n8n-popup-body');
+                        if (toggleFilterBtn) {
+                            toggleFilterBtn.onclick = () => {
+                                body.classList.toggle('n8n-filters-hidden');
+                            };
+                        }
+                    
+                        // ---------------- Table rendering ----------------
+                        function renderTable() {
+                            const visible = state.visibleColumns.length ? state.visibleColumns : state.allColumns;
+                            const allFilteredSorted = getFilteredSortedRows();
+                            const total = allFilteredSorted.length;
+                            const totalPages = Math.max(1, Math.ceil(total / state.rowsPerPage));
+                            if (state.currentPage > totalPages) state.currentPage = totalPages;
+                            const startIdx = (state.currentPage - 1) * state.rowsPerPage;
+                            const endIdx = Math.min(startIdx + state.rowsPerPage, total);
+                            const pageEntries = allFilteredSorted.slice(startIdx, endIdx);
+                    
+                            const resultsCountEl = popup.querySelector('#resultsCountText');
+                            if (resultsCountEl) resultsCountEl.textContent = \`\${total} result\${total === 1 ? '' : 's'} found\`;
+                    
+                            let html = '<table class="n8n-data-table"><thead><tr><th class="n8n-checkbox-col"><input type="checkbox" id="selectAllCheckbox" /></th>';
+                            visible.forEach(col => {
+                                const isSorted = state.sortColumn === col;
+                                const sortIcon = !isSorted ? '&#8645;' : (state.sortDirection === 'asc' ? '&#8593;' : '&#8595;');
+                                const hasFilter = state.filters[col] && state.filters[col].size > 0;
+                                html += \`
+                                <th>
+                                    <div class="n8n-th-inner">
+                                    <span class="n8n-th-label" data-sort-col="\${col}">\${escapeHtml(col)}</span>
+                                    <button class="n8n-sort-btn \${isSorted ? 'active' : ''}" data-sort-col="\${col}" type="button" title="Sort">\${sortIcon}</button>
+                                    <button class="n8n-filter-btn \${hasFilter ? 'active' : ''}" data-filter-col="\${col}" type="button" title="Filter">&#9660;</button>
+                                    </div>
+                                </th>\`;
+                            });
+                            html += '</tr></thead><tbody>';
+                    
+                            if (pageEntries.length === 0) {
+                                html += \`
+                                <tr class="n8n-empty-state-row">
+                                    <td colspan="\${visible.length + 1}">
+                                    <div class="n8n-empty-state">
+                                        <div class="n8n-empty-icon">&#128230;</div>
+                                        <div class="n8n-empty-text">No more products to display</div>
+                                    </div>
+                                    </td>
+                                </tr>\`;
+                            } else {
+                                pageEntries.forEach(({ row, idx }) => {
+                                    const checked = state.selectedRows.has(idx) ? 'checked' : '';
+                                    html += \`<tr>\`;
+                                    html += \`<td class="n8n-checkbox-col"><input type="checkbox" class="n8n-row-checkbox" data-row-idx="\${idx}" \${checked}/></td>\`;
+                                    visible.forEach(col => {
+                                        const val = cellText(row, col);
+                                        if (pillColumns.has(col) && val) {
+                                            html += \`<td><span class="n8n-pill">\${escapeHtml(val)}</span></td>\`;
+                                        } else {
+                                            html += \`<td>\${escapeHtml(val)}</td>\`;
+                                        }
+                                    });
+                                    html += '</tr>';
+                                });
+                            }
+                            html += '</tbody></table>';
+                            container.innerHTML = html;
+                    
+                            updatePaginationUI(total, startIdx, endIdx, totalPages);
+                    
+                            // sort handlers
+                            container.querySelectorAll('[data-sort-col]').forEach(el => {
+                                el.onclick = () => {
+                                    const col = el.getAttribute('data-sort-col');
+                                    if (state.sortColumn === col) {
+                                        state.sortDirection = state.sortDirection === 'asc' ? 'desc' : 'asc';
+                                    } else {
+                                        state.sortColumn = col;
+                                        state.sortDirection = 'asc';
+                                    }
+                                    renderTable();
+                                };
+                            });
+                    
+                            // filter buttons
+                            container.querySelectorAll('[data-filter-col]').forEach(btn => {
+                                btn.onclick = (e) => {
+                                    e.stopPropagation();
+                                    openFilterDropdown(btn, btn.getAttribute('data-filter-col'));
+                                };
+                            });
+                    
+                            // row checkboxes
+                            container.querySelectorAll('.n8n-row-checkbox').forEach(cb => {
+                                cb.onchange = () => {
+                                    const idx = parseInt(cb.getAttribute('data-row-idx'), 10);
+                                    if (cb.checked) state.selectedRows.add(idx);
+                                    else state.selectedRows.delete(idx);
+                                    syncSelectAllCheckbox(pageEntries);
+                                };
+                            });
+                            const selectAllCb = container.querySelector('#selectAllCheckbox');
+                            if (selectAllCb) {
+                                selectAllCb.onchange = () => {
+                                    pageEntries.forEach(({ idx }) => {
+                                        if (selectAllCb.checked) state.selectedRows.add(idx);
+                                        else state.selectedRows.delete(idx);
+                                    });
+                                    renderTable();
+                                };
+                                syncSelectAllCheckbox(pageEntries);
+                            }
+                        }
+                    
+                        function syncSelectAllCheckbox(pageEntries) {
+                            const selectAllCb = container.querySelector('#selectAllCheckbox');
+                            if (!selectAllCb || pageEntries.length === 0) return;
+                            const allChecked = pageEntries.every(({ idx }) => state.selectedRows.has(idx));
+                            selectAllCb.checked = allChecked;
+                            selectAllCb.indeterminate = !allChecked && pageEntries.some(({ idx }) => state.selectedRows.has(idx));
+                        }
+                    
+                        // ---------------- Per-column filter dropdown ----------------
+                        function closeFilterDropdown() {
+                            const panel = doc.querySelector('.n8n-filter-dropdown');
+                            if (panel) panel.remove();
+                            doc.removeEventListener('click', outsideFilterClick);
+                        }
+                        function outsideFilterClick(e) {
+                            const panel = doc.querySelector('.n8n-filter-dropdown');
+                            if (panel && !panel.contains(e.target)) closeFilterDropdown();
+                        }
+                    
+                        function openFilterDropdown(anchorEl, col) {
+                            closeFilterDropdown();
+                            const values = uniqueValues(col);
+                            const current = state.filters[col];
+                    
+                            const panel = doc.createElement('div');
+                            panel.className = 'n8n-filter-dropdown';
+                            panel.innerHTML = \`
+                            <input type="text" class="n8n-filter-search" placeholder="Search values..." />
+                            <div class="n8n-filter-actions">
+                                <button data-action="all" type="button">Select All</button>
+                                <button data-action="clear" type="button">Clear</button>
+                            </div>
+                            <div class="n8n-filter-values"></div>
+                            <div class="n8n-filter-footer">
+                                <button class="n8n-filter-apply" type="button">Apply</button>
+                            </div>
+                            \`;
+                            const valuesWrap = panel.querySelector('.n8n-filter-values');
+                            function renderValues(filterText) {
+                                valuesWrap.innerHTML = '';
+                                values
+                                    .filter(v => !filterText || v.toLowerCase().includes(filterText.toLowerCase()))
+                                    .forEach(v => {
+                                        const checked = !current || current.has(v);
+                                        const row = doc.createElement('label');
+                                        row.className = 'n8n-filter-value-row';
+                                        row.innerHTML = \`<input type="checkbox" value="\${escapeHtml(v)}" \${checked ? 'checked' : ''}/> <span>\${escapeHtml(v) || '(blank)'}</span>\`;
+                                        valuesWrap.appendChild(row);
+                                    });
+                            }
+                            renderValues('');
+                    
+                            panel.querySelector('.n8n-filter-search').oninput = (e) => renderValues(e.target.value);
+                            panel.querySelector('[data-action="all"]').onclick = () => {
+                                panel.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true);
+                            };
+                            panel.querySelector('[data-action="clear"]').onclick = () => {
+                                panel.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+                            };
+                            panel.querySelector('.n8n-filter-apply').onclick = () => {
+                                const checked = [...panel.querySelectorAll('input[type=checkbox]:checked')].map(cb => cb.value);
+                                if (checked.length === values.length) delete state.filters[col];
+                                else state.filters[col] = new Set(checked);
+                                state.currentPage = 1;
+                                closeFilterDropdown();
+                                renderTable();
+                            };
+                    
+                            doc.body.appendChild(panel);
+                            const rect = anchorEl.getBoundingClientRect();
+                            panel.style.top = \`\${rect.bottom + 4}px\`;
+                            panel.style.left = \`\${rect.left}px\`;
+                            setTimeout(() => doc.addEventListener('click', outsideFilterClick), 0);
+                        }
+                    
+                        // ---------------- Column visibility picker ----------------
+                        const colBtn = popup.querySelector('#colSelectorBtn');
+                        const colPanel = popup.querySelector('#colSelectorPanel');
+                    
+                        function renderColPanel() {
+                            colPanel.innerHTML = \`
+                            <input type="text" class="n8n-col-search" placeholder="Search columns..." />
+                            <div class="n8n-col-panel-header">
+                                <button data-action="all" type="button">Select All</button>
+                                <button data-action="clear" type="button">Clear</button>
+                            </div>
+                            <div class="n8n-col-panel-list"></div>
+                            \`;
+                            const listEl = colPanel.querySelector('.n8n-col-panel-list');
+                    
+                            function renderList(keyword) {
+                                const kw = (keyword || '').toLowerCase();
+                                const cols = state.allColumns.filter(col => col.toLowerCase().includes(kw));
+                                listEl.innerHTML = cols.map(col => \`
+                                <label class="n8n-col-panel-row">
+                                    <input type="checkbox" data-col="\${escapeHtml(col)}" \${state.visibleColumns.includes(col) ? 'checked' : ''}/>
+                                    <span>\${escapeHtml(col)}</span>
+                                </label>
+                                \`).join('') || \`<div class="n8n-col-empty">No matching columns</div>\`;
+                    
+                                listEl.querySelectorAll('input[type=checkbox]').forEach(cb => {
+                                    cb.onchange = () => {
+                                        const col = cb.getAttribute('data-col');
+                                        if (cb.checked) {
+                                            if (!state.visibleColumns.includes(col)) state.visibleColumns.push(col);
+                                        } else {
+                                            state.visibleColumns = state.visibleColumns.filter(c => c !== col);
+                                        }
+                                        state.visibleColumns = state.allColumns.filter(c => state.visibleColumns.includes(c));
+                                        renderTable();
+                                    };
+                                });
+                            }
+                            renderList('');
+                    
+                            colPanel.querySelector('.n8n-col-search').oninput = (e) => renderList(e.target.value);
+                            colPanel.querySelector('[data-action="all"]').onclick = () => {
+                                state.visibleColumns = [...state.allColumns];
+                                renderColPanel();
+                                renderTable();
+                            };
+                            colPanel.querySelector('[data-action="clear"]').onclick = () => {
+                                state.visibleColumns = [];
+                                renderColPanel();
+                                renderTable();
+                            };
+                        }
+                        renderColPanel();
+                    
+                        colBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            colPanel.style.display = colPanel.style.display === 'none' ? 'block' : 'none';
+                        };
+                        doc.addEventListener('click', (e) => {
+                            if (colPanel.style.display !== 'none' && !colPanel.contains(e.target) && e.target !== colBtn && !colBtn.contains(e.target)) {
+                                colPanel.style.display = 'none';
+                            }
                         });
-                        html += '</tr></thead><tbody>';
-                        
-                        // Create rows
-                        tableData.rows.forEach(row => {
-                        html += '<tr>';
-                        tableData.columns.forEach(col => {
-                            html += \`<td>\${row[col] || ''}</td>\`;
-                        });
-                        html += '</tr>';
-                        });
-                        
-                        html += '</tbody></table>';
-                        return html;
+                    
+                        // ---------------- Pagination ----------------
+                        function updatePaginationUI(total, startIdx, endIdx, totalPages) {
+                            const pageInfo = popup.querySelector('#pageInfoText');
+                            if (pageInfo) pageInfo.textContent = total === 0 ? 'Showing 0 of 0 results' : \`Showing \${startIdx + 1} to \${endIdx} of \${total} results\`;
+                    
+                            const firstBtn = popup.querySelector('#firstPageBtn');
+                            const prevBtn = popup.querySelector('#prevPageBtn');
+                            const nextBtn = popup.querySelector('#nextPageBtn');
+                            const lastBtn = popup.querySelector('#lastPageBtn');
+                            if (firstBtn) firstBtn.disabled = state.currentPage <= 1;
+                            if (prevBtn) prevBtn.disabled = state.currentPage <= 1;
+                            if (nextBtn) nextBtn.disabled = state.currentPage >= totalPages;
+                            if (lastBtn) lastBtn.disabled = state.currentPage >= totalPages;
+                    
+                            const pageNumbersEl = popup.querySelector('#pageNumbers');
+                            if (pageNumbersEl) {
+                                let numsHtml = '';
+                                for (let p = 1; p <= totalPages; p++) {
+                                    numsHtml += \`<button class="n8n-page-num-btn \${p === state.currentPage ? 'active' : ''}" data-page="\${p}" type="button">\${p}</button>\`;
+                                }
+                                pageNumbersEl.innerHTML = numsHtml;
+                                pageNumbersEl.querySelectorAll('[data-page]').forEach(btn => {
+                                    btn.onclick = () => {
+                                        state.currentPage = parseInt(btn.getAttribute('data-page'), 10);
+                                        renderTable();
+                                    };
+                                });
+                            }
+                        }
+                    
+                        const rowsPerPageSelect = popup.querySelector('#rowsPerPageSelect');
+                        rowsPerPageSelect.value = state.rowsPerPage;
+                        rowsPerPageSelect.onchange = () => {
+                            state.rowsPerPage = parseInt(rowsPerPageSelect.value, 10);
+                            state.currentPage = 1;
+                            renderTable();
+                        };
+                        popup.querySelector('#firstPageBtn').onclick = () => { state.currentPage = 1; renderTable(); };
+                        popup.querySelector('#prevPageBtn').onclick = () => { if (state.currentPage > 1) { state.currentPage--; renderTable(); } };
+                        popup.querySelector('#nextPageBtn').onclick = () => { state.currentPage++; renderTable(); };
+                        popup.querySelector('#lastPageBtn').onclick = () => {
+                            const total = getFilteredSortedRows().length;
+                            state.currentPage = Math.max(1, Math.ceil(total / state.rowsPerPage));
+                            renderTable();
+                        };
+                    
+                        renderTable();
+                        setupCloseHandlers(popup, targetWindow);
                     }
                     
-                    // Fallback simple table
-                    return \`
-                        <table class="n8n-data-table">
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Department</th>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>John Doe</td>
-                            <td>Marketing</td>
-                        </tr>
-                        </table>
-                    \`;
+                    function renderFallbackTable(tableData) {
+                        if (tableData.html) return tableData.html;
+                        return \`
+                            <table class="n8n-data-table">
+                            <tr><th>ID</th><th>Name</th><th>Department</th></tr>
+                            <tr><td>1</td><td>John Doe</td><td>Marketing</td></tr>
+                            </table>
+                        \`;
                     }
-
+                    
                     function addPopupStyles(targetWindow) {
+                        const doc = targetWindow.document;
                         const styleId = 'n8n-full-window-popup-styles';
-                        if (targetWindow.document.getElementById(styleId)) return;
-
-                        const style = targetWindow.document.createElement('style');
+                        if (doc.getElementById(styleId)) return;
+                    
+                        const style = doc.createElement('style');
                         style.id = styleId;
                         style.textContent = \`
                             .n8n-full-window-popup {
-                                position: fixed;
-                                inset: 0;
-                                background: rgba(15, 23, 42, 0.65);
-                                backdrop-filter: blur(6px);
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                z-index: 99999;
-                                animation: popupFade .25s ease;
+                                position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65);
+                                backdrop-filter: blur(6px); display: flex; justify-content: center; align-items: center;
+                                z-index: 99999; animation: popupFade .25s ease;
                             }
-
+                            @keyframes popupFade { from { opacity: 0; } to { opacity: 1; } }
+                    
                             .n8n-popup-content {
-                                background: #fff;
-                                border-radius: 20px;
-                                width: 96%;
-                                max-width: 1700px;
-                                height: 90vh;
-                                display: flex;
-                                flex-direction: column;
-                                overflow: hidden;
-                                box-shadow:
-                                    0 20px 60px rgba(0,0,0,.25);
-                            }
-                            .n8n-popup-header{
-                                display:flex;
-                                justify-content:space-between;
-                                align-items:center;
-
-                                padding: 3px 23px;
-
-                                background:linear-gradient( 90deg, #1544A3, #315DDF, #6D28D9 );
-
-                                color:#fff;
-
-                                position:sticky;
-                                top:0;
-                                z-index:10;
-                            }
-
-                            .n8n-popup-header h2{
-
-                                margin:0;
-                                font-size:24px;
-                                font-weight:600;
-
-                            }
-                            .n8n-popup-close{
-
-                                width:40px;
-                                height:40px;
-
-                                border:none;
-
-                                border-radius:50%;
-
-                                background:rgba(255,255,255,.18);
-
-                                color:white;
-
-                                font-size:26px;
-
-                                cursor:pointer;
-
-                                transition:.25s;
-
-                            }
-
-                            .n8n-popup-close:hover{
-
-                                background:white;
-
-                                color:#315DDF;
-
-                                transform:rotate(90deg);
-
-                            }
-                            .n8n-data-table {
-                                width: 100%;
-                                border-collapse: collapse;
-                                background: #fff;
+                                background: #fff; border-radius: 16px; width: 96%; max-width: 1700px;
+                                max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;
+                                box-shadow: 0 20px 60px rgba(0,0,0,.3);
                                 font-family: "Segoe UI", Arial, sans-serif;
                             }
-                            .n8n-data-table th {
-
-                                position: sticky;
-                                top: 0;
-                                z-index: 2;
-
-                                background:linear-gradient( 90deg, #1544A3, #315DDF, #6D28D9 );
-
-                                color: white;
-
-                                padding: 14px 18px;
-
-                                font-size: 15px;
-
-                                font-weight: 600;
-
-                                text-align: left;
-
-                                border: 1px solid rgba(255,255,255,.15);
-
+                    
+                            /* Header */
+                            .n8n-popup-header {
+                                display: flex; align-items: center; gap: 16px; padding: 18px 24px;
+                                background: linear-gradient(90deg, #2952d9, #6d28d9);
+                                color: #fff; flex-wrap: wrap;
+                            }
+                            .n8n-header-titles { flex: 0 0 auto; margin-right: auto; }
+                            .n8n-header-titles h3 { margin: 0; font-size: 20px; font-weight: 700; }
+                            .n8n-header-titles p { margin: 2px 0 0; font-size: 13px; color: rgba(255,255,255,.8); }
+                    
+                            .n8n-header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+                    
+                            .n8n-search-wrap { position: relative; }
+                            .n8n-search-input {
+                                padding: 8px 34px 8px 14px; border-radius: 8px; border: none;
+                                background: rgba(255,255,255,.18); color: #fff; font-size: 13px; width: 200px;
+                            }
+                            .n8n-search-input::placeholder { color: rgba(255,255,255,.75); }
+                            .n8n-search-icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 13px; opacity: .8; }
+                    
+                            .n8n-toolbar-btn {
+                                background: rgba(255,255,255,.18); color: #fff; border: 1px solid rgba(255,255,255,.35);
+                                padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500;
                                 white-space: nowrap;
                             }
-                            .n8n-data-table th:first-child{
-                                border-top-left-radius:16px;
+                            .n8n-toolbar-btn:hover { background: rgba(255,255,255,.3); }
+                    
+                            .n8n-popup-close {
+                                width: 34px; height: 34px; border: none; border-radius: 50%;
+                                background: rgba(255,255,255,.2); color: white; font-size: 22px;
+                                cursor: pointer; transition: .2s; flex-shrink: 0;
                             }
-
-                            .n8n-data-table th:last-child{
-                                border-top-right-radius:16px;
+                            .n8n-popup-close:hover { background: white; color: #6d28d9; transform: rotate(90deg); }
+                    
+                            /* Sub-toolbar */
+                            .n8n-sub-toolbar {
+                                display: flex; align-items: center; justify-content: space-between;
+                                padding: 12px 24px; border-bottom: 1px solid #edf0f5; flex-wrap: wrap; gap: 10px;
                             }
-                            .n8n-popup-body{
-
-                                flex:1;
-
-                                overflow:auto;
-
-                                padding:25px;
-
-                                background:#f5f8ff;
-
+                            .n8n-sub-toolbar-left { display: flex; gap: 10px; flex-wrap: wrap; }
+                            .n8n-ghost-btn {
+                                background: #fff; border: 1px solid #d8e3f4; color: #334155;
+                                padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500;
                             }
-                            .n8n-data-table {
-                                width: 100%;
-                                border-collapse: separate;
-                                border-spacing: 0;
-                                border: 1px solid #d8e3f4;
-                                border-radius: 14px;
-                                overflow: hidden;
-                                background: #fff;
+                            .n8n-ghost-btn:hover { background: #f5f8ff; }
+                            .n8n-results-count { font-size: 13px; color: #64748b; }
+                    
+                            /* Column selector panel */
+                            .n8n-col-selector-wrap { position: relative; }
+                            .n8n-col-panel {
+                                position: absolute; top: 110%; right: 0; background: #fff; color: #1e293b;
+                                border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.25); width: 240px;
+                                max-height: 320px; overflow-y: auto; z-index: 100020; padding: 10px;
                             }
-
-                            .n8n-data-table th,
-                            .n8n-data-table td {
-                                padding: 14px 18px;
-                                border-right: 1px solid #333;
-                                border-bottom: 1px solid #333;
+                            .n8n-col-search, .n8n-filter-search {
+                                width: 100%; box-sizing: border-box; padding: 7px 10px; border: 1px solid #d8e3f4;
+                                border-radius: 6px; font-size: 13px; margin-bottom: 8px;
                             }
-
-                            .n8n-data-table th:last-child,
-                            .n8n-data-table td:last-child {
-                                border-right: none;
+                            .n8n-col-panel-header, .n8n-filter-actions { display: flex; justify-content: space-between; margin-bottom: 6px; }
+                            .n8n-col-panel-header button, .n8n-filter-actions button {
+                                border: none; background: #eef2ff; color: #315DDF; padding: 4px 9px;
+                                border-radius: 6px; cursor: pointer; font-size: 12px;
                             }
-
-                            .n8n-data-table tbody tr:last-child td {
-                                border-bottom: none;
+                            .n8n-col-panel-header button:hover, .n8n-filter-actions button:hover { background: #dbe4ff; }
+                            .n8n-col-panel-row, .n8n-filter-value-row {
+                                display: flex; align-items: center; gap: 8px; padding: 5px 4px; font-size: 13px; cursor: pointer;
                             }
-
-                            /* Product Name column */
-                            .n8n-data-table th:nth-child(1),
-                            .n8n-data-table td:nth-child(1){
-                                min-width: 320px;
-                                width: 320px;
+                            .n8n-col-panel-row:hover, .n8n-filter-value-row:hover { background: #f5f8ff; border-radius: 6px; }
+                            .n8n-col-empty { padding: 8px 4px; font-size: 13px; color: #888; font-style: italic; }
+                    
+                            /* Table area */
+                            .n8n-popup-body { flex: 0 1 auto; overflow: hidden; position: relative; }
+                            .n8n-table-scroll {
+                                width: 100%; max-height: calc(90vh - 220px); overflow: auto;
+                                scrollbar-width: thin; scrollbar-color: #c8d3ea transparent;
                             }
-
-                            /* Product Family */
-                            .n8n-data-table th:nth-child(2),
-                            .n8n-data-table td:nth-child(2){
-                                min-width: 240px;
+                            .n8n-table-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+                            .n8n-table-scroll::-webkit-scrollbar-thumb { background: #c8d3ea; border-radius: 4px; }
+                            .n8n-table-scroll::-webkit-scrollbar-track { background: transparent; }
+                    
+                            .n8n-data-table { width: 100%; border-collapse: collapse; background: #fff; }
+                            .n8n-data-table th {
+                                position: sticky; top: 0; z-index: 2; background: #f3f6fb;
+                                color: #1e293b; padding: 0; font-size: 13px; font-weight: 700;
+                                letter-spacing: 0.02em; text-align: left; border-bottom: 2px solid #e2e8f0; white-space: nowrap;
                             }
-
-                            /* Product Type */
-                            .n8n-data-table th:nth-child(3),
-                            .n8n-data-table td:nth-child(3){
-                                min-width: 180px;
+                            .n8n-th-inner { display: flex; align-items: center; justify-content: flex-start; gap: 4px; padding: 12px 14px; }
+                            .n8n-th-label { margin-right: auto; cursor: pointer; user-select: none; }
+                            .n8n-th-label:hover { color: #315DDF; }
+                            .n8n-sort-btn, .n8n-filter-btn {
+                                background: transparent; border: none; color: #94a3b8; cursor: pointer;
+                                border-radius: 3px; width: 18px; height: 18px; font-size: 11px; flex-shrink: 0;
+                                transition: background .15s, color .15s;
                             }
-
-                            /* Commitment */
-                            .n8n-data-table th:nth-child(9),
-                            .n8n-data-table td:nth-child(9){
-                                min-width: 180px;
+                            .n8n-sort-btn:hover, .n8n-filter-btn:hover { background: #e6ecf8; color: #315DDF; }
+                            .n8n-sort-btn.active, .n8n-filter-btn.active { background: #dbe6ff; color: #315DDF; }
+                    
+                            .n8n-checkbox-col { width: 40px; text-align: center; padding: 12px !important; }
+                            .n8n-data-table input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; }
+                    
+                            .n8n-data-table th, .n8n-data-table td {
+                                padding: 10px 16px; border: none; border-bottom: 1px solid #edf0f5; font-size: 13.5px; line-height: 1.3;
                             }
-                            
+                            .n8n-data-table tbody tr:hover td { background: #f7f9ff; }
+                    
+                            .n8n-pill {
+                                display: inline-block; padding: 3px 10px; border-radius: 999px;
+                                background: #eef2ff; color: #315DDF; border: 1px solid #c7d6ff;
+                                font-size: 12px; font-weight: 600;
+                            }
+                    
+                            .n8n-empty-state-row td { border-bottom: none; }
+                            .n8n-empty-state { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 50px 0; }
+                            .n8n-empty-icon { font-size: 40px; opacity: .35; }
+                            .n8n-empty-text { font-size: 14px; color: #94a3b8; }
+                    
+                            /* Filter dropdown */
+                            .n8n-filter-dropdown {
+                                position: fixed; background: #fff; color: #1e293b; width: 240px;
+                                border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.3); z-index: 100030; padding: 10px;
+                            }
+                            .n8n-filter-values { max-height: 180px; overflow-y: auto; border-top: 1px solid #eef2ff; border-bottom: 1px solid #eef2ff; padding: 6px 0; }
+                            .n8n-filter-footer { padding-top: 8px; text-align: right; }
+                            .n8n-filter-apply {
+                                border: none; background: #315DDF; color: #fff; padding: 7px 16px;
+                                border-radius: 6px; cursor: pointer; font-size: 13px;
+                            }
+                            .n8n-filter-apply:hover { background: #1544A3; }
+                    
+                            /* Footer / pagination */
+                            .n8n-popup-footer {
+                                display: flex; align-items: center; justify-content: space-between;
+                                padding: 14px 24px; border-top: 1px solid #e2e8f0; background: #fff;
+                                font-size: 13.5px; color: #334155; flex-shrink: 0; flex-wrap: wrap; gap: 10px;
+                            }
+                            .n8n-rows-per-page { display: flex; align-items: center; gap: 8px; }
+                            .n8n-rows-per-page select { padding: 5px 8px; border: 1px solid #d8e3f4; border-radius: 6px; }
+                            .n8n-page-controls { display: flex; align-items: center; gap: 6px; }
+                            .n8n-page-numbers { display: flex; gap: 4px; }
+                            .n8n-page-controls button, .n8n-page-num-btn {
+                                border: 1px solid #d8e3f4; background: #fff; color: #334155; padding: 6px 12px;
+                                border-radius: 6px; cursor: pointer; font-size: 13px; min-width: 36px;
+                            }
+                            .n8n-page-num-btn.active { background: #315DDF; color: #fff; border-color: #315DDF; font-weight: 600; }
+                            .n8n-page-controls button:disabled {
+                                border-color: #e2e8f0; color: #b8c2d1; background: #f8fafc; cursor: not-allowed;
+                            }
+                            .n8n-page-controls button:not(:disabled):hover, .n8n-page-num-btn:not(.active):hover { background: #eef2ff; }
                         \`;
-                        targetWindow.document.head.appendChild(style);
-                        }
-
-                        function setupCloseHandlers(popup, targetWindow) {
+                        doc.head.appendChild(style);
+                    }
+                    
+                    function setupCloseHandlers(popup, targetWindow) {
+                        const doc = targetWindow.document;
                         const closePopup = () => {
                             popup.remove();
-                            targetWindow.document.body.style.overflow = '';
+                            doc.body.style.overflow = '';
                         };
-
-                        // Close button
                         popup.querySelector('.n8n-popup-close').addEventListener('click', closePopup);
-                        
-                        // Click outside
-                        popup.addEventListener('click', (e) => {
-                            if (e.target === popup) closePopup();
-                        });
-
-                        // Escape key
-                        targetWindow.document.addEventListener('keydown', (e) => {
-                            if (e.key === 'Escape') closePopup();
-                        });
+                        popup.addEventListener('click', (e) => { if (e.target === popup) closePopup(); });
+                        doc.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopup(); });
                     }
-
-
-
-                        // // Function to create and show the table popup
-                        // function showTablePopup(tableData) {
-                        //     // Remove existing popup if it exists
-                        //     const existingBackdrop = document.querySelector('.n8n-dialog-backdrop');
-                        //     if (existingBackdrop) {
-                        //         existingBackdrop.remove();
-                        //     }
-
-                        //     const chatContainer = document.querySelector('.n8n-chat-container')
-                        //     // console.log('chatContainer:', chatContainer);
-
-                        //     const backdrop = document.createElement('div');
-                        //     backdrop.className = 'n8n-dialog-backdrop';
-                            
-                        //     chatContainer.appendChild(backdrop); // Append to body instead of chatContainer
-
-                        //     const dialog = document.createElement('div');
-                        //     dialog.className = 'n8n-table-dialog';
-                            
-                        //     dialog.innerHTML = 
-                        //         '<div class="n8n-dialog-header">' +
-                        //             '<h3>' + (tableData.title || 'Table Data') + '</h3>' +
-                        //             '<button class="n8n-dialog-close-button">×</button>' +
-                        //         '</div>' +
-                        //         '<div class="n8n-table-container"></div>';
-
-                        //     backdrop.appendChild(dialog);
-
-                        //     const tableContainer = dialog.querySelector('.n8n-table-container');
-                        //     const table = createTableFromJSON(tableData, true);
-                        //     tableContainer.appendChild(table);
-
-                        //     const closeDialog = () => {
-                        //         dialog.remove();
-                        //         backdrop.remove();
-                        //         document.removeEventListener('keydown', handleEscape);
-                        //     };
-
-                        //     dialog.querySelector('.n8n-dialog-close-button').addEventListener('click', closeDialog);
-                        //     backdrop.addEventListener('click', (e) => {
-                        //         if (e.target === backdrop) {
-                        //             closeDialog();
-                        //         }
-                        //     });
-
-                        //     // Add escape key handler
-                        //     const handleEscape = (e) => {
-                        //         if (e.key === 'Escape') {
-                        //             closeDialog();
-                        //         }
-                        //     };
-                        //     document.addEventListener('keydown', handleEscape);
-                        // }
-
 
 
 
 
                     function createTableFromJSON(data, isPopup = false) {
+
                         const tableContainer = document.createElement("div");
                         tableContainer.className = "n8n-table-container";
-                        if (!isPopup) tableContainer.style.cursor = "pointer";
+                        tableContainer.style.position = "relative";
+                        tableContainer.style.borderRadius = "10px";
+                        tableContainer.style.overflow = "hidden";
+                        tableContainer.style.width = "100%";
+                        tableContainer.style.boxSizing = "border-box";
+                        tableContainer.style.fontFamily = "inherit";
+
+                        if (!isPopup) {
+                            tableContainer.style.cursor = "pointer";
+                        }
 
                         const table = document.createElement("table");
-                        table.border = "1";
+                        table.className = "n8n-data-table";
+                        table.style.width = "100%";
+                        table.style.borderCollapse = "collapse";
+                        table.style.background = "#fff";
+
                         if (!isPopup) {
-                            table.style.width = "100%";
-                            table.style.boxSizing = "border-box";
-                            table.style.borderCollapse = "collapse";
-                            table.style.marginLeft = "0px";
+                            table.style.tableLayout = "fixed"; // <-- prevents overflow/scroll
                         }
 
-                        // === Column truncation ===
-                        let columnsToRender;
-                        if (isPopup || data.columns.length <= 6) {
-                            columnsToRender = data.columns;
-                        } else {
-                            const firstCols = data.columns.slice(0, 2);
-                            const lastCols = data.columns.slice(-2);
-                            columnsToRender = [...firstCols, '...', ...lastCols];
-                        }
+                        // ==========================
+                        // CONFIG
+                        // ==========================
 
-                        // === Header ===
+                        const MAX_COLUMNS = 3;      // fewer columns so each gets breathing room without scroll
+                        const MAX_ROWS = 2;
+                        const HEADER_LENGTH = 14;
+                        const CELL_LENGTH = 16;
+
+                        // ==========================
+                        // COLUMNS
+                        // ==========================
+
+                        const columnsToRender =
+                            isPopup || data.columns.length <= MAX_COLUMNS
+                                ? data.columns
+                                : data.columns.slice(0, MAX_COLUMNS);
+
+                        // ==========================
+                        // HEADER
+                        // ==========================
+
                         const thead = document.createElement("thead");
                         const headerRow = document.createElement("tr");
+
                         columnsToRender.forEach(col => {
+
                             const th = document.createElement("th");
-                            th.innerText = col;
-                            if (!isPopup) {
-                                th.style.padding = "8px";
-                                th.style.backgroundColor = "#f0f0f0";
-                                th.style.fontSize = "14px";
-                                th.style.whiteSpace = "normal";
-                                th.style.wordBreak = "break-word";
-                            }
+
+                            const displayText =
+                                !isPopup && col.length > HEADER_LENGTH
+                                    ? col.substring(0, HEADER_LENGTH) + "..."
+                                    : col;
+
+                            th.innerText = displayText;
+                            th.title = col;
+
+                            th.style.padding = "14px 16px";
+                            th.style.fontSize = "14px";
+                            th.style.textAlign = "left";
+                            th.style.whiteSpace = "nowrap";
+                            th.style.overflow = "hidden";
+                            th.style.textOverflow = "ellipsis";
+                            th.style.background = "linear-gradient(90deg, #1544A3, #315DDF, #6D28D9)";
+                            th.style.fontWeight = "600";
+                            th.style.color = "#fff";
+
                             headerRow.appendChild(th);
                         });
+
                         thead.appendChild(headerRow);
                         table.appendChild(thead);
 
-                        // === Row truncation ===
-                        let rowsToRender;
-                        if (isPopup || data.rows.length <= 3) {
-                            rowsToRender = data.rows;
-                        } else {
-                            const firstRows = data.rows.slice(0, 2);
-                            const lastRow = data.rows[data.rows.length - 1];
-                            rowsToRender = [...firstRows, '...', lastRow];
-                        }
+                        // ==========================
+                        // ROWS
+                        // ==========================
 
-                        // === Body ===
+                        const totalRows = data.rows.length;
+                        const rowsToRender =
+                            isPopup || totalRows <= MAX_ROWS
+                                ? data.rows
+                                : data.rows.slice(0, MAX_ROWS);
+
+                        // ==========================
+                        // BODY
+                        // ==========================
+
                         const tbody = document.createElement("tbody");
 
                         rowsToRender.forEach(row => {
+
                             const tr = document.createElement("tr");
 
-                            if (row === '...') {
-                                // Create placeholder row with individual boxed cells
-                                columnsToRender.forEach(col => {
-                                    const td = document.createElement("td");
-                                    td.innerText = '...';
-                                    td.className = 'ellipsis';
-                                    if (!isPopup) {
-                                        td.style.textAlign = 'center';
-                                        td.style.color = '#888';
-                                        td.style.fontStyle = 'italic';
-                                        td.style.padding = "8px";
-                                        td.style.fontSize = "14px";
-                                    }
-                                    tr.appendChild(td);
-                                });
-                            } else {
-                                columnsToRender.forEach(col => {
-                                    const td = document.createElement("td");
+                            columnsToRender.forEach(col => {
 
-                                    if (col === '...') {
-                                        td.innerText = '...';
-                                        td.className = 'ellipsis';
-                                        if (!isPopup) {
-                                            td.style.textAlign = 'center';
-                                            td.style.color = '#888';
-                                            td.style.fontStyle = 'italic';
-                                            td.style.padding = "8px";
-                                            td.style.fontSize = "14px";
-                                            td.style.whiteSpace = "normal";
-                                            td.style.wordBreak = "break-word";
-                                        }
-                                    } else {
-                                        td.innerText = row[col] || '';
-                                        if (!isPopup) {
-                                            td.style.padding = "8px";
-                                            td.style.fontSize = "14px";
-                                            td.style.whiteSpace = "normal";
-                                            td.style.wordBreak = "break-word";
-                                        }
-                                    }
+                                const td = document.createElement("td");
+                                const value = row[col] == null ? "" : String(row[col]);
 
-                                    tr.appendChild(td);
-                                });
-                            }
+                                const displayValue =
+                                    !isPopup && value.length > CELL_LENGTH
+                                        ? value.substring(0, CELL_LENGTH) + "..."
+                                        : value;
+
+                                td.innerText = displayValue;
+                                td.title = value;
+
+                                td.style.padding = "14px 16px";
+                                td.style.fontSize = "14px";
+                                td.style.whiteSpace = "nowrap";
+                                td.style.overflow = "hidden";
+                                td.style.textOverflow = "ellipsis";
+                                td.style.textAlign = "left";
+                                td.style.verticalAlign = "middle";
+                                td.style.borderTop = "1px solid #f2f4f8"; // light divider, not a heavy grid
+                                td.style.color = "#111";
+
+                                tr.appendChild(td);
+                            });
 
                             tbody.appendChild(tr);
                         });
 
+                        // ==========================
+                        // FADED PREVIEW ROW
+                        // ==========================
+
+                        if (!isPopup && totalRows > MAX_ROWS) {
+
+                            const previewRow = data.rows[MAX_ROWS];
+
+                            const tr = document.createElement("tr");
+                            tr.style.opacity = "0.25";
+
+                            columnsToRender.forEach(col => {
+                                const td = document.createElement("td");
+                                const value = previewRow[col] == null ? "" : String(previewRow[col]);
+                                const displayValue =
+                                    value.length > CELL_LENGTH ? value.substring(0, CELL_LENGTH) + "..." : value;
+
+                                td.innerText = displayValue;
+                                td.style.padding = "14px 16px";
+                                td.style.fontSize = "14px";
+                                td.style.whiteSpace = "nowrap";
+                                td.style.overflow = "hidden";
+                                td.style.textOverflow = "ellipsis";
+                                td.style.textAlign = "left";
+                                td.style.borderTop = "1px solid #f2f4f8";
+                                td.style.color = "#111";
+
+                                tr.appendChild(td);
+                            });
+
+                            tbody.appendChild(tr);
+                        }
+
                         table.appendChild(tbody);
-                        return table;
+                        tableContainer.appendChild(table);
+
+                        // ==========================
+                        // FOOTER
+                        // ==========================
+
+                        if (!isPopup && totalRows > MAX_ROWS) {
+
+                            const footer = document.createElement("div");
+                            footer.style.position = "relative";
+                            footer.style.textAlign = "center";
+                            footer.style.padding = "12px 10px 16px";
+                            footer.style.background = "linear-gradient(180deg, rgba(255,255,255,0.4), #fff 60%)";
+                            footer.style.marginTop = "-36px";
+
+                            const countText = document.createElement("div");
+                            countText.innerText = \`Showing \${MAX_ROWS} of \${totalRows} rows\`;
+                            countText.style.fontSize = "13px";
+                            countText.style.color = "#888";
+                            countText.style.marginBottom = "6px";
+
+                            const viewFullLink = document.createElement("div");
+                            viewFullLink.innerText = "View Full Table →";
+                            viewFullLink.style.fontSize = "14px";
+                            viewFullLink.style.fontWeight = "600";
+                            viewFullLink.style.color = "#5B3FD9";
+
+                            footer.appendChild(countText);
+                            footer.appendChild(viewFullLink);
+                            tableContainer.appendChild(footer);
+                        }
+
+                        return tableContainer;
                     }
 
                     // Function to download table as CSV
